@@ -4,6 +4,10 @@ High performance computing (HPC) is a group of interconnected computers, called 
 
 Similar to your personal computer each node is made up of **cores**, **memory**, and **disk space**. Again just as in your personal computed the **core** processes the commands that are handed to it, the **memory** is for storing information needed by the core to execute the process, and the **disk space** is for longer term storage. Most personal computers are made up of multiple cores (quadcore, 6-core) and so data processing is often **parallelized**, that is parts of the task that do not depend on each other are preformed simultaneously by different cores **threading - explain what threading is and how you can tell if a task can be parallelized** . HPCs generally have hundreds or thousands of cores and thus are optimized for parallel computing of tasks that require more memory or disk space than is generally present on a personal computer. Even if a task could be performed locally, on your personal computer, it is generally performed faster and more efficiently on an HPC system. 
 
+<center>
+  ![](figures/HPC_PC.png)
+  <center>
+    
 When you interact with an HPC system you do so using a terminal program (Mac/Linux - terminal, PC - MobaXterm, Cmder,etc.) rather than a graphics user interface (GUI). Learning to use the terminal to interact with files can be a steep learning curve, but once you get the hang of it you may find yourself interacting with your local files using the terminal! 
 
 Most HPCs are hosted by an organization with particular rules about storage space and processing commands (also called submitting jobs). It is a good idea to familiarize yourself with these rules before you  begin to use the HPC. It can be heartbreaking when you work hard on a project only to exceed your storage space such that a processing step cannot be finished, or even worse you exceed the storage time limit and your files are deleted! 
