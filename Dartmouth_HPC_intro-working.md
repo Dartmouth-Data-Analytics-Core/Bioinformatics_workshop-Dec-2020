@@ -21,7 +21,7 @@ To use the test node simply log onto the test node interactively `mksub -I -l no
 To submit a job to the scheduler it is best practice to denote the submission options along with the data processing commands from within a PBS script and then submit that script to the scheduler `mksub my_script.pbs`. Though it is possible to submit a command to the scheduler without a pbs script `mksub -N my_job -l nodes=1;ppn:16 -l walltime=0:15:00 -M my_email@dartmouth.edu -m ea my command goes here` saving the command and the conditions it was submitted in the form of a PBS script enables you to easily resubmit the job if you run into an error, or edit and resubmit using different parameters. 
 
 An example PBS script:
-`
+```bash
 #!/bin/bash -l  
 #declare a name for this job to be my_serial_job  
 #it is recommended that this name be kept to 16 characters or less  
@@ -50,7 +50,7 @@ An example PBS script:
 cd $PBS_O_WORKDIR  
 
 some command that I would like to submit to the scheduler  
-`
+```
 
 ## Andes/Polaris
 
