@@ -54,8 +54,9 @@ some command that I would like to submit to the scheduler
 
 ## Andes/Polaris
 
-`ssh netID@andes.dartmouth.edu  
-ssh netID@polaris.dartmouth.edu`
+`ssh netID@andes.dartmouth.edu`  
+
+`ssh netID@polaris.dartmouth.edu`
 
 Andes and polaris are shared memory computers which run jobs that require a lot of memory or scratch space (temp files that are created and discarded during processing). Andes has 60 cores, 512 GB of memory, and 5TB of scratch space. Polaris has 40 cores, 1TB of memory, and 5TB of scratch space. You will notice that there are far fewer cores on andes/polaris these clusters do not use a job scheduler and jobs are executed interactively on these HPCs. You will also notice there is a lot more memory on polaris than andes, jobs that require a lot of memory and scratch space should be executed interactively on polaris.
 
