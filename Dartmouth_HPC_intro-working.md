@@ -75,12 +75,18 @@ Andes and polaris are shared memory computers which run jobs that require a lot 
 You will also notice there is a lot more memory on polaris than andes, jobs that require a lot of memory and scratch space should be executed interactively on polaris as discovery may not have the scratch space or memory available to execute these types of jobs.
 
 ## Logging onto an hpc
-Logging onto an hpc -ssh  
-creating an alias for logging on  
-Interacting with files on your hpc from your local computer - SSH clients vs mount points  
+Logging onto an hpc -ssh  `ssh netID@discovery7.dartmouth.edu`
+
+creating an alias for logging on  `alias discovery="ssh netID@discovery.dartmouth.edu"`
+
+Interacting with files on your hpc from your local computer - SSH clients (filezilla, cyberduck)
 
 ## customizing your account on discovery/polaris/andes 
 modules   
+List the modules you currently have loaded `module list`. 
+List the modules you could potentially load `module avail`. 
+Load a module from the list of available modules for the current login session you are running `module load`  
+Remove a module from the list that are loaded `module rm`  
 conda environments -bioconda vs. yml file   
 .bash_profile - what is it and how do you use it  
 
