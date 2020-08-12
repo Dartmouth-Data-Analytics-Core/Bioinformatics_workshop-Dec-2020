@@ -26,9 +26,9 @@ Dartmouth's HPC is maintained by [Research Computing](https://rc.dartmouth.edu)(
 
 Discovery is a linux cluster with 2016 cores, 14.5TB of memory, and 1.8PB of disk space. The compute nodes are managed by a [job scheduler](https://rc.dartmouth.edu/index.php/using-discovery/scheduling-jobs/scheduler-policy/) when you log onto discovery you are automatically directed to the head node where data processing should not be executed. Interactive processing on discovery should only be performed on the test node x01. Once you are satisfied that the commands work as you expect they can be submitted to the scheduler using a PBS script.   
 
-To use the test node simply log onto the test node interactively `mksub -I -l node=x01 -l walltime=3:00:00` and excute the commands that you want to test. 
+To use the test node simply log onto the test node interactively `mksub -I -l node=x01 -l walltime=3:00:00` and execute the commands that you want to test. 
 
-To submit a job to the scheduler it is best practice to denote the submission options along with the data processing commands from within a PBS script and then submit that script to the scheduler `mksub my_script.pbs`. Though it is possible to submit a command to the scheduler without a pbs script `mksub -N my_job -l nodes=1;ppn:16 -l walltime=0:15:00 -M my_email@dartmouth.edu -m ea my command goes here` saving the command and the conditions it was submitted in the form of a PBS script enables you to easily resubmit the job if you run into an error, or edit and resubmit using different parameters. 
+To submit a job to the scheduler it is best practice to denote the submission options along with the data processing commands from within a PBS script and then submit that script to the scheduler `mksub my_script.pbs`. 
 
 An example PBS script:
 ```bash
@@ -62,13 +62,17 @@ cd $PBS_O_WORKDIR
 some command that I would like to submit to the scheduler  
 ```
 
+Though it is possible to submit a command to the scheduler without a pbs script `mksub -N my_job -l nodes=1;ppn:16 -l walltime=0:15:00 -M my_email@dartmouth.edu -m ea my command goes here` saving the command and the submission settings the form of a PBS script enables you to easily resubmit the job if you run into an error, or edit and resubmit th job using different parameters. 
+
 ## Andes/Polaris
 
 `ssh netID@andes.dartmouth.edu`  
 
 `ssh netID@polaris.dartmouth.edu`
 
-Andes and polaris are shared memory computers which run jobs that require a lot of memory or scratch space (temp files that are created and discarded during processing). Andes has 60 cores, 512 GB of memory, and 5TB of scratch space. Polaris has 40 cores, 1TB of memory, and 5TB of scratch space. You will notice that there are far fewer cores on andes/polaris these clusters do not use a job scheduler and jobs are executed interactively on these HPCs. You will also notice there is a lot more memory on polaris than andes, jobs that require a lot of memory and scratch space should be executed interactively on polaris.
+Andes and polaris are shared memory computers which run jobs that require a lot of memory or scratch space (temp files that are created during processing but discarded later). Andes has 60 cores, 512 GB of memory, and 5TB of scratch space. Polaris has 40 cores, 1TB of memory, and 5TB of scratch space. You will notice that there are far fewer cores on andes/polaris, these clusters do not use a job scheduler and jobs are executed interactively on these HPCs. If you feel more comfortable executing jobs interactively this is where you should work. 
+
+You will also notice there is a lot more memory on polaris than andes, jobs that require a lot of memory and scratch space should be executed interactively on polaris as discovery may not have the scratch space or memory available to execute these types of jobs.
 
 ## Logging onto an hpc
 Logging onto an hpc -ssh  
