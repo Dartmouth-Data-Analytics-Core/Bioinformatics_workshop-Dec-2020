@@ -12,6 +12,12 @@ Similar to your personal computer each node is made up of **cores**, **memory**,
     
 When you interact with an HPC system you do so using a terminal program (Mac/Linux - terminal, PC - MobaXterm, Cmder,etc.) rather than a graphics user interface (GUI). Learning to use the terminal to interact with files can be a steep learning curve, but once you get the hang of it you may find yourself interacting with your local files using the terminal! 
 
+<p align="center">
+  <img src="figures/terminal.png" title="xxxx" alt="context"
+	width="100%" height="100%" />
+ </p>
+ </p>
+
 Most HPCs are hosted by an organization with particular rules about storage space and processing commands (also called submitting jobs). It is a good idea to familiarize yourself with these rules before you  begin to use the HPC. It can be heartbreaking when you work hard on a project only to exceed your storage space such that a processing step cannot be finished, or even worse you exceed the storage time limit and your files are deleted! 
 
 Dartmouth's HPC is maintained by [Research Computing](https://rc.dartmouth.edu)(RC) and is made up of 3000+ compute cores, 120,000 graphics processing cores, 12+ TB of memory, and 1PB of storage space. You can request an HPC account that comes with 50 GB of network file storage in [DartFS](https://rc.dartmouth.edu/index.php/dartfs/) for your personal account and 1TB of storage for a lab account. RC takes snapshots of your directories daily (kept for a week), weekly (kept for a month), and monthly(kept for a year), so that if you accidentaly delete or modify a file you have a repository of previous versions of that file. Furthmore they offer an option for **web sharing** such that links to data in your account can be shared with collaborators on (DartmouthWebShare) or off campus (public_html).
