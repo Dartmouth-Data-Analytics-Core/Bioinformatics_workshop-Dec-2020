@@ -6,7 +6,7 @@ Similar to your personal computer each node is made up of **cores**, **memory**,
 
 <p align="center">
   <img src="figures/HPC_PC.png" title="xxxx" alt="context"
-	width="100%" height="100%" />
+	width="70%" height="70%" />
  </p>
  </p>
     
