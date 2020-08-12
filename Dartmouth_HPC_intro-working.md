@@ -21,34 +21,35 @@ To use the test node simply log onto the test node interactively `mksub -I -l no
 To submit a job to the scheduler it is best practice to denote the submission options along with the data processing commands from within a PBS script and then submit that script to the scheduler `mksub my_script.pbs`. Though it is possible to submit a command to the scheduler without a pbs script `mksub -N my_job -l nodes=1;ppn:16 -l walltime=0:15:00 -M my_email@dartmouth.edu -m ea my command goes here` saving the command and the conditions it was submitted in the form of a PBS script enables you to easily resubmit the job if you run into an error, or edit and resubmit using different parameters. 
 
 An example PBS script:
-`#!/bin/bash -l
-# declare a name for this job to be my_serial_job
-# it is recommended that this name be kept to 16 characters or less
-#PBS -N my_job
+`
+#!/bin/bash -l  
+#declare a name for this job to be my_serial_job  
+#it is recommended that this name be kept to 16 characters or less  
+#PBS -N my_job  
 
-# request the queue (enter the possible names, if omitted, default is the default)
-# this job is going to use the default
-#PBS -q default
+#request the queue (enter the possible names, if omitted, default is the default)  
+#this job is going to use the default  
+#PBS -q default  
 
-# request 1 node and 16  processors on that node
-#PBS -l nodes=1:ppn=16
+#request 1 node and 16  processors on that node  
+#PBS -l nodes=1:ppn=16  
 
-# request 0 hours and 15 minutes of wall time
-# (Default is 1 hour without this directive)
-#PBS -l walltime=0:15:00
+#request 0 hours and 15 minutes of wall time  
+#(Default is 1 hour without this directive)  
+#PBS -l walltime=0:15:00  
 
-# mail is sent to you when the job starts and when it terminates (e) or aborts (a) - can also have an email sent when the job begins (b) 
-#PBS -m ea
+#mail is sent to you when the job starts and when it terminates (e) or aborts (a) - can also have an email sent when the job begins (b)   
+#PBS -m ea  
 
-# specify your email address 
-#PBS -M my_email@dartmouth.edu
+#specify your email address   
+#PBS -M my_email@dartmouth.edu  
 
-# By default, PBS scripts execute in your home directory, not the
-# directory from which they were submitted. The following line
-# places the job in the directory from which the job was submitted. 
-cd $PBS_O_WORKDIR
+#By default, PBS scripts execute in your home directory, not the  
+#directory from which they were submitted. The following line  
+#places the job in the directory from which the job was submitted.   
+cd $PBS_O_WORKDIR  
 
-some command that I would like to submit to the scheduler
+some command that I would like to submit to the scheduler  
 `
 
 ## Andes/Polaris
