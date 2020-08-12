@@ -101,6 +101,7 @@ checking the status of a submitted job- qstat, myjobs
 nohup  
 
 ## Error mitigation  
+errors with job submission - exit status what does this tell you about what happened, look in your error/output file - does it look like you would expect?
 stack exchange - what is it and how do yuo use it?  
 Error messages, where can I find them and how do I know what they mean?  
 Problem set  
