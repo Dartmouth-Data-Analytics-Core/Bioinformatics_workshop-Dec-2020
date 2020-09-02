@@ -89,39 +89,3 @@ Load a module from the list of available modules for the current login session y
 Remove a module from the list that are loaded `module rm`  
 conda environments -bioconda vs. yml file   
 .bash_profile - what is it and how do you use it  
-
-## Interacting with files from your hpc
-Editing files on the hpc - nano  
-navigating the prompt - ctrl+a/ctrl+e, tab to autocomplete, ctrl+c   
-figuring out where you are - pwd 
-what is in the directory you're in - ls  
-creating directories and organizing files - mkdir, cd, mv, cp  
-navigating to directories - space limitations and the scratch directory  
-copying files from one location to another - recursive copying, rsync, cp, scp  
-regex special characters - \* ,\t, \n, ., ~, ^, $  
-uninterpreting special characters  
-looking inside files - more, cat  
-redirecting output - >   
-grep - looking for patterns in your files  
-sed - editing batches of files  
-Downloading data from external sources (NCBI, ensembl, SRA, etc.) - rsync, curl, wget  
-piping commands to link them together
-grep - looking for patterns in your files  
-sed - editing batches of files  
-manipulating file contents - cut, paste  
-Looping commands
-
-## Large jobs on the hpc
-building a command - reading the manual!!!   
-writing a bash script by linking commands  
-writing a pbs script to submit a job  
-checking the traffic on discovery- pbsmons  
-submitting a job - mksub  
-checking the status of a submitted job- qstat, myjobs   
-nohup  
-
-## Error mitigation  
-errors with job submission - exit status what does this tell you about what happened, look in your error/output file - does it look like you would expect?
-stack exchange - what is it and how do yuo use it?  
-Error messages, where can I find them and how do I know what they mean?  
-Problem set  
