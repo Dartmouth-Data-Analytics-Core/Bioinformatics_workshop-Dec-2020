@@ -19,5 +19,5 @@
 
 ## Propsed dates:
 
-Week of Dec 7th (COBRE EAC meeting is that week)
-Week of Dec 14th 
+- **Week of Dec 7th** (COBRE EAC meeting is that week)
+- **Week of Dec 14th** 
