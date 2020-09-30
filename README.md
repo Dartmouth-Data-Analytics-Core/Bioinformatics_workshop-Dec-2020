@@ -3,7 +3,7 @@
 ## Day1
 
 - Introduction to HPC, logging onto discovery
-- Fred sequnecing lecture
+- Fred sequencing lecture
 - Common file formats (FastQ, BAM/SAM/CRAM, Fasta)
 - Basic scripting (basic bash scripting, R scripting on HPC, submitting jobs to HPC)
 
@@ -15,3 +15,9 @@
 - Principles of alignment
 - IGV tutorial
 - multiple sequence alignment
+
+
+## Propsed dates:
+
+Week of Dec 7th (COBRE EAC meeting is that week)
+Week of Dec 14th 
