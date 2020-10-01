@@ -129,7 +129,7 @@ The alignment field has eleven mandatory fields for each read.
 
 <p align="center">
   <img src="/figures/sam_alignment_fields.png" title="xxxx" alt="context"
-	width="75%" height="75%" />
+	width="80%" height="80%" />
  </p>
  </p>
  
@@ -139,7 +139,7 @@ The alignment field has eleven mandatory fields for each read.
 
 <p align="center">
   <img src="/figures/sam_flag-bit-decoder.png" title="xxxx" alt="context"
-	width="75%" height="75%" />
+	width="80%" height="80%" />
  </p>
  </p>
 
@@ -153,7 +153,7 @@ The alignment field has eleven mandatory fields for each read.
 
 <p align="center">
   <img src="/figures/sam_cigar_key.png" title="xxxx" alt="context"
-	width="75%" height="75%" />
+	width="80%" height="80%" />
  </p>
  </p>
  
