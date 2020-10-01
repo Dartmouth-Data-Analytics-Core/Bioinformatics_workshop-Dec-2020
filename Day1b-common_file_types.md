@@ -93,6 +93,45 @@ zcat SRR1039508_1.chr20.fastq.gz | sed -n '2~4p' | head -10000 | grep -o . | sor
 
 Now we have the number of each nuleotide across the reads from the first 10000 records. A quick and easy program to get GC content. GC content is used in basic quality control of sequence from FASTQs to check for potential contamination of the sequencing library. We just used this code to check 1 sample, but what if we want to know for our 4 samples?
 
-## BAM/SAM/CRAM file format
+## SAM/BAM/CRAM file format
+
+SAM format is a common way of representing sequenced reads, especially after reads have been aligned or mapped to a reference genome. BAM is a binary (non-human readable) format of SAM that takes up less space. CRAM files are compressed versions of BAM files - these take up the least space and are recommended for longer term storage of alignment files. SAM/BAM/CRAM files can be converted back and forth with the tool **samtools view**.
+
+```bash
+
+#convert sam to bam
+samtools view -b sample.sam > sample.bam
+
+#convert bam to cram
+samtools view -C sample.bam > sample.cram
+```
+
+A SAM file is made up of two basic parts, the header and the alignment. All header lines will start with the **@** symbol. The mandatory flag **@HD** will come first in the file and should only occur once, this flag has the meta-data that pertains to the SAM file and will either have a **GO** field indicating that reads are grouped but not sorted or a **SO** field indicating that reads are sorted. If the reads have been mapped there will be a series of **@SQ** flags. Additional optional flags are **@RG** which denotes the read groups, **@PG** which denotes the programs used, and **@CO** which is used for additional comments.
+
+[example SAM header]()
+
+The alignment field has eleven mandatory fields for each read. 
+
+[table of alignment fields]()
+
+- **QNAME** denotes the query name, if there are muleiple alignment lines in this flag it indicates multimapping or chimeric reads
+
+- **FLAG** a combination of bitwise flags that describe the alignment properties of each segment of the sequence
+
+[table of bitwise FLAGS]()
+
+- **RNAME** the name of the reference sequence aligned to the read in this field
+
+- **POS** the left most position of the first CIGAR operation that "consumes" a reference base
+
+- **MAPQ** mapping quality, 255 means no mapping quality is available
+
+- **CIGAR** represents the type of match between the query and reference
+
+[cigar table]()
+
+- **QUAL** Phred scaled base error probability
+
+You can learn more about the SAM file format [here](https://samtools.github.io/hts-specs/SAMv1.pdf).
 
 ## FASTA file format
