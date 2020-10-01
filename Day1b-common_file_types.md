@@ -127,13 +127,21 @@ samtool view -H sample.bam
 
 The alignment field has eleven mandatory fields for each read. 
 
-![table of alignment fields](/figures/sam_alignment_fields.png)
-
+<p align="center">
+  <img src="/figures/sam_alignment_fields.png" title="xxxx" alt="context"
+	width="75%" height="75%" />
+ </p>
+ </p>
+ 
 - **QNAME** denotes the query name, if there are muleiple alignment lines in this flag it indicates multimapping or chimeric reads
 
 - **FLAG** a combination of bitwise flags that describe the alignment properties of each segment of the sequence
 
-![table of bitwise FLAGS](/figures/sam_flag-bit-decoder.png)
+<p align="center">
+  <img src="/figures/sam_flag-bit-decoder.png" title="xxxx" alt="context"
+	width="75%" height="75%" />
+ </p>
+ </p>
 
 - **RNAME** the name of the reference sequence aligned to the read in this field
 
@@ -143,8 +151,12 @@ The alignment field has eleven mandatory fields for each read.
 
 - **CIGAR** represents the type of match between the query and reference
 
-![cigar table](/figures/sam_cigar_key.png)
-
+<p align="center">
+  <img src="/figures/sam_cigar_key.png" title="xxxx" alt="context"
+	width="75%" height="75%" />
+ </p>
+ </p>
+ 
 - **QUAL** Phred scaled base error probability
 
 You can learn more about the SAM file format [here](https://samtools.github.io/hts-specs/SAMv1.pdf).
