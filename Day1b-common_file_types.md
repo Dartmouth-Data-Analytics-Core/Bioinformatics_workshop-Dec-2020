@@ -112,13 +112,13 @@ A SAM file is made up of two basic parts, the header and the alignment. All head
 
 The alignment field has eleven mandatory fields for each read. 
 
-[table of alignment fields]()
+![table of alignment fields](../figures/sam_alignment_fields.png)
 
 - **QNAME** denotes the query name, if there are muleiple alignment lines in this flag it indicates multimapping or chimeric reads
 
 - **FLAG** a combination of bitwise flags that describe the alignment properties of each segment of the sequence
 
-[table of bitwise FLAGS]()
+![table of bitwise FLAGS](../figures/sam_flag-bit-decoder.png)
 
 - **RNAME** the name of the reference sequence aligned to the read in this field
 
@@ -128,7 +128,7 @@ The alignment field has eleven mandatory fields for each read.
 
 - **CIGAR** represents the type of match between the query and reference
 
-[cigar table]()
+![cigar table](../figures/sam_cigar_key.png)
 
 - **QUAL** Phred scaled base error probability
 
