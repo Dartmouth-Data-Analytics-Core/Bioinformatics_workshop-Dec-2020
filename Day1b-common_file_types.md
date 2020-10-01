@@ -106,9 +106,11 @@ samtools view -b sample.sam > sample.bam
 samtools view -C sample.bam > sample.cram
 ```
 
-A SAM file is made up of two basic parts, the header and the alignment. All header lines will start with the **@** symbol. The mandatory flag **@HD** will come first in the file and should only occur once, this flag has the meta-data that pertains to the SAM file and will either have a **GO** field indicating that reads are grouped but not sorted or a **SO** field indicating that reads are sorted. If the reads have been mapped there will be a series of **@SQ** flags. Additional optional flags are **@RG** which denotes the read groups, **@PG** which denotes the programs used, and **@CO** which is used for additional comments.
+A SAM file is made up of two basic parts, the header and the alignment. 
 
-![example SAM header](/figures/sam_header_example.png)
+### SAM file header
+
+All header lines will start with the **@** symbol. The mandatory flag **@HD** will come first in the file and should only occur once, this flag has the meta-data that pertains to the SAM file and will either have a **GO** field indicating that reads are grouped but not sorted or a **SO** field indicating that reads are sorted. If the reads have been mapped there will be a series of **@SQ** flags. Additional optional flags are **@RG** which denotes the read groups, **@PG** which denotes the programs used, and **@CO** which is used for additional comments.
 
 To view a SAM/BAM/CRAM file you can use the **samtools view** tool with the **-H** flag:
 
@@ -116,6 +118,10 @@ To view a SAM/BAM/CRAM file you can use the **samtools view** tool with the **-H
 
 samtool view -H sample.bam
 ```
+
+![example SAM header](/figures/sam_header_example.png)
+
+### SAM file alignment field
 
 The alignment field has eleven mandatory fields for each read. 
 
