@@ -93,6 +93,8 @@ zcat SRR1039508_1.chr20.fastq.gz | sed -n '2~4p' | head -10000 | grep -o . | sor
 
 Now we have the number of each nuleotide across the reads from the first 10000 records. A quick and easy program to get GC content. GC content is used in basic quality control of sequence from FASTQs to check for potential contamination of the sequencing library. We just used this code to check 1 sample, but what if we want to know for our 4 samples?
 
+----
+
 ## SAM/BAM/CRAM file format
 
 SAM format is a common way of representing sequenced reads, especially after reads have been aligned or mapped to a reference genome. BAM is a binary (non-human readable) format of SAM that takes up less space. CRAM files are compressed versions of BAM files - these take up the least space and are recommended for longer term storage of alignment files. SAM/BAM/CRAM files can be converted back and forth with the tool **samtools view**.
@@ -146,5 +148,7 @@ The alignment field has eleven mandatory fields for each read.
 - **QUAL** Phred scaled base error probability
 
 You can learn more about the SAM file format [here](https://samtools.github.io/hts-specs/SAMv1.pdf).
+
+---- 
 
 ## FASTA file format
