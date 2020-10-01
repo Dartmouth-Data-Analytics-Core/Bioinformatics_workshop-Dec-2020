@@ -108,17 +108,17 @@ samtools view -C sample.bam > sample.cram
 
 A SAM file is made up of two basic parts, the header and the alignment. All header lines will start with the **@** symbol. The mandatory flag **@HD** will come first in the file and should only occur once, this flag has the meta-data that pertains to the SAM file and will either have a **GO** field indicating that reads are grouped but not sorted or a **SO** field indicating that reads are sorted. If the reads have been mapped there will be a series of **@SQ** flags. Additional optional flags are **@RG** which denotes the read groups, **@PG** which denotes the programs used, and **@CO** which is used for additional comments.
 
-![example SAM header](../figures/sam_header_example.png)
+![example SAM header](/figures/sam_header_example.png)
 
 The alignment field has eleven mandatory fields for each read. 
 
-![table of alignment fields](../figures/sam_alignment_fields.png)
+![table of alignment fields](/figures/sam_alignment_fields.png)
 
 - **QNAME** denotes the query name, if there are muleiple alignment lines in this flag it indicates multimapping or chimeric reads
 
 - **FLAG** a combination of bitwise flags that describe the alignment properties of each segment of the sequence
 
-![table of bitwise FLAGS](../figures/sam_flag-bit-decoder.png)
+![table of bitwise FLAGS](/figures/sam_flag-bit-decoder.png)
 
 - **RNAME** the name of the reference sequence aligned to the read in this field
 
@@ -128,7 +128,7 @@ The alignment field has eleven mandatory fields for each read.
 
 - **CIGAR** represents the type of match between the query and reference
 
-![cigar table](../figures/sam_cigar_key.png)
+![cigar table](/figures/sam_cigar_key.png)
 
 - **QUAL** Phred scaled base error probability
 
