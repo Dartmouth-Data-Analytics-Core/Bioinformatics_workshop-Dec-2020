@@ -110,6 +110,13 @@ A SAM file is made up of two basic parts, the header and the alignment. All head
 
 ![example SAM header](/figures/sam_header_example.png)
 
+To view a SAM/BAM/CRAM file you can use the **samtools view** tool with the **-H** flag:
+
+```bash
+
+samtool view -H sample.bam
+```
+
 The alignment field has eleven mandatory fields for each read. 
 
 ![table of alignment fields](/figures/sam_alignment_fields.png)
