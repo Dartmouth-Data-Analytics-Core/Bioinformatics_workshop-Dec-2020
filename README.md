@@ -76,7 +76,7 @@ The DAC aims to facilitate advanced bioinformatic, computational, and statistica
 
 If you have questions about this workshop, or would like to discuss data analysis services available from the Data Analytics Core, please visit out [website](https://sites.dartmouth.edu/cqb/projects-and-cores/data-analytics-core/), or email us at: DataAnalyticsCore@groups.dartmouth.edu
 
-<img src="figures/logo.jpg" width="250" height="140" >
+<img src="figures/logo (1).jpg" width="250" height="140" >
 
 ### Workshop goals: 
 - Develop a working understanding what Bioinformatic data analysis involves, how it is done, and what skills it requires
