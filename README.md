@@ -4,7 +4,7 @@
 
 - Introduction 
   - Intro to workshop, DAC, and plug the DAC service 
-  - How to do this workshop (e.g. managing windows etc. can be reused from that iontro lecture I gave for the RNA-seq workshop) 
+  - How to do this workshop (e.g. managing windows etc. can be reused from that intro lecture I gave for the RNA-seq workshop) 
    - Personal introductions 
 - Introduction to bioinformatics (what is it and how is it done) + intro. to HPC & the Discovery cluster (including having them log in and navigate to files we will be working with) 
 - Fred sequencing lecture (45 min with time for discussion?)
@@ -51,7 +51,7 @@
 
 
 ## Particpant number?
-I was thinkning we could perhaps go as high as 35 with this one, given that we will have Tim and can recuit more TAs this time around. This also ensures we generqate more revnue from the NOv workshop
+I was thinkning we could perhaps go as high as 35 with this one, given that we will have Tim and can recuit more TAs this time around. This also ensures we generqate more revenue from the Nov workshop
 
 
 ## Propsed dates:
@@ -70,11 +70,11 @@ I was thinkning we could perhaps go as high as 35 with this one, given that we w
 
 ## Fundamentals of Bioinformatics, December 2020
 
-This workshop will be delivered on xxxx 2020 by the Data Analytics Core (DAC) of the [Center for Quantitative Biology at Dartmouth](https://sites.dartmouth.edu/cqb/). 
+This workshop will be delivered on December 14, 15, & 17 by the Data Analytics Core (DAC) of the [Center for Quantitative Biology at Dartmouth](https://sites.dartmouth.edu/cqb/). 
 
 The DAC aims to facilitate advanced bioinformatic, computational, and statistical analysis of complex genomics data for the Dartmouth research community. 
 
-If you have questions about this workshop, or would like to discuss data analysis services available from the Data Analytics Core, please visit out [website](https://sites.dartmouth.edu/cqb/projects-and-cores/data-analytics-core/), or email us at: DataAnalyticsCore@groups.dartmouth.edu
+If you have questions about this workshop, or would like to discuss data analysis services available from the Data Analytics Core, please visit our [website](https://sites.dartmouth.edu/cqb/projects-and-cores/data-analytics-core/), or email us at: DataAnalyticsCore@groups.dartmouth.edu
 
 <img src="figures/logo (1).jpg" width="250" height="140" >
 
@@ -89,7 +89,7 @@ If you have questions about this workshop, or would like to discuss data analysi
 - Learn how to leverage high performance computing systems (HPCs) to perform Bioinformatic data-analysis 
 
 ### Workshop Contacts: 
-- Shannon Soucy (Shannon.Margaret.Soucy@Dartmouth.edu)
+- Shannon Soucy (Shannon.Soucy@Dartmouth.edu)
 - Owen Wilkins (omw@Dartmouth.edu)
 
 
