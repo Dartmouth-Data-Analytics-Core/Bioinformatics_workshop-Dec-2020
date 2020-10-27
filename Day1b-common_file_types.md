@@ -164,3 +164,11 @@ You can learn more about the SAM file format [here](https://samtools.github.io/h
 ---- 
 
 ## FASTA file format
+
+
+
+
+
+
+cover zwero and 1 -based file formats 
+
