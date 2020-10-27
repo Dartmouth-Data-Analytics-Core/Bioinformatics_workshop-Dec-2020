@@ -37,6 +37,7 @@ subseq(dna.st, 10, 19)
 
 IUPAC extended genetic alphabet 
 
+mention RNAString, and AAString. any otehr classes you forgot?
 
 
 
