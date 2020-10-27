@@ -13,6 +13,65 @@
 
 
 
+library(Biostrings)
+
+DNA_ALPHABET
+seq = sample(DNA_ALPHABET[c(1:4, 16)], size=50, replace=TRUE)
+seq
+
+seq = paste(seq, collapse="")
+seq
+
+dna.st = DNAString(seq)
+dna.st
+length(dna.st)
+
+str(dna.st)
+dna.st
+
+subseq(dna.st, 10, 19)
+
+# this is better practice for operating on genomic regions than direct indexing using R's 1-based system 
+# e.g. 
+dna.st[10:19]
+
+
+### what if we want to store multiple sequences 
+rm(seq)
+seq <- NULL
+seq[1] = paste(sample(DNA_ALPHABET[c(1:4)], size=50, replace=TRUE), collapse="")
+seq[2] = paste(sample(DNA_ALPHABET[c(1:4)], size=50, replace=TRUE), collapse="")
+seq[3] = paste(sample(DNA_ALPHABET[c(1:4)], size=50, replace=TRUE), collapse="")
+seq[4] = paste(sample(DNA_ALPHABET[c(1:4)], size=50, replace=TRUE), collapse="")
+seq[5] = paste(sample(DNA_ALPHABET[c(1:4)], size=50, replace=TRUE), collapse="")
+seq
+
+length(seq)
+
+dna.st.set = DNAStringSet(seq)
+
+length(dna.st.set)
+
+names(dna.st.set) = paste("barcode-", 1:5, sep="")
+
+dna.st.set
+
+
+alphabetFrequency(dna.st, baseOnly=TRUE, as.prob=TRUE)
+
+letterFrequency(dna.st, "A", as.prob=TRUE)
+
+reverseComplement(dna.st)
+reverseComplement(dna.st[1])
+reverseComplement(subseq(dna.st[1], 1, 10))
+
+
+# maybe try a barcode matching exercise?
+
+
+IUPAC extended genetic alphabet 
+
+
 ### The GenomicRanges R-package
 
 [GenomicRanges](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html) is an extremely useful package from the BioConductor project for working with genomic regions and coordinates in R, and lies at the core of numerous other BioConductor packages such as [BSgenome](https://bioconductor.org/packages/release/bioc/html/BSgenome.html), [rtracklayer](https://bioconductor.org/packages/release/bioc/html/rtracklayer.html) and [VariantAnnotation](https://bioconductor.org/packages/release/bioc/html/VariantAnnotation.html). 
