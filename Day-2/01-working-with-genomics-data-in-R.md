@@ -13,8 +13,11 @@
 
 
 
+```{r}
 library(Biostrings)
+```
 
+```{r}
 DNA_ALPHABET
 seq = sample(DNA_ALPHABET[c(1:4, 16)], size=50, replace=TRUE)
 seq
@@ -30,12 +33,22 @@ str(dna.st)
 dna.st
 
 subseq(dna.st, 10, 19)
+```
+
+IUPAC extended genetic alphabet 
+
+
+
 
 # this is better practice for operating on genomic regions than direct indexing using R's 1-based system 
 # e.g. 
+```{r}
+
 dna.st[10:19]
+```
 
 
+```{r}
 ### what if we want to store multiple sequences 
 rm(seq)
 seq <- NULL
@@ -55,7 +68,9 @@ length(dna.st.set)
 names(dna.st.set) = paste("barcode-", 1:5, sep="")
 
 dna.st.set
+```
 
+```{r}
 
 alphabetFrequency(dna.st, baseOnly=TRUE, as.prob=TRUE)
 
@@ -64,12 +79,11 @@ letterFrequency(dna.st, "A", as.prob=TRUE)
 reverseComplement(dna.st)
 reverseComplement(dna.st[1])
 reverseComplement(subseq(dna.st[1], 1, 10))
-
+```
 
 # maybe try a barcode matching exercise?
 
 
-IUPAC extended genetic alphabet 
 
 
 ### The GenomicRanges R-package
