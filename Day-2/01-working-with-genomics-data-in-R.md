@@ -128,7 +128,7 @@ Lets explore some BioStrings functionality using a some real coding sequences fo
 ` ""This species exemplifies many sessile and sedentary marine invertebrates (e.g., corals, ascidians, bryozoans): They disperse during a planktonic larval phase, settle in the vicinity of conspecifics, ward off potential competitors (including incompatible genotypes), and ensure that brooded eggs are fertilized by conspecific sperm."" `
 
 ![](../figures/Amphimedon_queenslandica_adult.png)
-
+Image source: [Wikipedia](https://en.wikipedia.org/wiki/Amphimedon_queenslandica)
 
 The coding sequences (13 overall) are in FASTA format, and BioStrings provides functionality for reading in FASTA files with the `readDNAStringSet()` function. 
 
@@ -145,11 +145,37 @@ We have now imported the coding sequences as a `DNAStringSet` object, which we c
 length(a.queen)
 
 # base frequencies
-alphabetFrequency(a.queen, baseOnly=TRUE, as.prob=TRUE)
+base.freqs <- alphabetFrequency(a.queen, baseOnly=TRUE, as.prob=TRUE)
+base.freqs
 
 # translate to protein 
 translate(a.queen)
 ```
+
+Perhaps we are interested in the GC content of each coding sequence. One way to compare GC content across these regions: 
+```{r}
+# create a variable to store GC content 
+gc.content <- rep(NA, length(a.queen))
+
+# use a loop to calculate GC content for each coding region 
+for(i in 1:length(gc.content)){
+  gc.content[i] <- sum(base.freqs[i,"C"], base.freqs[i,"G"])
+}
+gc.content
+
+# visualize 
+plot(gc.content, col="firebrick",
+     xlab="Coding region", ylab="GC content", main="GC content comparison",
+     las = 1, pch=16, cex = 1.3)
+abline(h=0.5, lwd = 2, lty=2, col="deepskyblue4")
+```
+
+We can further manipulate the DNAStringSet object using the `Views` method introduced by the **IRanges** R-package, where we essentially create a set of so-called ***views*** across a *'subject'* vector, in this case, our coding sequences. Creating `Views` are useful as they allow us to perform more complicated tasks, such as **pattern matching**. 
+```{r}
+a.queen.v <- as(a.queen, "Views")
+```
+MAYBE REMOVE THIS BIT? OR INTRODUCE LATER, BIT COMPLICATED 
+
 
 
 
@@ -210,16 +236,6 @@ Will return the below to your console:
 
 
 
-### The GenomicRanges R-package
-
-[GenomicRanges](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html) is an extremely useful package from the BioConductor project for working with genomic regions and coordinates in R, and lies at the core of numerous other BioConductor packages such as [BSgenome](https://bioconductor.org/packages/release/bioc/html/BSgenome.html), [rtracklayer](https://bioconductor.org/packages/release/bioc/html/rtracklayer.html) and [VariantAnnotation](https://bioconductor.org/packages/release/bioc/html/VariantAnnotation.html). 
-
-The goal of this lesson is to introduce you to the major object classes used by *GenomicRanges*, how they work, and together explore some examples of how you could use the package in your own work. This is not mean't to be a comprehensive introduction to the complete functionality of *GenomicRanges*, or replace the excellent tutorials or Vigenttes available on the [BioConductor website](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html)
-
-Lets load the GenomicRanges package: 
-```{r}
-library(GenomicRanges)
-```
 
 
 
@@ -246,6 +262,22 @@ str(genome)
 
 
 If your genome is not included in the available genomes but you would still like to leverage the BioStrings and BSGenome framework, you can [forge a BSGenome package](https://bioconductor.org/packages/release/bioc/html/BSgenome.html) following instructions available at the BioConductor website. 
+
+
+
+
+
+### The GenomicRanges R-package
+
+[GenomicRanges](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html) is an extremely useful package from the BioConductor project for working with genomic regions and coordinates in R, and lies at the core of numerous other BioConductor packages such as [BSgenome](https://bioconductor.org/packages/release/bioc/html/BSgenome.html), [rtracklayer](https://bioconductor.org/packages/release/bioc/html/rtracklayer.html) and [VariantAnnotation](https://bioconductor.org/packages/release/bioc/html/VariantAnnotation.html). 
+
+The goal of this lesson is to introduce you to the major object classes used by *GenomicRanges*, how they work, and together explore some examples of how you could use the package in your own work. This is not mean't to be a comprehensive introduction to the complete functionality of *GenomicRanges*, or replace the excellent tutorials or Vigenttes available on the [BioConductor website](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html)
+
+Lets load the GenomicRanges package: 
+```{r}
+library(GenomicRanges)
+```
+
 
 
 
