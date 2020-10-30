@@ -37,7 +37,51 @@ Unfortunately, this sequence is short and boring. Lets make a longer sequence us
 DNA_ALPHABET
 ```
 
-You can see the 4 standard DNA bases are returned as the first 4 elements of this character string. The remaining elements represent ambiguous bases or specific combinations/relationships using something called the extended IUPAC genetic alphabet (more on this later in this lesson). For now, lets use the standard, unambiguous DNA bases (A, G, C, T). 
+You can see the 4 standard DNA bases are returned as the first 4 elements of this character string. The remaining elements represent ambiguous bases or specific combinations/relationships using something called the *extended The International Union of Pure and Applied Chemistry (IUPAC) genetic alphabet.* 
+
+The extended IUPAC code is a specific nomenclature designed to describe incompletely specified nucleic acids. The standard IUPAC code uses 16 characters to specify single bases (A, G, C, T, U) in nucleic acid sequences, or various possible states that a specific nucleic acid may exist as in a sequence. 
+
+The standard IUPAC code is used by numerous bioinformatics tools and softwares in order to represent complex sequences of nucleic acids for which we may not be confident in some individual base identities (e.g. complex genomic regions that are challenging to sequence using short read approaches). 
+
+**Table 1. Standard IUPAC genetic alphabet.**
+
+|Symbol |	Mnemonic| Translation  |
+|---|---|---|
+| A	|	A | (adenine) |  
+| C	|	C | (cytosine)  | 
+| G	|	G	| (guanine)  | 
+| T	|		T	| (thymine)  | 
+| U	|		U	| (uracil)  | 
+| R	|	pu**R**ine		| A or G  | 
+| Y		| p**Y**rimidine		| C or T/U  | 
+| S		| **S**trong interaction	|	C or G  | 
+| W		| **W**eak interaction		| A or T/U  | 
+| M		| a**M**ino group		| A or C  | 
+| K		| **K**eto group		| G or T/U |   
+| H		| not G		| A, C or T/U |   
+| B		| not A		| C, G or T/U |  
+| V		| not T/U		| A, C or G |  
+| D		| not C		| A, G or T/U |  
+| N		| a**N**y		| A, C, G or T/U |  
+| - | none | Gap  
+
+This table was adapted from [Johnson, 2010, *Bioinformatics*](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2865858/#B1). 
+
+An extended IUPAC genetic alphabet was also described in 2010 [(Johnson, 2010, *Bioinformatics*)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2865858/#B1). The extended code uses additional characters, underlining, and bolding as well as the original 16 character code (all meanings maintained) to denote all possible combinations or relationships between bases. Among other uses, this has been valuable for representing genetic varaition in DNA sequences. You can explore the details on the extended code in **Tables 2 & 3** of [(Johnson, 2010)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2865858/#B1). 
+
+**BioStrings** and its object classes its object classes use the extended IUPAC genetic alphabet to describe nucelic acid sequences. If you working with *BioStrings* objects, and need a reminder of the basic characters of the extended code, you can just type `IUPAC_CODE_MAP` when you have the *BioStrings* package loaded into your R session. 
+
+For example, entering the below into your command-line..
+```
+IUPAC_CODE_MAP
+```
+Will return the below to your console: 
+```
+     A      C      G      T      M      R      W      S      Y      K      V      H      D      B  N 
+   "A"    "C"    "G"    "T"   "AC"   "AG"   "AT"   "CG"   "CT"   "GT"  "ACG"  "ACT"  "AGT"  "CGT" "ACGT" 
+```
+
+For now, lets use the standard, unambiguous DNA bases (A, G, C, T). 
 ```{r}
 # randomly sample from specific characters in DNA_ALPHABET to create a longer sequence
 seq = sample(DNA_ALPHABET[c(1:4, 16)], size=100, replace=TRUE)
@@ -124,8 +168,10 @@ Like *XString*, a virtual class exists for `DNAStringSet` class objects called *
 
 #### Using BioStrings with real data 
 
-Lets explore some BioStrings functionality using a some real coding sequences for a marine sponge organism native to the Great Barrier Reef,  *Amphimedon queenslandica* downloaded from NCBI (RefSeq ID:NC_008944.1)[https://www.ncbi.nlm.nih.gov/genome/2698]. *A.queenslandica* is described on the NCBI Genome webpage as: 
-` ""This species exemplifies many sessile and sedentary marine invertebrates (e.g., corals, ascidians, bryozoans): They disperse during a planktonic larval phase, settle in the vicinity of conspecifics, ward off potential competitors (including incompatible genotypes), and ensure that brooded eggs are fertilized by conspecific sperm."" `
+Lets explore some BioStrings functionality using a some real coding sequences for a marine sponge organism native to the Great Barrier Reef,  *Amphimedon queenslandica* downloaded from NCBI [RefSeq ID:NC_008944.1](https://www.ncbi.nlm.nih.gov/genome/2698). 
+
+*A.queenslandica* is described on the NCBI Genome webpage as: 
+> *"This species exemplifies many sessile and sedentary marine invertebrates (e.g., corals, ascidians, bryozoans): They disperse during a planktonic larval phase, settle in the vicinity of conspecifics, ward off potential competitors (including incompatible genotypes), and ensure that brooded eggs are fertilized by conspecific sperm."*
 
 ![](../figures/Amphimedon_queenslandica_adult.png)
 Image source: [Wikipedia](https://en.wikipedia.org/wiki/Amphimedon_queenslandica)
@@ -150,6 +196,9 @@ base.freqs
 
 # translate to protein 
 translate(a.queen)
+
+# find the longest consecutive string of A bases 
+longestConsecutive(a.queen, "A") 
 ```
 
 Perhaps we are interested in the GC content of each coding sequence. One way to compare GC content across these regions: 
@@ -170,74 +219,65 @@ plot(gc.content, col="firebrick",
 abline(h=0.5, lwd = 2, lty=2, col="deepskyblue4")
 ```
 
-We can further manipulate the DNAStringSet object using the `Views` method introduced by the **IRanges** R-package, where we essentially create a set of so-called ***views*** across a *'subject'* vector, in this case, our coding sequences. Creating `Views` are useful as they allow us to perform more complicated tasks, such as **pattern matching**. 
-```{r}
-a.queen.v <- as(a.queen, "Views")
+Several *BioStrings* functions also allow us to search sequences for specific patterns of interest. For example, we may want to confirm that each of our coding sequences begins with an `ATG` start codon. We can do this using the *BioStrings* functions `matchPattern()` and `countPattern()`. 
 ```
-MAYBE REMOVE THIS BIT? OR INTRODUCE LATER, BIT COMPLICATED 
+# return all matches in a DNAString subject sequence to a query pattern
+matchPattern("ATG", a.queen[[1]])
 
+# only return how many counts were found 
+countPattern("ATG", a.queen[[1]])
 
+# what happens if we remove the indexing of the DNAStringSet object 'a.queen'? Why?
+matchPattern("ATG", a.queen)
 
+# match a query sequence against multiple sequences that you want to search in  
+vmatch <- vmatchPattern("ATG", a.queen)
+vmatch
 
-# maybe try a barcode matching exercise?
+# look at the structure of this object 
+str(vmatch)
 
-
-
-Masked sequence: MaskedXString 
-
-
-
-
-#### The IUPAC extended genetic alphabet 
-
-The International Union of Pure and Applied Chemistry (IUPAC) code is a specific nomenclature designed to describe incompletely specified nucleic acids. The standard IUPAC code uses 16 characters to specify single bases (A, G, C, T, U) in nucleic acid sequences, or various possible states that a specific nucleic acid may exist as in a sequence. 
-
-The standard IUPAC code is used by numerous bioinformatics tools and softwares in order to represent complex sequences of nucleic acids for which we may not be confident in some individual base identities (e.g. complex genomic regions that are challenging to sequence using short read approaches). 
-
-**Table 1. Standard IUPAC genetic alphabet.**
-
-|Symbol |	Mnemonic| Translation  |
-|---|---|---|
-| A	|	A | (adenine) |  
-| C	|	C | (cytosine)  | 
-| G	|	G	| (guanine)  | 
-| T	|		T	| (thymine)  | 
-| U	|		U	| (uracil)  | 
-| R	|	pu**R**ine		| A or G  | 
-| Y		| p**Y**rimidine		| C or T/U  | 
-| S		| **S**trong interaction	|	C or G  | 
-| W		| **W**eak interaction		| A or T/U  | 
-| M		| a**M**ino group		| A or C  | 
-| K		| **K**eto group		| G or T/U |   
-| H		| not G		| A, C or T/U |   
-| B		| not A		| C, G or T/U |  
-| V		| not T/U		| A, C or G |  
-| D		| not C		| A, G or T/U |  
-| N		| a**N**y		| A, C, G or T/U |  
-| - | none | Gap  
-
-This table was adapted from [Johnson, 2010, *Bioinformatics*](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2865858/#B1). 
-
-An extended IUPAC genetic alphabet was also described in 2010 [(Johnson, 2010, *Bioinformatics*)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2865858/#B1). The extended code uses additional characters, underlining, and bolding as well as the original 16 character code (all meanings maintained) to denote all possible combinations or relationships between bases. Among other uses, this has been valuable for representing genetic varaition in DNA sequences. You can explore the details on the extended code in **Tables 2 & 3** of [(Johnson, 2010)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2865858/#B1). 
-
-**BioStrings** and its object classes its object classes use the extended IUPAC genetic alphabet to describe nucelic acid sequences. If you working with *BioStrings* objects, and need a reminder of the basic characters of the extended code, you can just type `IUPAC_CODE_MAP` when you have the *BioStrings* package loaded into your R session. 
-
-For example, entering the below into your command-line..
-```
-IUPAC_CODE_MAP
-```
-Will return the below to your console: 
-```
-     A      C      G      T      M      R      W      S      Y      K      V      H      D      B  N 
-   "A"    "C"    "G"    "T"   "AC"   "AG"   "AT"   "CG"   "CT"   "GT"  "ACG"  "ACT"  "AGT"  "CGT" "ACGT" 
+# extract the IRanges for matches in the first subject sequence 
+vmatch[[1]]
 ```
 
+We may also have several patterns that we want to search for in each our coding sequences. For example, perhaps we want to search for standard stop codons (`TAG`, `TAA`, `TGA`) in the *A.queenslandica* coding sequences. *BioStrings* functions `matchPDict()` and `vmatchPDict()` provide functionality for such tasks. e.g. 
+```
+# create a DNAStringSet of the stop codons 
+stop.codons <- DNAStringSet(c("TAG", "TAA", "TGA"))
 
+# create a dictionary of patterns (PDict class object) that you want to search your sequences for 
+stop.codons.dict <- PDict(stop.codons)
 
+# search in the first coding sequence 
+match1 <- matchPDict(stop.codons.dict, a.queen[[1]])
+match1
+match1[[3]]
 
+# use a loop to search for stop codons in all our coding sequences 
+matches <- list()
+for(i in 1:length(gc.content)){
+  matches[[i]] <- matchPDict(stop.codons.dict, a.queen[[i]])
+}
+length(matches)
+str(matches)
+matches[[4]]
+matches[[4]][[3]]
+```
 
+Such an approach might be useful if you were trying to estimate gene models in a set of preliminary coding sequences. Other applications of these pattern matching methods might include searching for/or designing probe sequences, or searching for reads containing custom barcodes in a single cell sequencing experiment. 
 
+#### Other functionality in *BioStrings*
 
+*BioStrings* also provides functionality for a number of other analytical tasks that you may want to perform on a set of sequences stored using the *XString* and *XStringSet* method, for example:  
+* trimming sequence ends based on pattern matching using `trimLRPatterns()`
+* local and global alignment problems using `pairwiseAlignment()`
+* read in multiple sequence alignments using `readDNAMultipleAlignment()`
+* motif searches with a Position Weight Matrix (PWM) using `matchPWM()` (commonly done in ChIP-seq & ATAC-seq)
+* palindrome searching using findPalindromes `findPalindromes()`
+* computing edit distances between sets of sequences using `stringDist()`  
+
+An excellent *BioStrings* tutorial is available [here](https://bioconductor.org/help/course-materials/2011/BioC2011/LabStuff/BiostringsBSgenomeOverview.pdf) from one of the *BioStrings* creators, that covers much of the same material as we have above, but in more detail and with more complex examples. 
 
 ### The BSGenome R-package
 
@@ -261,7 +301,24 @@ str(genome)
 
 
 
+Masked sequence: MaskedXString 
+
+
+
+
+
+
+
+
+
+
+
+
 If your genome is not included in the available genomes but you would still like to leverage the BioStrings and BSGenome framework, you can [forge a BSGenome package](https://bioconductor.org/packages/release/bioc/html/BSgenome.html) following instructions available at the BioConductor website. 
+
+
+
+# maybe try a barcode matching exercise?
 
 
 
