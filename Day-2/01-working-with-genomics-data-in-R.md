@@ -173,8 +173,7 @@ Lets explore some BioStrings functionality using a some real coding sequences fo
 *A.queenslandica* is described on the NCBI Genome webpage as: 
 > *"This species exemplifies many sessile and sedentary marine invertebrates (e.g., corals, ascidians, bryozoans): They disperse during a planktonic larval phase, settle in the vicinity of conspecifics, ward off potential competitors (including incompatible genotypes), and ensure that brooded eggs are fertilized by conspecific sperm."*
 
-![](../figures/Amphimedon_queenslandica_adult.png)
-Image source: [Wikipedia](https://en.wikipedia.org/wiki/Amphimedon_queenslandica)
+!Image source: [Wikipedia](https://en.wikipedia.org/wiki/Amphimedon_queenslandica)](../figures/Amphimedon_queenslandica_adult.png)
 
 The coding sequences (13 overall) are in FASTA format, and BioStrings provides functionality for reading in FASTA files with the `readDNAStringSet()` function. 
 
@@ -279,6 +278,8 @@ Such an approach might be useful if you were trying to estimate gene models in a
 
 An excellent *BioStrings* tutorial is available [here](https://bioconductor.org/help/course-materials/2011/BioC2011/LabStuff/BiostringsBSgenomeOverview.pdf) from one of the *BioStrings* creators, that covers much of the same material as we have above, but in more detail and with more complex examples. 
 
+> Similar tasks (and many other things) can be performed in python using tools like [*biopython*](https://biopython.org/). The major advantage of the *BioStrings* package is its interoperability with other R/BioConductor packages, such as the *BSGenome* package. 
+
 ### The BSGenome R-package
 
 The [BSgenome](https://bioconductor.org/packages/release/bioc/html/BSgenome.html) package provides BioConductor-based access to reference genome sequences that utilize the object classes of the *BioStrings* package discussed above (e.g. *DNAString* and *DNAStringSet*). 
@@ -314,12 +315,34 @@ Masked sequence: MaskedXString
 
 
 
-If your genome is not included in the available genomes but you would still like to leverage the BioStrings and BSGenome framework, you can [forge a BSGenome package](https://bioconductor.org/packages/release/bioc/html/BSgenome.html) following instructions available at the BioConductor website. 
+If your genome is not included in the available genomes but you would still like to leverage the *BioStrings* and *BSGenome* framework, you can [forge a BSGenome package](https://bioconductor.org/packages/release/bioc/html/BSgenome.html) following instructions available at the BioConductor website. 
 
 
 
-# maybe try a barcode matching exercise?
 
+### Genome annotation resources sequences in R 
+
+main section: 
+GenomicFeatures package and TxDb package/BioMart e.g. GenomicFeatures::makeTxDbFromGFF with annotating DE genes from RNA-seq example 
+GenomicFeatures::makeTxDbFromGFF
+example of using getseq() to extract exon sequences of specific genes from a BSGenome sequence 
+
+briefly: 
+org.Hs.eg.db objects 
+Maybe just mention AnnotationHub as larger resource to do a lot of this 
+
+
+
+[here](http://www.bioconductor.org/packages/release/workflows/vignettes/annotation/inst/doc/Annotation_Resources.html#biomart)
+
+
+
+### Putting it all together exercise 
+
+You did a ChIP-seq experiment for two histone marks, you have BED files and BigWigs, you are want to:
+- annotate the peaks to genes 
+- find the regions where the marks overlap 
+- ...
 
 
 
