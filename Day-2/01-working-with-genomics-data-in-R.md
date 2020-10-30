@@ -1,4 +1,4 @@
-# Part 1 - Wokring with Genomics Data in R
+# Part 2 - ...
 
 ### Learning objectives: 
 - Understand why we might want to work with genomics data in R, and what packages are available to do this
