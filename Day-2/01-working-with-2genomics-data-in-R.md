@@ -19,7 +19,21 @@ Lets load the GenomicRanges package:
 library(GenomicRanges)
 ```
 
+
+![](../figures/typical-ngs-scenario.png)
+
+![](../figures/rle.png)
+
+
+![](../figures/iranges-basics.png)
+
+
+![](../figures/granges-vs-iranges.png)
+
+
 continuous run data in R, and rle class for bigwigs and signal tracks 
+
+
 
 
 genomation: 
