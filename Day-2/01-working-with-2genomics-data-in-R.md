@@ -104,31 +104,26 @@ gr <- GRanges(
     seqnames = rep("chr1", 10),
     ranges = IRanges(start = c(1,2,3,3,5,6,7,7,8,11), width = c(4,4,4,4,3,3,3,3,3,3)),
     names = paste0("r", "-", seq(1,10)),
-    strand = rep("+", 10),
+    strand = c(rep("+", 2), rep("-", 3), rep("*", 3), rep("+", 2)),
     score = rnorm(10,5,2))
 gr
 
-# 
+# return the region ranges only 
 granges(gr)
 
-# 
-seqlengths(gr)
-
-# 
-seqnames(gr)
-
-# return the strand 
+# return the strand info for all regions 
 strand(gr)
 
-# names 
+# return teh region names  
 names()
 
-# 
+# extract the metadata columns 
 mcols()
 ```
 
 Now lets imagine that these regions all represent sequencing reads in an NGS experiment. A common analytical task to perform on these regions would be to ask *what is the read coverage at each genomic position*. The `coverage` function provides a convient way to address this question, by returning a vector that indicates the frequency of reads overlapping each of the genomic positions. 
 ```
+# calculate coverage of each base over this genomic region 
 coverage(gr)
 ```
 
@@ -138,31 +133,56 @@ Expecting a regular numerical vector? That might be OK in our small toy example 
 
 *RLE* is an especially efficient way of storing genomics data since there are often streches of repeated values in the final data representation, and often long streches of sequences are not considered in an experiment (e.g. non-coding regions in RNA-seq) so we shouldn't waste space storing information on those positions. RLE is emplyed in the BIGWIG file format to allow efficient storage and access to signal track data against a reference genome. Consider the below example in the context of a ChIP-seq experiment. 
 
+
+owen insert figure here 
+
 ![](../figures/chip-rle-example.png)
+
+
+
+We may also be interested only in features on the same strand. This could be achieved with some simple subsetting:
+```
+# only for the regions on the + strand 
+coverage(gr[strand(gr)=="+"])
+```
 
 GRanges objects can be indexed similar to regular objects in R, their intervals can be manipulating using the same functions introduced above for IRanges objects, and queried/manipulated using additional method functions available in the GenomicRanges package. Lets explore some of these. 
 ```
-# indexing 
+# index GRange object for specific elements 
 gr[1]
 gr[[1]]
 gr[1][["r-1"]]
 
-# view the top X regions 
+# view the top X regions of interest 
 head(gr, n=5)
 
-# shift all regions 
+# view the top X regions with scores greater than a value of interest 
+head(gr[score(gr)>4], n=5)
+
+# shift all regions 5bp 
 shift(gr, 5)
 
-# resize all regions 
+# resize all regions by requiring them to be 5bp wide 
 resize(gr, 5)
+
+# reduce the regions to one simplified set of non-overlapping regions 
+reduce(gr)
+```
+
+##### Storing and operating on sets of GRanges 
+
+Separate GRanges objects can also be combined into lists using the class `GRangesList` . 
+There are many reasons you might wish to group GRanges objects into a list, for example: 
+* 
 ```
 
 
-GRanges objects can also be combined into lists
+grl <- GRangesList("txA" = gr1, "txB" = gr2)
 
 ```
 
-```
+
+# sum up coverage to calculate variant calling coverage..?
 
 
 
