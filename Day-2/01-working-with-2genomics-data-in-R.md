@@ -125,6 +125,12 @@ Now lets imagine that these regions all represent sequencing reads in an NGS exp
 ```
 # calculate coverage of each base over this genomic region 
 coverage(gr)
+
+# perhaps we are only interested in the regions on the + strand 
+coverage(gr[strand(gr)=="+"])
+
+# 
+sum(coverage(gr))
 ```
 
 Expecting a regular numerical vector? That might be OK in our small toy example here, but imagine we need to do this for regions covering an entire genome. The object size would quickly become extremely large and require significant amounts of computational memory to handle. Instead, *GenomicRanges* leverages functionaility inrtoduced by *IRanges* to compress this sort of data through a process called **Run-length encoding (RLE)**. RLE is an efficient form of data compression for instances where we have long vectors with *runs* of numbers that might be the same. Consider the example below: 
@@ -134,17 +140,10 @@ Expecting a regular numerical vector? That might be OK in our small toy example 
 *RLE* is an especially efficient way of storing genomics data since there are often streches of repeated values in the final data representation, and often long streches of sequences are not considered in an experiment (e.g. non-coding regions in RNA-seq) so we shouldn't waste space storing information on those positions. RLE is emplyed in the BIGWIG file format to allow efficient storage and access to signal track data against a reference genome. Consider the below example in the context of a ChIP-seq experiment. 
 
 
-owen insert figure here 
-
 ![](../figures/chip-rle-example.png)
 
 
 
-We may also be interested only in features on the same strand. This could be achieved with some simple subsetting:
-```
-# only for the regions on the + strand 
-coverage(gr[strand(gr)=="+"])
-```
 
 GRanges objects can be indexed similar to regular objects in R, their intervals can be manipulating using the same functions introduced above for IRanges objects, and queried/manipulated using additional method functions available in the GenomicRanges package. Lets explore some of these. 
 ```
@@ -171,6 +170,20 @@ reduce(gr)
 
 ##### Storing and operating on sets of GRanges 
 
+
+EXMPLE SECTION - maybe try senter around a finding from encode or roadmap projects in paper
+(or find another paper where you can find an example) 
+DOWNLOAD ROADMAP EPIGENOMICS DATA OR ENCODE DATA AND USE AS EXAMPLE 
+COMPARE CHROMATIN MARKS FROM CHIP SEQ FROM 2 SAMPLES, 
+MAKE INTO GRANGES LIST 
+ANNOTATE TO TRANSCRIPT FEATURES (USING A GFF FILE FOR READING IN)
+GET OVERLAPPING PEAKS
+GET SOME UNIUE PEAKS
+VISUALIZE THEM 
+IMPORT THE BIGWIGS AND PLOT THEM 
+
+
+
 Separate GRanges objects can also be combined into lists using the class `GRangesList` . 
 There are many reasons you might wish to group GRanges objects into a list, for example: 
 * 
@@ -180,13 +193,6 @@ There are many reasons you might wish to group GRanges objects into a list, for 
 grl <- GRangesList("txA" = gr1, "txB" = gr2)
 
 ```
-
-
-# sum up coverage to calculate variant calling coverage..?
-
-
-
-
 
 
 GRanges objects can also be queried against each other. For example, you might want to find all the overlapping regions between 2 different sets of genomic ranges. 
@@ -224,6 +230,7 @@ cover bed, gff, bigwig
 SummarizedExperiment style packages
 adding gene annotation data to these 
 counting up over genomic regions 
+singlecellexperiment package 
 
 
 # visualization packages in R for genomics data 
@@ -234,5 +241,4 @@ This is not mean't to be a comprehensive introduction to the complete functional
 
 
 
-singlecellexperiment package 
 
