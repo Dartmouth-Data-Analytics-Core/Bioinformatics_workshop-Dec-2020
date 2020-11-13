@@ -121,7 +121,7 @@ It is important when selecting an aligner to use for your dataset that it is app
 
 It is also worth noting here that generating alignments is the most time consuming step of the analytical pipeline for most NGS analyses, and for RNA-seq, the field is moving toward quantification of gene expression using novel *'lightweight'* alignment tools, that are **extremely fast**, e.g. [Kallisto](https://pachterlab.github.io/kallisto/about), [Salfish](https://www.nature.com/articles/nbt.2862), and [Salmon](https://combine-lab.github.io/salmon/). These algorithms avoid generation of typical base-by-base alignments, and instead generate ***psuedo-alignments***, which have been shown to produce very accurate estimates of transcript abundances in RNA-seq data. 
 
-![Read alignment](../figures/read_alignment.png)
+![Read alignment](./figures/read_alignment.png)
   
 
 ### Concepts for read alignment 
@@ -154,7 +154,7 @@ At miniumum:
 Optional:   
 - `.gtf` file for the reference genome that species the genomic feature annotation. As mentioned above, if you know where the splice-junctions in your genome are, you can give this to aligners such as STAR and they will use this information to improve the quality of mapping in these regions. 
 
-![](../figures/gtf.png)
+![](./figures/gtf.png)
 
 
 ## SAM/BAM/CRAM file format
@@ -165,7 +165,7 @@ Read alignments are stored in the ***SAM (.sam)*** and )***BAM (.bam))*** file f
 
 Both formats contain a number of slots for each read alignment that describe key information about the alignment. 11 slots are mandatory, while others are optional and depend on the aligner used, and the settings used in that alignment.
 
-![SAM file](../figures/sam-file.png)
+![SAM file](./figures/sam-file.png)
 The image for the example BAM file is take from the [SAM/BAM file format documentation](https://samtools.github.io/hts-specs/SAMv1.pdf)
 
 #### Notes on select fields:
