@@ -99,11 +99,104 @@ Now we have the number of each nuleotide across the reads from the first 10000 r
 - FastQC   
 - MultiQC  
 
+### Discuss basics of adapter trimming 
+### 
+
 
 
 ----
 
+
+## Principles of read alignment for RNA-seq
+The goal of aliginging reads to a reference genome is to find the ***most likely location in that reference genome where the read originated from***. In the context of RNA-seq, this means we try to find the most likely gene in the reference genome that transcribed the RNA fragment which ultimately ended up in our cDNA library. Doing this for millions of reads allows us to quantify how many RNA fragments were transcribed from a given gene, so we are using the read alignment to measure gene expression. 
+
+Although we won't go into the theory here, alignming reads to reference genomes involves ***mapping*** to identify the most likely position of the read in the reference genome, followed by the ***alignment***, which describes the base-by-base relationship between the read and the reference. Alignments are often imperfect, and are associated with quality scores (***MAPQ scores***) that describe the quality of the alignment. 
+
+**Challenges of aligining millions of short reads to a refence genome involve:**
+- Mismatches introduced by **genetic variation** and **sequencing errors**
+- **Repeitive sequences** in genomes (e.g. start and end of chromosomes)
+- Presence of **intron** in reference genomes, meaning aligners must be able to consider **splice-junctions**
+
+It is important when selecting an aligner to use for your dataset that it is appropriate for your experiment, as numerous aligners exist and make different assumptions and have different strengths/weaknesses. Importantly, some aligners are ***splice-aware*** while others are not. ***Splice-aware*** aligners can generate alignments to a reference genome that span the intronic regions and therefore account for splicing, e.g. `STAR` and `HISAT2`. If your dataset is prokaryotic (non-splicosomal) you would **not** want to use a splice-aware aligner, and instead using an aligner that is not designed to map across intronic regions such as `bwa-mem` or `bowtie2`. 
+
+It is also worth noting here that generating alignments is the most time consuming step of the analytical pipeline for most NGS analyses, and for RNA-seq, the field is moving toward quantification of gene expression using novel *'lightweight'* alignment tools, that are **extremely fast**, e.g. [Kallisto](https://pachterlab.github.io/kallisto/about), [Salfish](https://www.nature.com/articles/nbt.2862), and [Salmon](https://combine-lab.github.io/salmon/). These algorithms avoid generation of typical base-by-base alignments, and instead generate ***psuedo-alignments***, which have been shown to produce very accurate estimates of transcript abundances in RNA-seq data. 
+
+![Read alignment](../figures/read_alignment.png)
+  
+
+### Concepts for read alignment 
+
+**Read clipping**  
+Aligners are capable of 'clipping' reads from sequence ends if they do not improve the quality of an alignment that exists for the rest of the sequence.  
+
+There are two type of clipping:  
+- *Soft-clipping*: bases at 5' and 3' ends of the read will be kept in the read sequence in the BAM file, but are NOT part of the alignment
+- *Hard-clipping*: bases at 5' and 3' ends of the read will be removed from the BAM file altogether and are NOT part of the alignment 
+
+Such clipping is commonly used by aligners to get rid of sequence contamination, e.g. ***adapter sequences*** or ***polyA tails*** from mRNAs, so that it does not affect the alignment. At least for RNA-seq, this is why you do not necessairily need to be very aggressive in read trimming and pre-processing steps. 
+
+Clipping can be very advantageous, but also can potentially cause some issues, read more [here](https://sequencing.qcfail.com/articles/soft-clipping-of-reads-may-add-potentially-unwanted-alignments-to-repetitive-regions/). 
+
+**Splicing**  
+As discussed above, numerous aligners exist, consisting of both ***splie-aware*** and ***splice-unaware*** aligners. Splice-aware aligners, such as `STAR` and `HISAT2` will produce alignments spanning splice junctions, which is obviously an important characteristic of RNA-seq data that the aligner needs to be able to account for. Furthermore, if you provide coordinates of splice-junctions to aligners like `STAR`, it can improve the mapping over spliced regions and improve detection of novel splice-functions. 
+
+**Genome vs transcriptome mapping?**  
+While there are times when one may want to map to a transcriptome, there are issues with this approach.  
+- If your annotated transcriptome is not complete, you may fail to map some reads simply because the sequences aren't in your reference, which would not be an issue if you mapped to the genome. 
+- With multiple splice isoforms it is difficult to disambiguate which splice isoform a read should be aligned to in transcriptome mapping. 
+- You cannot identify novel transcripts this way.
+
+**What input do I need for an alignment?**  
+At miniumum:  
+- `FASTQ` file(s)
+- A reference genome (`.fasta`)
+
+Optional:   
+- `.gtf` file for the reference genome that species the genomic feature annotation. As mentioned above, if you know where the splice-junctions in your genome are, you can give this to aligners such as STAR and they will use this information to improve the quality of mapping in these regions. 
+
+![](../figures/gtf.png)
+
+
 ## SAM/BAM/CRAM file format
+
+**Alignment file formats**  
+
+Read alignments are stored in the ***SAM (.sam)*** and )***BAM (.bam))*** file format. )***SAM)*** stands for )***Sequence Alignment/Map)*** format and is in tab-delimited text format, making it a human readable file (should you dare to look inside, these file are huge). )***BAM)*** files are the **compressed, indexed, binary version** of SAM files and are **NOT** human readable, but are much faster to parse and do complex downstream operations on. You can read all about the SAM/BAM file format specification in the documentation [here](https://samtools.github.io/hts-specs/SAMv1.pdf). While you may never need to actually look inside of a SAM/BAM file, it is important to have an understanding of what information is stored in one. 
+
+Both formats contain a number of slots for each read alignment that describe key information about the alignment. 11 slots are mandatory, while others are optional and depend on the aligner used, and the settings used in that alignment.
+
+![SAM file](../figures/sam-file.png)
+The image for the example BAM file is take from the [SAM/BAM file format documentation](https://samtools.github.io/hts-specs/SAMv1.pdf)
+
+#### Notes on select fields:
+
+**FLAG**:  
+Encodes important information about the read, for example, is it a ***primary***, ***secondary***, or ***supplementary*** alignment. Since a single read will likely have a number of properties that we want to ***'flag'***, SAM files use a special way of encoding the FLAG field to pack as much information as possible into a single number. While we won't go into detail on this here, SAM/BAM file use a *bit-wise* system to combine information across flags into a **single integer**. I encourage you to go read more about FLAGs and how they are specified in the SAM/BAM documentation. 
+
+The Broad institute provides an [excellent tool](https://broadinstitute.github.io/picard/explain-flags.html) for decomposing SAM flags into the proprties of the read that make up a specific `FLAG` value. 
+
+This command will provide basic information on FLAGs from samtools.
+```bash 
+samtools flags
+```
+The values shown here relate the the [hexadecimal system](https://www.electronics-tutorials.ws/binary/bin_3.html)
+
+**MAPQ**:   
+Corresponds to the quality of the mapping. These are calculated in the same way as the Phred scores `Q = -10 x log10(P)`, although are generally considered to be a best guess form the aligner. A MAPQ of 255 is used where mapping quality is not available. Some aligners also use specific values to represent certain types of alignments, which may affect use of downstream tools, so it is worth understanding those that are specific to your aligner. 
+
+**CIGAR**  
+An alphanumerical string that tells you information about the alignment. For relatively short reads, these are nice, but for long reads, they are a headache. Numbers correspond to number of bases, and letters correspond to features of those bases.  
+
+Letter key for CIGAR strings: 
+M = match or mismatch  
+S = soft clip  
+H = hard clip  
+I = insertion  
+D = deletion  
+N = skipping  
+
+So for example, alignment in row 3 of our SAM file example above (`5S6M`) would describe an alignment where 5 bases are soft-clipped, followed by 6 matching bases. 
+
 
 SAM format is a common way of representing sequenced reads, especially after reads have been aligned or mapped to a reference genome. BAM is a binary (non-human readable) format of SAM that takes up less space. CRAM files are compressed versions of BAM files - these take up the least space and are recommended for longer term storage of alignment files. SAM/BAM/CRAM files can be converted back and forth with the tool **samtools view**.
 
@@ -169,9 +262,21 @@ samtool view -H sample.bam
 
 You can learn more about the SAM file format [here](https://samtools.github.io/hts-specs/SAMv1.pdf).
 
+
+## QUantification
+
+<p align="center">
+<img src="../figures/genoic-content.png" title="xxxx" alt="context"
+	width="100%" height="100%" />
+</p>
+</p>
+
+***Fig. 1.** Genomic context of aligned reads can fall into several categories dictated by the annotation used. *
+
+
+
 ---- 
 
-## FASTA file format
 
 cover zwero and 1 -based coord systems 
 
