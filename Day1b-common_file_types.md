@@ -93,6 +93,14 @@ zcat SRR1039508_1.chr20.fastq.gz | sed -n '2~4p' | head -10000 | grep -o . | sor
 
 Now we have the number of each nuleotide across the reads from the first 10000 records. A quick and easy program to get GC content. GC content is used in basic quality control of sequence from FASTQs to check for potential contamination of the sequencing library. We just used this code to check 1 sample, but what if we want to know for our 4 samples?
 
+
+## Basic sequence quailty control check 
+
+- FastQC   
+- MultiQC  
+
+
+
 ----
 
 ## SAM/BAM/CRAM file format
@@ -165,10 +173,12 @@ You can learn more about the SAM file format [here](https://samtools.github.io/h
 
 ## FASTA file format
 
+cover zwero and 1 -based coord systems 
 
 
 
+## TO DO: 
+- Add basic concepts of alignment, assembly, quantification, peak calling as file types are introduced  
 
 
-cover zwero and 1 -based file formats 
 
