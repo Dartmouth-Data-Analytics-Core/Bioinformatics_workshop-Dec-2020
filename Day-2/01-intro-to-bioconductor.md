@@ -157,7 +157,15 @@ head(gr, n=5)
 
 # view the top X regions with scores greater than a value of interest 
 head(gr[score(gr)>4], n=5)
+```
 
+There are also numerous range-based operations can be performed on GRanges objects using functionality implemented through IRanges, and can be used to manipulate the original regions in almost ay way you desire. 
+
+![](../figures/range-operations.png)
+**Image source:** [GRanges tutorial](https://www.bioconductor.org/help/course-materials/2015/SeattleApr2015/B_GenomicRanges.html))
+
+Lets try a few out on our GRanges object: 
+```
 # shift all regions 5bp 
 shift(gr, 5)
 
@@ -168,7 +176,7 @@ resize(gr, 5)
 reduce(gr)
 ```
 
-##### Storing and operating on sets of GRanges 
+### Working with multiple GRanges objects  
 
 Now that we understand the basics of the IRanges and GenomicRanges packages, lets load in some real data as GRanges objects and perform some basic analysis tasks with them. We will be using ChIP-seq data from a recent study of the chromatin landscape in the developing mouse (Gorkin *et al*, *Nature*, 2020)[https://www.nature.com/articles/s41586-020-2093-3], published as part of the (ENCODE (Encyclopedia of DNA Elements) project)[https://www.encodeproject.org/]. 
 
@@ -180,7 +188,7 @@ In particular, we will use ChIP-seq data generated in immunoprecipation experime
 - **H3K27ac** - acetylation at the 27th lysine residue of histone H3
 - **H3K9ac** - acetylation at the 9th lysine residue of histone H3
 
-![../figures/chromatin-figure.png]
+![../figures/nucelosomes.png]
 
 Both H3K27ac and H3K9ac are known to be found at regions of active chromatin and particularly enhancers, therefore by comparing their distribution across forebrain and heart tissues at a soecific stage of development (E15.5), we can gain insight into which regions of the mouse genome are important for tissue-specific development. 
 
@@ -342,12 +350,4 @@ In order to address these questions, we need to pull in some annotation data for
 - Whether you use *BEDTools*, *BioPython* or Bioconductor packages within R is dependent on what you are doing and what you need to do next. For example, if you will be needing functionality from other Bioconductor packages after analysing the overlap between sets of genomic regions, you may choose to use R/Bioconductor. If you simply need to intersect two BED files to make a third that reflects the intersection for inout into another UNIX-based software, you could use BEDTools.   
 
 - This lesson is not intended to be a comprehensive introduction to the complete functionality of any of the packages discussed here, and would be impossible to achieve in the time we have. This lesson is based off of similar exercises available from far more comprehsnive vigenettes and documentation at the Bioconductor webpages for each page. There is an enormous range of functionality available from these packages and I encourage you to use this lesson as a starting point to direct you toward these more comprehsnive resources. For example, the [BioConductor website](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html) for *GenomicRanges* provides an excellent vigentte of *GenomicRanges* HOWTOs, covering a wide range of common tasks when operating on genomic regions. 
-
-
-
-
-
-
-
-Image from Bioconductor turiotrial (linked [here]())
 
