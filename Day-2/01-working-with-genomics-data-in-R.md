@@ -359,6 +359,16 @@ library(GenomicRanges)
 ```
 
 
+genomation: 
+reading in genomics data with r trackleyer and other file formats (Rsamtools for FASTQ..?/FASTA)
+
+## Data containers, maybe Part 3..?
+SummarizedExperiment style packages
+adding gene annotation data to these 
+counting up over genomic regions 
+singlecellexperiment package 
+
+
 
 
 
