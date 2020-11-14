@@ -188,7 +188,7 @@ In particular, we will use ChIP-seq data generated in immunoprecipation experime
 - **H3K27ac** - acetylation at the 27th lysine residue of histone H3
 - **H3K9ac** - acetylation at the 9th lysine residue of histone H3
 
-![](../figures/nucelosomes.png)
+![](../figures/nucleosomes.png)
 
 Both H3K27ac and H3K9ac are known to be found at regions of active chromatin and particularly enhancers, therefore by comparing their distribution across forebrain and heart tissues at a soecific stage of development (E15.5), we can gain insight into which regions of the mouse genome are important for tissue-specific development. 
 
