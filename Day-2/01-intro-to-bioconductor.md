@@ -182,13 +182,13 @@ Now that we understand the basics of the IRanges and GenomicRanges packages, let
 
 In this study, the autors generate an atlas of the dynamic chromatin landscape at various time points during mouse embryonic development, conducting over 1100 ChIP-seq experiments and 132 ATAC-seq experiments spanning 72 stages of development in various tissues. We will use a small subset of this data to demonstrate how the GenomicRanges package can be used to explore this type of data, as well as compare and contrast between samples. 
 
-![../figures/mouse-atlas-fig1a.png]
+![](../figures/mouse-atlas-fig1a.png)
 
 In particular, we will use ChIP-seq data generated in immunoprecipation experiments for several histone modifications, whose presence and absence can be used to infer the functional state of chromatin at specific loci (e.g. active transcription, enhancers, heterochromatin). Namely, we will start by contrasting the locations of ChIP-seq peaks for two chromatin marks between forebrain and heart tissues in the developing mouse: 
 - **H3K27ac** - acetylation at the 27th lysine residue of histone H3
 - **H3K9ac** - acetylation at the 9th lysine residue of histone H3
 
-![../figures/nucelosomes.png]
+![](../figures/nucelosomes.png)
 
 Both H3K27ac and H3K9ac are known to be found at regions of active chromatin and particularly enhancers, therefore by comparing their distribution across forebrain and heart tissues at a soecific stage of development (E15.5), we can gain insight into which regions of the mouse genome are important for tissue-specific development. 
 
