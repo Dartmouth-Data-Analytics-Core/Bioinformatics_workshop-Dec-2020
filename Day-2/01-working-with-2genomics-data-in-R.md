@@ -170,75 +170,185 @@ reduce(gr)
 
 ##### Storing and operating on sets of GRanges 
 
+Now that we understand the basics of the IRanges and GenomicRanges packages, lets load in some real data as GRanges objects and perform some basic analysis tasks with them. We will be using ChIP-seq data from a recent study of the chromatin landscape in the developing mouse (Gorkin *et al*, *Nature*, 2020)[https://www.nature.com/articles/s41586-020-2093-3], published as part of the (ENCODE (Encyclopedia of DNA Elements) project)[https://www.encodeproject.org/]. 
 
-EXMPLE SECTION - maybe try senter around a finding from encode or roadmap projects in paper
-(or find another paper where you can find an example) 
-DOWNLOAD ROADMAP EPIGENOMICS DATA OR ENCODE DATA AND USE AS EXAMPLE 
-COMPARE CHROMATIN MARKS FROM CHIP SEQ FROM 2 SAMPLES, 
-MAKE INTO GRANGES LIST 
-ANNOTATE TO TRANSCRIPT FEATURES (USING A GFF FILE FOR READING IN)
-GET OVERLAPPING PEAKS
-GET SOME UNIUE PEAKS
-VISUALIZE THEM 
-IMPORT THE BIGWIGS AND PLOT THEM 
+In this study, the autors generate an atlas of the dynamic chromatin landscape at various time points during mouse embryonic development, conducting over 1100 ChIP-seq experiments and 132 ATAC-seq experiments spanning 72 stages of development in various tissues. We will use a small subset of this data to demonstrate how the GenomicRanges package can be used to explore this type of data, as well as compare and contrast between samples. 
 
+![../figures/mouse-atlas-fig1a.png]
 
+In particular, we will use ChIP-seq data generated in immunoprecipation experiments for several histone modifications, whose presence and absence can be used to infer the functional state of chromatin at specific loci (e.g. active transcription, enhancers, heterochromatin). Namely, we will start by contrasting the locations of ChIP-seq peaks for two chromatin marks between forebrain and heart tissues in the developing mouse: 
+- **H3K27ac** - acetylation at the 27th lysine residue of histone H3
+- **H3K9ac** - acetylation at the 9th lysine residue of histone H3
 
-Separate GRanges objects can also be combined into lists using the class `GRangesList` . 
-There are many reasons you might wish to group GRanges objects into a list, for example: 
-* 
+![../figures/chromatin-figure.png]
+
+Both H3K27ac and H3K9ac are known to be found at regions of active chromatin and particularly enhancers, therefore by comparing their distribution across forebrain and heart tissues at a soecific stage of development (E15.5), we can gain insight into which regions of the mouse genome are important for tissue-specific development. 
+
+To make things easier, we have downloaded the called peaks (in broadpeak format) for you from the (ENCODE website) [https://www.encodeproject.org/], therefore the first thing we need to do is read these data into R. Since broadpeak files are a form of extended BED file, we can use functions from the `rtracklayer` package to read them into our current session. 
+```
+# we need to establish a vector describing what the extra extended BED columns are
+extraCols_narrowPeak <- c(signalValue = "numeric", pValue = "numeric",
+                          qValue = "numeric", peak = "integer")
+# Note: if we had a reglar BED file (no extended fields) we could ignore the extraCols argument
+
+# use the import() function to read in the peaks called in the forebrain H3K27ac ChIP-seq
+fr_h3k27ac <- rtracklayer::import("forebrain_E15.5_H3K27ac.bed", 
+                                  format = "BED", 
+                                  extraCols = extraCols_narrowPeak,
+                                  genome = "mm10")
+                                  
+# do the same for the heart H3K27ac ChIP-seq peaks 
+ht_h3k27ac <- rtracklayer::import("heart_E15.5_H3K27ac.bed", 
+                                  format = "BED", 
+                                  extraCols = extraCols_narrowPeak, 
+                                  genome = "mm10")
+
+# print both GRanges objects to get an idea for their contents 
+fr_h3k27ac
+ht_h3k27ac
+
+# check their lengths 
+length(fr_h3k27ac)
+length(ht_h3k27ac)
 ```
 
+Now that we have loaded in the H3K27ac ChIP-seq peaks, we want to get a basic idea of how these peaks overlap, which tells us about how similar the chromatin states are between forebrain and heart tissue in the developing mouse at E15.5. GenomicRanges has specific functionality for doing this sort of analysis. 
+```
+# use findOverlaps() to return matches of genomic ranges between a 'query' and a 'subject'
+overlaps <- findOverlaps(query = fr_h3k27ac, subject = ht_h3k27ac)
+overlaps
 
-grl <- GRangesList("txA" = gr1, "txB" = gr2)
+# subset the forebrain GRanges object for H3K27ac peaks that overlap with peaks in heart
+fr_h3k27ac_ov1 <- fr_h3k27ac[queryHits(overlaps)]
+fr_h3k27ac_ov1
 
+# and vice versa for heart with forebrain 
+ht_h3k27ac_ov1 <- ht_h3k27ac[subjectHits(overlaps)]
+ht_h3k27ac_ov1
+
+# use these objects to calculate the % of overlapping peaks between 
+length(fr_h3k27ac_ov1)/length(fr_h3k27ac)*100
+length(ht_h3k27ac_ov1)/length(ht_h3k27ac)*100
+
+# we could directly subset for the overlapping peaks using subsetByOverlaps()
+subsetByOverlaps(fr_h3k27ac, heart_h3k27ac)
+
+# alternatively, we could get the H3K27ac peaks that are unique to each tissue  
+#### forebrain
+fr_h3k27ac_uniq1 <- fr_h3k27ac[-queryHits(overlaps)]
+fr_h3k27ac_uniq1
+
+#### heart 
+fr_h3k27ac_uniq1 <- fr_h3k27ac[-queryHits(overlaps)]
+fr_h3k27ac_uniq1
 ```
 
+Now lets read in the peaks for H3K9ac in both forebrain and heart. To help keep the objects in our R environment organized, we can use another class available in GenomicRanges, the `GRangesList` class, which allows us to store multiple Granges objects in a list. This makes sense to do for our analysis, as we have multiple sets of peaks for each tissue that we want to be in our R environment. 
+```
+# forebrain H3K9ac ChIP-seq peaks
+fr_h3k9ac <- rtracklayer::import("forebrain_E15.5_H3K9ac.bed", 
+                                  format = "BED", 
+                                  extraCols = extraCols_narrowPeak,
+                                  genome = "mm10")
+                                  
+# heart H3K9ac ChIP-seq peaks 
+ht_h3k9ac <- rtracklayer::import("heart_E15.5_H3K9ac.bed", 
+                                  format = "BED", 
+                                  extraCols = extraCols_narrowPeak, 
+                                  genome = "mm10")
 
-GRanges objects can also be queried against each other. For example, you might want to find all the overlapping regions between 2 different sets of genomic ranges. 
+# combine with H3K27ac peak sets to make GrangesList objects 
+fr <- GRangesList("h3K27ac" = fr_h3k27ac, "h3K9ac" = fr_h3k9ac)
+ht <- GRangesList("h3K27ac" = ht_h3k27ac, "h3K9ac" = ht_h3k9ac)
+
+# have a look at them 
+fr
+ht
+
+# check their length
+length(fr)
+length(ht)
+
+# explore individual elements of the list
+fr[[1]]
+fr[[2]]
+length(fr[[1]])
+length(fr[[2]])
+```
+
+We can use the GRangesLists to explore the overlap between marks within a given tissue, using the same approach with the `findOverlaps()` function as we did above. 
+```
+# subset for overlapping regions within the forebrain peaks, across both histone marks 
+fr_overlaps <- findOverlaps(query = fr$h3K27ac, subject = fr$h3K9ac)
+fr_overlaps
+
+# subset the forebrain H3K27ac GRanges for peaks overlapping with firebrain H3K9ac peaks
+fr_h3k27ac_ov_h3K9ac <- fr$h3K27ac[queryHits(fr_overlaps)]
+
+# calculate % overlapping peaks based on all forebrain H3K27ac peaks
+length(fr_h3k27ac_ov_h3K9ac)/length(fr$h3K27ac)*100
+
+# do the same for heart
+ht_overlaps <- findOverlaps(query = ht$h3K27ac, subject = ht$h3K9ac)
+ht_h3k27ac_ov_h3K9ac <- ht$h3K27ac[queryHits(ht_overlaps)]
+length(ht_h3k27ac_ov_h3K9ac)/length(ht$h3K27ac)*100
+```
+
+You could also obtain the overlapping regions between histone marks within each tissue more directly using the `susetByOverlaps()` function:
+```
+fr_ov2 <- subsetByOverlaps(fr$h3K27ac, fr$h3K9ac)
+fr_ov2
+
+ht_ov2 <- subsetByOverlaps(ht$h3K27ac, ht$h3K9ac)
+ht_ov2
+```
+
+Comparing the % of overlap for H3K27ac and H3K9ac in both tissues, we can see that there is quite a lot of overlap, but also still a lot of regions that don't overlap. This may suggest that these two histone marks also have independent roles in defining functional regions of chromatin. Indeed, the *ENCODE project* and *(Roadmap Epigenomics project)[http://www.roadmapepigenomics.org/]* use a complex statistical model to learn chromatin states and functionally annotate genomes based on ChIP-seq from several chromatin marks (called (ChromHMM)[https://www.nature.com/articles/nprot.2017.124]) for their sets of comprehensive consolidated epigenomes. 
+
+### Visualization 
+
+Bioconductor (and many packages outside Bioconductor) provide packages with extensive functionality for plotting genomics data, especially for data stored with GRanges class objects. One useful package is `GViz` which includes a diverse array of functionality for producing complex plot of genomics data. Especially useful, are the functionalities in Gviz that allow you to plot *'tracks'* that correspond to data from one sample or observation type (e.g. forebrain H3K27ac peaks), just as you might use view them in a genome browser. 
+
+Lets use `Gviz` to create a simple visualization of a specific genomic region, so that we can compare the peaks present for H3K27ac in forebrain and heart within that region. 
+```
+# create an annotation track from the Granges object for H3K27ac
+fr_h3k27ac_track <- AnnotationTrack(fr$h3K27ac, chromosome = "chr17", start = 9e6, end = 10e6,
+                         name = "Forebrain - H3K27ac", stacking = "dense", col = "indianred")
+
+# do the same for heart H3K27ac
+hr_h3k27ac_track <- AnnotationTrack(he$h3K27ac, chromosome = "chr17", start = 9e6, end = 10e6,
+                         name = "Heart - H3K27ac", stacking = "dense", col = "cornflowblue")
+                   
+# create a genomic axis object to add to plot 
+gtrack <- GenomeAxisTrack()
+
+# plot the tracks for this region 
+plotTracks(list(gtrack, fr_h3k27ac_track, hr_h3k9ac_track), from = 9e6, to = 10e6)
+```
+
+!()[../figures/fr-ht-h3k27ac-chr17.png]
+
+Clearly the peaks are distributed differently over this region of chromosome 17, supporting the notion that the regions of functional chromatin differ between forebrain and heart tissue in the developing mouse embryo at E15.5. However, this plot isn't really that useful to us if we don't have any genome annotation to go with it. For example, which genes are the peaks near? Are the peaks mostly located within gene bodies, or are they intergenic? 
+
+In order to address these questions, we need to pull in some annotation data for the mouse genome. Fortunately, Bioconductor has very extensive functionality in the form of various packages specifcally devoted to genome annotation, and interface with public databases like *UCSC*, *Ensembl*, and *NCBI* to obtain the most up to date reference data available. **This will be the focus of our next lesson**. 
+
+**Practical note:** Generally, I would not explore a new dataset using Bioconductor-based visualization packages. When I am interested in exploring the data visually and/or am interested in a specific region or gene, I will use a genome browser like *IGV* to do this. This is much faster and easier and requires no coding. However, the real utility of packages like `Gviz` is that they provide a comprehensive and flexible way to display data in numerous ways not possible in standard genome browsers, and also provide a way to produce plots for numerous regions of interest programmatically. 
+
+### Additional considerations:  
+- There are numerous ways to perform the sorts of tasks that we did in this lesson, both within and outside of R. For example, (**BEDTools**)[https://bedtools.readthedocs.io/en/latest/], described as "the swiss-army knife for genomic-arithmetic" allows you to intersect, subset, merge, count, and manipulate genomic regions directly from the UNIX command line for several file formats (BED, GFF/GTF, VCF). Alternatively, (**Biopython**)[https://biopython.org/] provides similar functionality from within python.  
+
+!()[../figures/bedtools.png]
+!()[../figures/biopython.png]
+
+- Whether you use *BEDTools*, *BioPython* or Bioconductor packages within R is dependent on what you are doing and what you need to do next. For example, if you will be needing functionality from other Bioconductor packages after analysing the overlap between sets of genomic regions, you may choose to use R/Bioconductor. If you simply need to intersect two BED files to make a third that reflects the intersection for inout into another UNIX-based software, you could use BEDTools.   
+
+- This lesson is not intended to be a comprehensive introduction to the complete functionality of any of the packages discussed here, and would be impossible to achieve in the time we have. This lesson is based off of similar exercises available from far more comprehsnive vigenettes and documentation at the Bioconductor webpages for each page. There is an enormous range of functionality available from these packages and I encourage you to use this lesson as a starting point to direct you toward these more comprehsnive resources. For example, the [BioConductor website](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html) for *GenomicRanges* provides an excellent vigentte of *GenomicRanges* HOWTOs, covering a wide range of common tasks when operating on genomic regions. 
+
+
+
+
+
+
 
 Image from Bioconductor turiotrial (linked [here]())
-
-
-
-These are analogous to functionalities from command line utilities like BEDTools.  
-
-BEDTools image 
-
-
-
-
-The [BioConductor website](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html) for *GenomicRanges* has some excellent vignettes and how tos for specific tasks, e.g. *"how to find peaks in read coverage"*. I encourage you to go and explore these. 
-
-
-
-
-genomation: 
-reading in genomics data with r trackleyer and other file formats (Rsamtools for FASTQ..?/FASTA)
-annotation of genomic intervals (maybe just use a small fasta file of a chr for this exercise) 
-
-
-reading in as flat files 
-reading in genomics data files with special functions 
-cover bed, gff, bigwig 
-
-
-
-
-
-## Data containers, maybe Part 3..?
-SummarizedExperiment style packages
-adding gene annotation data to these 
-counting up over genomic regions 
-singlecellexperiment package 
-
-
-# visualization packages in R for genomics data 
-GViz
-
-
-This is not mean't to be a comprehensive introduction to the complete functionality of *GenomicRanges*, or replace the excellent tutorials or Vigenttes available on the Bioconductor website. 
-
-
-
 
