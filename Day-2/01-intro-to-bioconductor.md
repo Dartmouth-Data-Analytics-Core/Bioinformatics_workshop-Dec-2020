@@ -178,7 +178,7 @@ reduce(gr)
 
 ### Working with multiple GRanges objects  
 
-Now that we understand the basics of the IRanges and GenomicRanges packages, lets load in some real data as GRanges objects and perform some basic analysis tasks with them. We will be using ChIP-seq data from a recent study of the chromatin landscape in the developing mouse (Gorkin *et al*, *Nature*, 2020)[https://www.nature.com/articles/s41586-020-2093-3], published as part of the (ENCODE (Encyclopedia of DNA Elements) project)[https://www.encodeproject.org/]. 
+Now that we understand the basics of the IRanges and GenomicRanges packages, lets load in some real data as GRanges objects and perform some basic analysis tasks with them. We will be using ChIP-seq data from a recent study of the chromatin landscape in the developing mouse [Gorkin *et al*, *Nature*, 2020](https://www.nature.com/articles/s41586-020-2093-3), published as part of the [ENCODE (Encyclopedia of DNA Elements) project](https://www.encodeproject.org/). 
 
 In this study, the autors generate an atlas of the dynamic chromatin landscape at various time points during mouse embryonic development, conducting over 1100 ChIP-seq experiments and 132 ATAC-seq experiments spanning 72 stages of development in various tissues. We will use a small subset of this data to demonstrate how the GenomicRanges package can be used to explore this type of data, as well as compare and contrast between samples. 
 
@@ -192,7 +192,7 @@ In particular, we will use ChIP-seq data generated in immunoprecipation experime
 
 Both H3K27ac and H3K9ac are known to be found at regions of active chromatin and particularly enhancers, therefore by comparing their distribution across forebrain and heart tissues at a soecific stage of development (E15.5), we can gain insight into which regions of the mouse genome are important for tissue-specific development. 
 
-To make things easier, we have downloaded the called peaks (in broadpeak format) for you from the (ENCODE website) [https://www.encodeproject.org/], therefore the first thing we need to do is read these data into R. Since broadpeak files are a form of extended BED file, we can use functions from the `rtracklayer` package to read them into our current session. 
+To make things easier, we have downloaded the called peaks (in broadpeak format) for you from the (ENCODE website) [](https://www.encodeproject.org/), therefore the first thing we need to do is read these data into R. Since broadpeak files are a form of extended BED file, we can use functions from the `rtracklayer` package to read them into our current session. 
 ```
 # we need to establish a vector describing what the extra extended BED columns are
 extraCols_narrowPeak <- c(signalValue = "numeric", pValue = "numeric",
@@ -311,7 +311,7 @@ ht_ov2 <- subsetByOverlaps(ht$h3K27ac, ht$h3K9ac)
 ht_ov2
 ```
 
-Comparing the % of overlap for H3K27ac and H3K9ac in both tissues, we can see that there is quite a lot of overlap, but also still a lot of regions that don't overlap. This may suggest that these two histone marks also have independent roles in defining functional regions of chromatin. Indeed, the *ENCODE project* and *(Roadmap Epigenomics project)[http://www.roadmapepigenomics.org/]* use a complex statistical model to learn chromatin states and functionally annotate genomes based on ChIP-seq from several chromatin marks (called (ChromHMM)[https://www.nature.com/articles/nprot.2017.124]) for their sets of comprehensive consolidated epigenomes. 
+Comparing the % of overlap for H3K27ac and H3K9ac in both tissues, we can see that there is quite a lot of overlap, but also still a lot of regions that don't overlap. This may suggest that these two histone marks also have independent roles in defining functional regions of chromatin. Indeed, the ENCODE project and [Roadmap Epigenomics project](http://www.roadmapepigenomics.org/) use a complex statistical model to learn chromatin states and functionally annotate genomes based on ChIP-seq from several chromatin marks (called [ChromHMM](https://www.nature.com/articles/nprot.2017.124)) for their sets of comprehensive consolidated epigenomes. 
 
 ### Visualization 
 
@@ -343,7 +343,7 @@ In order to address these questions, we need to pull in some annotation data for
 **Practical note:** Generally, I would not explore a new dataset using Bioconductor-based visualization packages. When I am interested in exploring the data visually and/or am interested in a specific region or gene, I will use a genome browser like *IGV* to do this. This is much faster and easier and requires no coding. However, the real utility of packages like `Gviz` is that they provide a comprehensive and flexible way to display data in numerous ways not possible in standard genome browsers, and also provide a way to produce plots for numerous regions of interest programmatically. 
 
 ### Additional considerations:  
-- There are numerous ways to perform the sorts of tasks that we did in this lesson, both within and outside of R. For example, (**BEDTools**)[https://bedtools.readthedocs.io/en/latest/], described as "the swiss-army knife for genomic-arithmetic" allows you to intersect, subset, merge, count, and manipulate genomic regions directly from the UNIX command line for several file formats (BED, GFF/GTF, VCF). Alternatively, (**Biopython**)[https://biopython.org/] provides similar functionality from within python.  
+- There are numerous ways to perform the sorts of tasks that we did in this lesson, both within and outside of R. For example, [**BEDTools**](https://bedtools.readthedocs.io/en/latest/), described as "the swiss-army knife for genomic-arithmetic" allows you to intersect, subset, merge, count, and manipulate genomic regions directly from the UNIX command line for several file formats (BED, GFF/GTF, VCF). Alternatively, [**Biopython**](https://biopython.org/) provides similar functionality from within python.  
 
 ![](../figures/bedtools-biopython.png)
 
