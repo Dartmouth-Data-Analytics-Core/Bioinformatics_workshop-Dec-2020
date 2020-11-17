@@ -334,7 +334,7 @@ gtrack <- GenomeAxisTrack()
 plotTracks(list(gtrack, fr_h3k27ac_track, hr_h3k9ac_track), from = 9e6, to = 10e6)
 ```
 
-!()[../figures/fr-ht-h3k27ac-chr17.png]
+!()[../figures/h3k27ac_chr11-region-1.png]
 
 Clearly the peaks are distributed differently over this region of chromosome 17, supporting the notion that the regions of functional chromatin differ between forebrain and heart tissue in the developing mouse embryo at E15.5. However, this plot isn't really that useful to us if we don't have any genome annotation to go with it. For example, which genes are the peaks near? Are the peaks mostly located within gene bodies, or are they intergenic? 
 
