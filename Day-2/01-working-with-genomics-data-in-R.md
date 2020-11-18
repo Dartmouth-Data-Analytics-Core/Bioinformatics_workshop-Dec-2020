@@ -1,10 +1,131 @@
-# Part 2 - ...
+# Part 2 - Genome annotation in R/Bioconductor 
 
-### Learning objectives: 
-- Understand why we might want to work with genomics data in R, and what packages are available to do this
-- Learn the basics behind the GenomicRanges format and how it can be used to store information on genomic regions
-- Learn how to work with reference genomes in R from BioConductor packages 
-- Learn how to read in and manipulate a refernece genome in R 
+As discussed at the end of part 1, there are many instances in genomic data analysis where we will want to utilize publicly available genome annotation data. This is typically done toward the end of an analysis when you wish to learn more about the most significant results. Bioconductor provides an extensive set of annotation resources that provide access with a number of popular annotation databases (NCBI, Ensembl, GenBank, UniProt) as well as functionality that allows interaction with these data using common Bioconductor data structures (e.g. GRanges). 
+
+Examples of common annotation tasks include:  
+* Mapping unique gene identifiers (e.g. ENSEMBL or NCBI IDs) to gene symbols in an RNA-seq experiment 
+* Accessing transcript coordinate information for transcripts of interest from an RNA-seq dataset
+* Annotate the genomic context (e.g. promoter, intron, exon, intergenic) peaks from a ChIP-seq experiment
+* Extract sequences from a reference genomes corresponding to a set of ChIP- or ATAC-seq peaks
+
+In this lesson, we will introduce the major Bioconductor packages for genome annotation and how you might use them to achieve common tasks in NGS data analysis. 
+
+| **Package/package-family** | **Contents & uses**                                                |
+|------------------------|-------------------------------------------------------------|
+| *Org.X.db*               | Gene-based annotation, mapping IDs, symbols and identifiers |
+| *GenomicFeatures/TxDb*   | Detailed transcriptome annotations in GRanges format        |
+| *genomation*             | annotation of genomic context and basic data visualization  |
+| *BS.genome*              | Full sequences for common reference genomes                 |
+
+### Mapping gene identifiers with *Org.X.DB*
+
+OrgDb represents a family of Bioconductor packages that store gene identifiers from a numerous annotation databases (e.g. gene ontologies) for a wide range or organsisms. For example, `org.Hs.eg.db` loads the current annotations for human genes, `org.Mm.eg.db` for mouse, `org.Sc.sgd.db` for yeast, and so on. 
+
+OrgDb packages also provide access to some basic additional annotation data such as membership in gene ontology groups. Just as we did in the last lesson, you can navigate through Bioconductor's package index to view all of the existing Org.X.db packages. 
+[here](https://www.bioconductor.org/packages/release/BiocViews.html#___OrgDb)
+
+It is worth noting that you are not loading annotation data for a specific genome build when using OrgDb packages (which should be obvious from the package names). OrgDb packages pertain to identifiers based on what are usually the most recent genome annotations since they are updated every few months. If you need annotations for an older build specifically, you may need to adopt a different approach than using OrgDb. 
+
+Load the org.db package for the human genome:
+```{r}
+library(org.Hs.eg.db)
+```
+
+Once loaded, OrgDB allows access to the annotation data for the package you loaded through hidden objects that can be accessed using a set of common Org.Db functions. For example, we can access data from the `org.Hs.eg.db` package after loading it by using the hidden object *org.Hs.eg.db*. 
+```{r}
+org.Hs.eg.db
+
+# what class is it
+class(org.Hs.eg.db)
+
+# what types of data can be extracted?
+keytypes(org.Hs.eg.db)
+```
+
+OrgDb objects use the `keytypes()` method to access specific types of data from the annotation source. We can ask OrgDb to return a specific keytype that we are interested in. 
+```{r}
+# obtain all ENSEMBL IDs 
+entrez.ids <- keys(org.Hs.eg.db, keytype="ENSEMBL")
+head(entrez.ids)
+
+# how many are there 
+length(entrez.ids)
+```
+
+The situation we usually end up in however, is when we want to return a set of keytypes given one set of keytypes, for example, returning the gene symbol, entrez ID, and RefSeq ID from a list of Ensembl IDs. For thie we can use the `select()` method or `mapIds` method. 
+```
+# use ensembl id of first 6 in entrez.ids to get desired keytypes
+select(org.Hs.eg.db, keys = head(entrez.ids), columns = c("SYMBOL","ENTREZID", "REFSEQ"), keytype="ENSEMBL")
+
+# using mapIds but only to get gene symbol 
+mapIds(org.Hs.eg.db, keys = head(entrez.ids), column = c("SYMBOL"), keytype="ENSEMBL")
+```
+
+**Question:** When/why might we use `mapIds` over `select`?
+
+### RNA-seq results annotation using OrgDb  
+
+Lets apply this approach to annotate some real RNA-seq differential expression results. Start by reading in the data, currently stored in .csv format. 
+```{r}
+# read in data 
+results <- read.csv()
+
+# check the first few lines  
+head(results) 
+```
+
+Now use mapIDs to obtain 1:1 mappings between the Ensembl ID and the gene symbol. 
+```
+# using mapIds but only to get gene symbol 
+gene.symbols <- mapIds(org.Hs.eg.db, keys = rownames(results), column = c("SYMBOL"), keytype="ENSEMBL")
+
+# add to results 
+results$symbol <- gene.symbols
+
+# check the new results table 
+head(results) 
+
+# make sure there are no NAs..
+table(is.na(results$symbol))
+```
+
+Uh Oh! There are loads of NAs, meaning many genes didn't have a symbol mapped to them... Turns out Org.Db is most built around entrez IDs and does not contain the annotations
+
+
+
+
+EnsDb.Hsapiens.v86
+```
+# use ensembl id of first 6 in entrez.ids to get desired keytypes
+select(EnsDb, keys = head(entrez.ids), columns = c("SYMBOL","ENTREZID", "REFSEQ"), keytype="ENSEMBL")
+
+# using mapIds but only to get gene symbol 
+mapIds(EnsDb, keys = head(entrez.ids), column = c("SYMBOL"), keytype="ENSEMBL")
+```
+
+# how many IDs are we missing now? 
+
+
+
+
+
+
+
+
+Note: There are various ways to achieve what we did here using different Biconductor/R-packages. One way is not necessairily better than the other, however it is important to understand the resource/database that you package is pulling from, so always read the documentation. 
+
+
+
+
+
+if you dont have the gff3 file, for example if the data processing was done elsewhere, you may use access biomart 
+makeTxDbPackageFromBiomaRt
+
+
+
+
+transcript info with the txdb package 
+
 
 
 ### The BioStrings R-package
@@ -302,6 +423,17 @@ str(genome)
 
 
 
+
+
+### visualize mouse histone mark data with genomation 
+### elude to other packages that can do this in R, but also out of R, maybe find a place to do this with deeptools 
+
+
+
+
+
+
+
 Masked sequence: MaskedXString 
 
 
@@ -337,26 +469,6 @@ Maybe just mention AnnotationHub as larger resource to do a lot of this
 
 
 
-### Putting it all together exercise 
-
-You did a ChIP-seq experiment for two histone marks, you have BED files and BigWigs, you are want to:
-- annotate the peaks to genes 
-- find the regions where the marks overlap 
-- ...
-
-
-
-
-### The GenomicRanges R-package
-
-[GenomicRanges](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html) is an extremely useful package from the BioConductor project for working with genomic regions and coordinates in R, and lies at the core of numerous other BioConductor packages such as [BSgenome](https://bioconductor.org/packages/release/bioc/html/BSgenome.html), [rtracklayer](https://bioconductor.org/packages/release/bioc/html/rtracklayer.html) and [VariantAnnotation](https://bioconductor.org/packages/release/bioc/html/VariantAnnotation.html). 
-
-The goal of this lesson is to introduce you to the major object classes used by *GenomicRanges*, how they work, and together explore some examples of how you could use the package in your own work. This is not mean't to be a comprehensive introduction to the complete functionality of *GenomicRanges*, or replace the excellent tutorials or Vigenttes available on the [BioConductor website](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html)
-
-Lets load the GenomicRanges package: 
-```{r}
-library(GenomicRanges)
-```
 
 
 genomation: 
@@ -369,6 +481,7 @@ counting up over genomic regions
 singlecellexperiment package 
 
 
+several overviews of annotation functionalities in Bioconductor exist. 
 
 
 
