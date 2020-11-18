@@ -200,7 +200,7 @@ We will use a small subset of this data to demonstrate how the **GenomicRanges**
 **Figure 1A-B from Gorkin *et al*, 2020, Nature**. 
 ![](../figures/mouse-atlas-fig1a.png)
 
-In particular, we will use **ChIP-seq data** generated in immunoprecipation experiments for **several histone modifications**, whose presence and absence can be used to infer the functional state of chromatin at specific loci (e.g. active transcription, enhancers, heterochromatin). 
+In particular, we will use **ChIP-seq data** generated in immunoprecipation experiments for **several histone modifications**, whose presence and absence can be used to infer the functional state of chromatin at specific loci (e.g. active transcription, enhancers, heterochromatin). These data have been downloaded and made available in this github repo, in: `Bioinformatics_workshop/Day-2/data/gorkin-et-al/`. 
 
 Namely, we will start by contrasting the locations of ChIP-seq peaks for two chromatin marks between forebrain and heart tissues in the developing mouse: 
 - **H3K27ac** - acetylation at the 27th lysine residue of histone H3
