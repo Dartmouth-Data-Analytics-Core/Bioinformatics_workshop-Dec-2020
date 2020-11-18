@@ -12,15 +12,15 @@ In a typical analysis of an NGS dataset, like that depicted in the figure below,
 At this point in the analysis, we often want to perform various tasks on the reduced representation of the data, such as query overlapping peak regions between different sample groups, annotate regions based on their 
 genomic or transcriptional context, or perform complex statistical analysis. The **R statistical programming environment**, and more specifically **Bioconductor** provides one avenue through which to perform these downstream analysis. 
 
-By far the largest advantage to using R to perform specific stages of genomic data analysis are the large number of packages available that facilitate efficient analysis of high-throughput data. [**Bioconductor**](https://www.bioconductor.org/) represents a specific collection of R-packages maintained as part of an open source project, that provides a wide-range of data analysis software packages for biological data analysis, and particularly genomics. These **Bioconductor** introduce several particuarly useful object classes and methods that provide effecient storage of, access to, and maniuplation of various forms of genomics and high throughput sequencing data.
+By far the largest advantage to using R to perform specific stages of genomic data analysis are the large number of packages available that facilitate efficient analysis of high-throughput data. [**Bioconductor**](https://www.bioconductor.org/) represents a specific collection of R-packages maintained as part of an open source project, that provides a wide-range of data analysis software packages for biological data analysis, and particularly genomics. These **Bioconductor** packages introduce several particuarly useful object classes and methods that provide effecient storage of, access to, and manipulation of various forms of genomics and high throughput sequencing data.
 
 
-** Visit the Bioconductor website and explore the available packages and how they are organized. **
+**Visit the Bioconductor website and explore the available packages and how they are organized.**
 ![](../figures/bioconductor.png)
 
 **Bioconductor** packages are especially noteworthy for their high level of integration and use of common object classes, making cross-compatibility of many Bioconductor packages very easy, as well as allowing previous packages to be utilized by subsequently developed packages. Applications of **Bioconductor** packages range from simple data representation utilities to full implementations of complex statistical methodologies developed for the analysis of specfic types of genomics data. 
 
-Explore available package on the [**Bioconductor website**](https://www.bioconductor.org/) and browse their Vigenettes to get an idea for the range of software available. The table below provides examples of some important BioConductor packages organized by their application/utility, as well as some more specific examples designed for analysis of specific data-types. 
+Explore available packages on the [**Bioconductor website**](https://www.bioconductor.org/) and browse their Vigenettes to get an idea for the range of software available. The table below provides examples of some important BioConductor packages organized by their application/utility, as well as some more specific examples designed for analysis of specific data-types. 
 
 **Important Bioconductor packages by analytical utility**
 
@@ -28,7 +28,7 @@ Explore available package on the [**Bioconductor website**](https://www.biocondu
 -------|-------
 Data representation | IRanges, GenomicRanges, GenomicFeatures, BioStrings, BSGenome, SummarizedExperiment
 File handling & manipulation | *rtracklayer*, *BioStrings*, *ShortRead*, *Rsamtools*
-RNA-seq | *DESeq2*, *edgeR*, *DEXSeq*. *EDAseq*
+RNA-seq | *DESeq2*, *edgeR*, *DEXSeq*, *EDAseq*
 ChIP-seq | *ChIPseeker*, *ChIPpeakAnno*, *DiffBind*, *ChIPQC*, *TFBStools*
 DNA methylation | *minfi*, *methylKit*, *ENmix*, *BiSeq*, *ELMER*
 Varaint analysis | *VariantAnnotation*, *maftools*, *VariantFiltering*, *ensemblVEP*
@@ -65,9 +65,9 @@ library(IRanges); library(GenomicRanges)
 
 ##### The IRanges package 
 
-As discussed above, various types NGS assays may result in a specific set of regions of interest for further downstream analysis. For example, coding regions in RNA-seq, transcription-factor signal peaks in ChIP-seq, or accessible chromatin in ATAC-seq. Being able to store, query, and manipulate genomic regions in critical in facilitating downstream analysis of these regions. 
+As discussed above, various types of NGS assays may result in a specific set of regions of interest for further downstream analysis. For example, coding regions in RNA-seq, transcription-factor signal peaks in ChIP-seq, or accessible chromatin in ATAC-seq. Being able to store, query, and manipulate genomic regions is critical in facilitating downstream analysis of these regions. 
 
-The *IRanges* package provides an efficient way to achieve these tasks on basic sets of integer ranges. The *GenomicsRanges* package then builds upon the IRanges functionaility to enable storage and manipulation of genomic regions on annotated sequences (chromosomes). in the below example, you can see an example set of regions on chromosome 1 of the human genome. These regions could be anything of interest, e.g. and NGS read, exon coordinates, TF peaks. 
+The *IRanges* package provides an efficient way to achieve these tasks on basic sets of integer ranges. The *GenomicsRanges* package then builds upon the IRanges functionaility to enable storage and manipulation of genomic regions on annotated sequences (chromosomes). In the figure above, you can see an example set of regions on chromosome 1 of the human genome. These regions could be anything of interest, e.g. and NGS read, exon coordinates, TF peaks. 
 
 For the purposes of IRanges however, simply consider them as a set of integer regions. In the figure, we can see how these would be specified in R if we used the `IRanges()` constructor function to generate an `IRanges` class object of the integer regions shown in orange. Each object shows that each region has a `start`, `end` and `width`. 
 
@@ -80,7 +80,7 @@ IRanges(start = c(1), width = 4)
 IRanges(start = c(11), width = 3)
 ```
 
-*IRanges* objects can contain mutiple regions, which we could have contructed for these regions like this: 
+*IRanges* objects can contain mutiple regions, which we could have constructed for these regions like this: 
 ```
 ir <- IRanges(start = c(1,11), width = c(4, 3))
 ir
@@ -104,7 +104,7 @@ ir
 
 ##### The GenomicRanges package 
 
-The *GenomicRanges* package extends the functionality introduced by IRanges to allow for analysis of genomic regions within the Bioconductor framework, and severs as a foundation for accessing and manipulating genomic regions for other BioConductor packages, some of which we will discuss (e.g. [*rtracklayer*](https://bioconductor.org/packages/release/bioc/html/rtracklayer.html), [*BSGenome*](https://bioconductor.org/packages/release/bioc/html/BSgenome.html), [*GenomicAlignments*](https://bioconductor.org/packages/release/bioc/html/GenomicAlignments.html)). 
+The *GenomicRanges* package extends the functionality introduced by IRanges to allow for analysis of genomic regions within the Bioconductor framework, and seves as a foundation for accessing and manipulating genomic regions for other BioConductor packages, some of which we will discuss (e.g. [*rtracklayer*](https://bioconductor.org/packages/release/bioc/html/rtracklayer.html), [*BSGenome*](https://bioconductor.org/packages/release/bioc/html/BSgenome.html), [*GenomicAlignments*](https://bioconductor.org/packages/release/bioc/html/GenomicAlignments.html)). 
 
 At the core of the package is the *GRanges* class, which is analogous to the IRanges class but specifies genomic ranges denoted by a start, and end on a specific sequence (e.g. a chromosome). Lets construct a `GRanges` object for the ranges shown in the figure. 
 ```
@@ -172,7 +172,7 @@ head(gr, n=5)
 head(gr[score(gr)>4], n=5)
 ```
 
-There are also numerous range-based operations can be performed on *GRanges* objects using functionality implemented through *IRanges*, and can be used to manipulate the original regions in almost ay way you desire. 
+There are also numerous range-based operations can be performed on *GRanges* objects using functionality implemented through *IRanges*, and can be used to manipulate the original regions in almost any way you desire. 
 
 ![](../figures/range-operations.png)
 **Image source:** [GRanges tutorial](https://www.bioconductor.org/help/course-materials/2015/SeattleApr2015/B_GenomicRanges.html)
@@ -193,7 +193,7 @@ reduce(gr)
 
 Now that we understand the basics of the **IRanges** and **GenomicRanges** packages, lets load in some real data as *GRanges* objects and perform some basic analysis tasks with them. We will be using ChIP-seq data from a recent study of the chromatin landscape in the developing mouse [Gorkin *et al*, *Nature*, 2020](https://www.nature.com/articles/s41586-020-2093-3), published as part of the [ENCODE (Encyclopedia of DNA Elements) project](https://www.encodeproject.org/). 
 
-In this study, the autors generate an atlas of the dynamic chromatin landscape at various time points during mouse embryonic development, conducting over **1100 ChIP-seq** experiments and **132 ATAC-seq** experiments spanning **72 stages of development** across various tissues. 
+In this study, the authors generate an atlas of the dynamic chromatin landscape at various time points during mouse embryonic development, conducting over **1100 ChIP-seq** experiments and **132 ATAC-seq** experiments spanning **72 stages of development** across various tissues. 
 
 We will use a small subset of this data to demonstrate how the **GenomicRanges** package can be used to explore this type of data, as well as compare and contrast between samples. **Figure 1A** from the [Gorkin *et al*](https://www.nature.com/articles/s41586-020-2093-3) manuscript is included below, and decribes the data collected during this project. 
 
@@ -360,14 +360,14 @@ Clearly the peaks are distributed differently over this region of chromosome 17,
 
 In order to address these questions, we need to pull in some annotation data for the mouse genome. Fortunately, Bioconductor has very extensive functionality in the form of various packages specifcally devoted to genome annotation, and interface with public databases like *UCSC*, *Ensembl*, and *NCBI* to obtain the most up to date reference data available. **This will be the focus of our next lesson**. 
 
-**Practical note:** Generally, I would not explore a new dataset using Bioconductor-based visualization packages. When I am interested in exploring the data visually and/or am interested in a specific region or gene, I will use a genome browser like *IGV* to do this. This is much faster and easier and requires no coding. However, the real utility of packages like `Gviz` is that they provide a comprehensive and flexible way to display data in numerous ways not possible in standard genome browsers, and also provide a way to produce plots for numerous regions of interest programmatically. 
+**Practical note:** Generally, I would not explore a new dataset using Bioconductor-based visualization packages. When I am interested in exploring the data visually and/or am interested in a specific region or gene, I will use a genome browser like *IGV* to do this. This is much faster and easier and requires no coding. However, the real utility of packages like `Gviz` is that they provide a comprehensive and flexible way to display data in numerous ways not possible in standard genome browsers, and also provide a way to produce plots for numerous regions of interest programmatically(i.e you can write one code for a single region copy the code and change the names or boundaries to reproduce a similar plot for multiple regions of interest). 
 
 ### Additional considerations:  
 - There are numerous ways to perform the sorts of tasks that we did in this lesson, both within and outside of R. For example, [**BEDTools**](https://bedtools.readthedocs.io/en/latest/), described as "the swiss-army knife for genomic-arithmetic" allows you to intersect, subset, merge, count, and manipulate genomic regions directly from the UNIX command line for several file formats (BED, GFF/GTF, VCF). Alternatively, [**Biopython**](https://biopython.org/) provides similar functionality from within python.  
 
-<img src="../figures/bedtools-biopython.png" height="250" width="562.5"/>
+<img src="../figures/bedtools-biopython.png" height="250" width="562.5" align="center"/>
 
-- Whether you use *BEDTools*, *BioPython* or Bioconductor packages within R is dependent on what you are doing and what you need to do next. For example, if you will be needing functionality from other Bioconductor packages after analysing the overlap between sets of genomic regions, you may choose to use R/Bioconductor. If you simply need to intersect two BED files to make a third that reflects the intersection for inout into another UNIX-based software, you could use BEDTools.   
+- Whether you use *BEDTools*, *BioPython* or Bioconductor packages within R is dependent on what you are doing and what you need to do next. For example, if you will be needing functionality from other Bioconductor packages after analysing the overlap between sets of genomic regions, you may choose to use R/Bioconductor. If you simply need to intersect two BED files to make a third that reflects the intersection for input into another UNIX-based software, you could use BEDTools.   
 
 - This lesson is not intended to be a comprehensive introduction to the complete functionality of any of the packages discussed here, and would be impossible to achieve in the time we have. This lesson is based off of similar exercises available from far more comprehsnive vigenettes and documentation at the Bioconductor webpages for each page. There is an enormous range of functionality available from these packages and I encourage you to use this lesson as a starting point to direct you toward these more comprehsnive resources. For example, the [BioConductor website](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html) for *GenomicRanges* provides an excellent vigentte of *GenomicRanges* HOWTOs, covering a wide range of common tasks when operating on genomic regions. 
 
