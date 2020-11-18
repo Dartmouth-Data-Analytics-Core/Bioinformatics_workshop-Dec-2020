@@ -345,7 +345,7 @@ In order to address these questions, we need to pull in some annotation data for
 ### Additional considerations:  
 - There are numerous ways to perform the sorts of tasks that we did in this lesson, both within and outside of R. For example, [**BEDTools**](https://bedtools.readthedocs.io/en/latest/), described as "the swiss-army knife for genomic-arithmetic" allows you to intersect, subset, merge, count, and manipulate genomic regions directly from the UNIX command line for several file formats (BED, GFF/GTF, VCF). Alternatively, [**Biopython**](https://biopython.org/) provides similar functionality from within python.  
 
-![](../figures/bedtools-biopython.png){:height="50%" width="50%"}
+<img src="../figures/bedtools-biopython.png" height="250" width="562.5"/>
 
 - Whether you use *BEDTools*, *BioPython* or Bioconductor packages within R is dependent on what you are doing and what you need to do next. For example, if you will be needing functionality from other Bioconductor packages after analysing the overlap between sets of genomic regions, you may choose to use R/Bioconductor. If you simply need to intersect two BED files to make a third that reflects the intersection for inout into another UNIX-based software, you could use BEDTools.   
 
