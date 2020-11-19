@@ -32,7 +32,7 @@ library(org.Hs.eg.db)
 ```
 
 Once loaded, OrgDB allows access to the annotation data for the package you loaded through hidden objects that can be accessed using a set of common Org.Db functions. For example, we can access data from the `org.Hs.eg.db` package after loading it by using the hidden object *org.Hs.eg.db*. 
-```{r}
+```r
 org.Hs.eg.db
 
 # what class is it
@@ -43,7 +43,7 @@ keytypes(org.Hs.eg.db)
 ```
 
 OrgDb objects use the `keytypes()` method to access specific types of data from the annotation source. We can ask OrgDb to return a specific keytype that we are interested in. 
-```{r}
+```r
 # obtain all ENSEMBL IDs 
 entrez.ids <- keys(org.Hs.eg.db, keytype="ENSEMBL")
 head(entrez.ids)
