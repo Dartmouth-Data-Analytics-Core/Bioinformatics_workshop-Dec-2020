@@ -175,6 +175,18 @@ transcript info with the txdb package
 think about flow before starting thsi section, genomation or bsgenome first..?
 
 
+### Genome reference sequences in Bioconductor 
+
+Beyond providing access to extensive annotation data in R, Bioconductor also provides functionality to obtain and maniuplate the complete reference sequences for commonly used genomes. Specifically, the `BSgenome` family of Bioconductor packages 
+
+We can use these genomic sequences for a number of common research tasks, for example:  
+* Extracting DNA/RNA/protein sequences of specific genes or gene regions of interest 
+* 
+
+
+
+
+
 
 
 ### The BioStrings R-package
