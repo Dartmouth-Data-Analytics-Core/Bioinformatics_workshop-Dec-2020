@@ -14,8 +14,8 @@ In this lesson, we will introduce the major Bioconductor packages for genome ann
 |------------------------|-------------------------------------------------------------|
 | *Org.X.db*               | Gene-based annotation, mapping IDs, symbols and identifiers |
 | *GenomicFeatures/TxDb*   | Detailed transcriptome annotations in GRanges format        |
-| *genomation*             | annotation of genomic context and basic data visualization  |
 | *BS.genome*              | Full sequences for common reference genomes                 |
+| *genomation*             | annotation of genomic context and basic data visualization  |
 
 ### Mapping gene identifiers with *Org.X.DB*
 
@@ -68,7 +68,7 @@ mapIds(org.Hs.eg.db, keys = head(entrez.ids), column = c("SYMBOL"), keytype="ENS
 Lets apply this approach to annotate some real RNA-seq differential expression results. Start by reading in the data, currently stored in .csv format. 
 ```{r}
 # read in data 
-results <- read.csv()
+results <- read.csv("diff-exp-results.csv", stringsAsFactors = F, row.names = "ensembl")
 
 # check the first few lines  
 head(results) 
@@ -89,21 +89,70 @@ head(results)
 table(is.na(results$symbol))
 ```
 
-Uh Oh! There are loads of NAs, meaning many genes didn't have a symbol mapped to them... Turns out Org.Db is most built around entrez IDs and does not contain the annotations
+Uh Oh! There are lots of NAs, meaning many genes didn't have a symbol mapped to them... Turns out Org.Db is most built around **entrez IDs** and does not contain the annotations for many Ensembl genes, which includes a lot of non-coding RNAs like lincRNAs. Instead, we can use an Ensembl package, `EnsDb.Hsapiens.v86` to pull data directly from Ensembl. 
 
-
-
-
-EnsDb.Hsapiens.v86
+```{r}
+library(EnsDb.Hsapiens.v86)
 ```
-# use ensembl id of first 6 in entrez.ids to get desired keytypes
-select(EnsDb, keys = head(entrez.ids), columns = c("SYMBOL","ENTREZID", "REFSEQ"), keytype="ENSEMBL")
 
+Now lets use `EnsDb.Hsapiens.v86` to retrieve annotation data for our genes and see how many missing genes occur. 
+
+```
 # using mapIds but only to get gene symbol 
-mapIds(EnsDb, keys = head(entrez.ids), column = c("SYMBOL"), keytype="ENSEMBL")
+gene.symbols.2 <- mapIds(EnsDb.Hsapiens.v86, keys = head(entrez.ids), column = c("SYMBOL"), keytype="ENSEMBL")
+
+# how long is it
+length(gene.symbols.2)
+
+# how many NAs
+table(is.na(gene.symbols.2))
 ```
 
-# how many IDs are we missing now? 
+Many fewer NAs are identified, meaning we were able to annotate more of the genes in our dataset with gene symbols. There are still a few missing though, why might this be? 
+
+To ensure we annotate all possible genes approrpiately, we need to make sure we are using annotation data from the genome annotation release that was used to determine read count quantification on our dataset (that is, the annotation used the define gene and exon boundaries for counting up reads and attributing them to each gene). 
+
+For standard RNA-seq analyses, this is usually performed using a **GTF** file that contains all the gene model and annotation data for a specific release. These data were annotated using Ensembl verion **97** (which explains why the R-package based off of Ensembl v86 was not able to find matching symbols for all our Ensembl IDs) therefore we could read the GTF file directly into R and manually link ensembl IDs to gene symbols. 
+
+However, the GTF file is pretty big, so it not really feasible for us to use that approach unless we take the time to download and store the file locally, or work on a HPC. Instead, we can download basic annotation data for Ensembl annotation releases using the BioMart resource through the Ensembl website. 
+
+Lets go and download these data from the [Ensembl website](https://uswest.ensembl.org/index.html) together (remember that we need to download annotation data specifically for Ensembl v97, and the current version (as of Nov. 2020), which is the website default, is Ensembl v101). 
+
+Now read this file into R:
+```{r}
+anno <- read.table("GRCh38.p12_ensembl-97.txt", sep="\t", header=TRUE, stringsAsFactors = F)
+
+# check the first few rows and dimensions 
+head(anno)
+dim(anno)
+
+# check how many Ensembl IDs overlap with our results 
+table(anno$Gene.stable.ID %in% rownames(results))
+table(rownames(results) %in% anno$Gene.stable.ID)
+
+# lets rename the ensembl ID column in both datasets so that we can merge them together based on those IDs
+colnames(anno)[1] <- "ensembl"
+results$ensembl <- rownames(results)
+
+results_merge <- merge(results, anno, by="ensembl")
+head(results_merge)
+table(is.na(z2$Gene.name))
+```
+
+Great! We now have gene symbols for all the genes in our dataset, and some additional annotation data integrated directly with our results. Save these data and send it to your PI! 
+```{r}
+write.csv(results_merge, file = "diff-exp-results-annotated.csv")
+```
+
+As we have seen, while the R-packages discussed above can present powerful and quick ways to access lots of annotation data (e.g. gene ontology etc.), there are some obvious limitations which are important to understand when you are annotating your own datasets. 
+
+Using BioMart is also valuable if you need annotation data for a model organism that doesn't have an EnsDb or OrgDb R-package availble for it. 
+
+If you want to access BioMart from within R, you can use the `BioMart` package to directly interface with the database. This can be a little slower than the approach described above, but can allow more flexibility depending on what you need annotation data for. 
+
+```{r}
+
+```
 
 
 
@@ -112,19 +161,19 @@ mapIds(EnsDb, keys = head(entrez.ids), column = c("SYMBOL"), keytype="ENSEMBL")
 
 
 
-Note: There are various ways to achieve what we did here using different Biconductor/R-packages. One way is not necessairily better than the other, however it is important to understand the resource/database that you package is pulling from, so always read the documentation. 
 
 
-
-
-
-if you dont have the gff3 file, for example if the data processing was done elsewhere, you may use access biomart 
 makeTxDbPackageFromBiomaRt
-
-
-
-
 transcript info with the txdb package 
+
+
+
+
+
+
+
+think about flow before starting thsi section, genomation or bsgenome first..?
+
 
 
 
@@ -482,6 +531,12 @@ singlecellexperiment package
 
 
 several overviews of annotation functionalities in Bioconductor exist. 
+
+
+
+Note: There are various ways to achieve what we did here using different Biconductor/R-packages. One way is not necessairily better than the other, however it is important to understand the resource/database that you package is pulling from, so always read the documentation. 
+
+
 
 
 
