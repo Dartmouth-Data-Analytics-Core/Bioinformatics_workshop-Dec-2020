@@ -4,9 +4,8 @@ As discussed at the end of part 1, there are many instances in genomic data anal
 
 Examples of common annotation tasks include:  
 * Mapping unique gene identifiers (e.g. ENSEMBL or NCBI IDs) to gene symbols in an RNA-seq experiment 
-* Accessing transcript coordinate information for transcripts of interest from an RNA-seq dataset
-* Annotate the genomic context (e.g. promoter, intron, exon, intergenic) peaks from a ChIP-seq experiment
-* Extract sequences from a reference genomes corresponding to a set of ChIP- or ATAC-seq peaks
+* Annotate coding variants from a WGS/WES dataset based on transcriptional context (e.g. coding variants) for a specific genome annotation (e.g. Ensembl transcripts)
+* Annotate the genomic context (e.g. promoter, intron, exon, intergenic), and obtain sequence information for, peaks from a ChIP- or ATAC-seq experiment (e.g. for motif analysis).
 
 In this lesson, we will introduce the major Bioconductor packages for genome annotation and how you might use them to achieve common tasks in NGS data analysis. 
 
@@ -18,6 +17,10 @@ In this lesson, we will introduce the major Bioconductor packages for genome ann
 | *genomation*             | annotation of genomic context and basic data visualization  |
 
 ### Mapping gene identifiers with *Org.X.DB*
+
+
+ADD DETAILS OF INHERITS FROM ANNOTATIONDBI 
+
 
 OrgDb represents a family of Bioconductor packages that store gene identifiers from a numerous annotation databases (e.g. gene ontologies) for a wide range or organsisms. For example, `org.Hs.eg.db` loads the current annotations for human genes, `org.Mm.eg.db` for mouse, `org.Sc.sgd.db` for yeast, and so on. 
 
@@ -194,21 +197,79 @@ head(anno_bm, 10)
 
 You can see we now have a `data.frame` stored in anno_BM in our environment that looks similar to the text file that we downloiaded directly from biomaRt and read into R. You could follow a similar protocol to that which we performed to merge the BiomaRt data downloaded in the text file with our RNA-seq results. 
 
+---
+
+### Leverging transcript-specific data with Bioconductor 
+
+Another useful core Bioconductor package is the `GenomicFeatures` package, which implements the `TxDb` object class, and provides a convienient and efficient way to store and access transcript specific data from a genome annotation. `TxDb` objects store a wide-range of transcript-specific information including coordinates and sequences for promoters, exons, introns, and untranslated regions (UTRs). 
+
+`TxDB` objects for common genome annotations can be loaded directly by calling the corresponding annotation package. We can view the available `TxDb` packages by going to the Bioconductor website and using the search tool. Lets start by loading the `TxDb` package for the human genome and having a look at the contents. 
+```r
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+
+# assign to txdb variable 
+txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+txdb
+```
+
+You can see this available `TxDb` object is for gene annotations generated under the UCSC annotation pipeline. What if your genome is not included in the available `TxDb` packages, for example, if we wanted to continue using an Ensembl annotation? Or perhaps there is no pre-constructed `TxDb` object avaialble for your organism. `GenomicFeatures` provides a number of function specifically to address these issues, for example:  
+* makeTxDbFromEnsembl() - Contsrtuct a TxDb object from Ensembl
+* makeTxDbPackageFromBiomaRt() - Contsrtuct a TxDb object from Biomart
+* makeTxDbPackageFromGFF() - Contsrtuct a TxDb object from a GFF/GTF file (especially useful if you are working with a very niche or custom annotation/organism). 
+
+Lets construct a 
+```
+txdb <- makeTxDbFromEnsembl("homo_sapiens", release = 101)
+                             
+Fetch transcripts and genes from Ensembl ... OK
+Fetch exons and CDS from Ensembl ... OK
+Fetch chromosome names and lengths from Ensembl ...OK
+Gather the metadata ... OK
+Make the TxDb object ... OK
+
+txdb <- readRDS("")
+
+```
+
+
+GR <- transcripts(txdb)
+tx_strand <- strand(GR)
+PR <- promoters(txdb, upstream=2000, downstream=400)
+length(threeUTRsByTranscript(txdb))
+
+keytypes(txdb)
+columns(txdb)
+select(txdb, keys = keys, columns="TXNAME", keytype="GENEID")
+
+seqlevels(txdb))
+EX <- exons(txdb)
+
+CDS <- cds(txdb)
+
+
+EX <- exonsBy(txdb)
 
 
 
 
 
-makeTxDbPackageFromBiomaRt
-transcript info with the txdb package 
+
+library(VariantAnnotation)
+vcf <- readVcf(fl, "hg19")
+head(vcf)
 
 
 
+vcf_anno <- locateVariants(rowRanges(vcf_anno),
+    TxDb.Hsapiens.UCSC.hg19.knownGene,
+    CodingVariants())
+    
+head(vcf_anno)
 
 
+include some other stuff from VariantAnnotation package? perhaops overlap with known pathogenic variants..? 
 
 
-think about flow before starting thsi section, genomation or bsgenome first..?
 
 
 ### Genome reference sequences in Bioconductor 
@@ -481,6 +542,17 @@ str(matches)
 matches[[4]]
 matches[[4]][[3]]
 ```
+
+
+
+
+extractTranscriptSeqs
+
+
+
+
+
+
 
 Such an approach might be useful if you were trying to estimate gene models in a set of preliminary coding sequences. Other applications of these pattern matching methods might include searching for/or designing probe sequences, or searching for reads containing custom barcodes in a single cell sequencing experiment. 
 
