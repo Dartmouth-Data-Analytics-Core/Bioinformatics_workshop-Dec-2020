@@ -27,7 +27,7 @@ OrgDb packages also provide access to some basic additional annotation data such
 It is worth noting that you are not loading annotation data for a specific genome build when using OrgDb packages (which should be obvious from the package names). OrgDb packages pertain to identifiers based on what are usually the most recent genome annotations since they are updated every few months. If you need annotations for an older build specifically, you may need to adopt a different approach than using OrgDb. 
 
 Load the org.db package for the human genome:
-```{r}
+```r
 library(org.Hs.eg.db)
 ```
 
@@ -53,7 +53,7 @@ length(entrez.ids)
 ```
 
 The situation we usually end up in however, is when we want to return a set of keytypes given one set of keytypes, for example, returning the gene symbol, entrez ID, and RefSeq ID from a list of Ensembl IDs. For thie we can use the `select()` method or `mapIds` method. 
-```
+```r
 # use ensembl id of first 6 in entrez.ids to get desired keytypes
 select(org.Hs.eg.db, keys = head(entrez.ids), columns = c("SYMBOL","ENTREZID", "REFSEQ"), keytype="ENSEMBL")
 
@@ -66,7 +66,7 @@ mapIds(org.Hs.eg.db, keys = head(entrez.ids), column = c("SYMBOL"), keytype="ENS
 ### RNA-seq results annotation using OrgDb  
 
 Lets apply this approach to annotate some real RNA-seq differential expression results. Start by reading in the data, currently stored in .csv format. 
-```{r}
+```r
 # read in data 
 results <- read.csv("diff-exp-results.csv", stringsAsFactors = F, row.names = "ensembl")
 
@@ -75,7 +75,7 @@ head(results)
 ```
 
 Now use mapIDs to obtain 1:1 mappings between the Ensembl ID and the gene symbol. 
-```
+```r
 # using mapIds but only to get gene symbol 
 gene.symbols <- mapIds(org.Hs.eg.db, keys = rownames(results), column = c("SYMBOL"), keytype="ENSEMBL")
 
@@ -91,13 +91,13 @@ table(is.na(results$symbol))
 
 Uh Oh! There are lots of NAs, meaning many genes didn't have a symbol mapped to them... Turns out Org.Db is most built around **entrez IDs** and does not contain the annotations for many Ensembl genes, which includes a lot of non-coding RNAs like lincRNAs. Instead, we can use an Ensembl package, `EnsDb.Hsapiens.v86` to pull data directly from Ensembl. 
 
-```{r}
+```r
 library(EnsDb.Hsapiens.v86)
 ```
 
 Now lets use `EnsDb.Hsapiens.v86` to retrieve annotation data for our genes and see how many missing genes occur. 
 
-```
+```r
 # using mapIds but only to get gene symbol 
 gene.symbols.2 <- mapIds(EnsDb.Hsapiens.v86, keys = head(entrez.ids), column = c("SYMBOL"), keytype="ENSEMBL")
 
@@ -119,7 +119,7 @@ However, the GTF file is pretty big, so it not really feasible for us to use tha
 Lets go and download these data from the [Ensembl website](https://uswest.ensembl.org/index.html) together (remember that we need to download annotation data specifically for Ensembl v97, and the current version (as of Nov. 2020), which is the website default, is Ensembl v101). 
 
 Now read this file into R:
-```{r}
+```r
 anno <- read.table("GRCh38.p12_ensembl-97.txt", sep="\t", header=TRUE, stringsAsFactors = F)
 
 # check the first few rows and dimensions 
@@ -140,7 +140,7 @@ table(is.na(z2$Gene.name))
 ```
 
 Great! We now have gene symbols for all the genes in our dataset, and some additional annotation data integrated directly with our results. Save these data and send it to your PI! 
-```{r}
+```r
 write.csv(results_merge, file = "diff-exp-results-annotated.csv")
 ```
 
@@ -150,7 +150,7 @@ Using BioMart is also valuable if you need annotation data for a model organism 
 
 If you want to access BioMart from within R, you can use the `BioMart` package to directly interface with the database. This can be a little slower than the approach described above, but can allow more flexibility depending on what you need annotation data for. 
 
-```{r}
+```r
 
 ```
 
@@ -194,7 +194,7 @@ We can use these genomic sequences for a number of common research tasks, for ex
 [BioStrings](http://bioconductor.org/packages/release/bioc/html/Biostrings.html) is a powerful R-package that lies at the core of several other BioConductor packages, and facilitates the storing sequence data in R so that it can be efficienty and quickly viewed, searched, and maniuplated. BioStrings achieves this through implementing several unique object classes for storing sequences, and aspects of nucelic acid (and amino acid) sequences in R. 
 
 Lets load the *BioStrings* R-package, and start by constructing the a *DNAString* class object, used to store DNA sequences. 
-```{r}
+```r
 library(Biostrings)
 
 # use the DNAString contructor function to create a 10 letter DNA sequence 
@@ -205,7 +205,7 @@ seq
 *DNAString* is part of a '*virtual class*' (cannot actually store objects itself, but can be used to set rules for a a group of classes) called *XString*. Other *XString* classes include `RNAString` for representing RNA sequences, and `AAString` for amino acids. Today we will focus on DNA sequences using *DNAString* class objects. 
 
 Now look at some of the basic features of our *DNAString* object. 
-```{r}
+```r
 # how long is it 
 length(seq)
 
@@ -214,7 +214,7 @@ str(dna.st)
 ``` 
 
 Unfortunately, this sequence is short and boring. Lets make a longer sequence using the pre stored *BioStrings* object `DNA_ALPHABET` and some functions from base R. 
-```{r}
+```r
 # print DNA alphabet to see what it returns 
 DNA_ALPHABET
 ```
@@ -258,7 +258,7 @@ For example, entering the below into your command-line..
 IUPAC_CODE_MAP
 ```
 Will return the below to your console: 
-```
+```r
      A      C      G      T      M      R      W      S      Y      K      V      H      D      B  N 
    "A"    "C"    "G"    "T"   "AC"   "AG"   "AT"   "CG"   "CT"   "GT"  "ACG"  "ACT"  "AGT"  "CGT" "ACGT" 
 ```
@@ -279,7 +279,7 @@ seq.dnastring
 ```
 
 Now collect some basic information on your sequence. 
-```{r}
+```r
 # confirm how long it is 
 length(seq.dnastring)
 
@@ -297,7 +297,7 @@ trinucleotideFrequency(seq.dnastring, as.prob=TRUE)
 ```
 
 We can also perform some basic manipulations of our sequence using *BioStrings* functions. 
-```{r}
+```r
 # subset the sequence for 10 specific bases of interest  
 seq.dnastring[10:19]
 
@@ -318,7 +318,7 @@ translate(seq.dnastring)
 ```
 
 This is nice, but usually we are working with multiple DNA sequences, for example the various chromosomes in a reference genome, or all the cell-specific barcodes in a single cell sequencing library. This is where the `DNAStringSet` object class becomes useful. `DNAStringSet` allows you to store, name, and manipulate multiple sequences in one *BioStrings* object. 
-```{r}
+```r
 # remove the old single sequence from our global R environment 
 rm(seq)
 
@@ -367,7 +367,7 @@ a.queen
 ```
 
 We have now imported the coding sequences as a `DNAStringSet` object, which we can pass to all of the same functions as we did before. For example: 
-```{r}
+```r
 # confirm how long it is 
 length(a.queen)
 
@@ -383,7 +383,7 @@ longestConsecutive(a.queen, "A")
 ```
 
 Perhaps we are interested in the GC content of each coding sequence. One way to compare GC content across these regions: 
-```{r}
+```r
 # create a variable to store GC content 
 gc.content <- rep(NA, length(a.queen))
 
@@ -401,7 +401,7 @@ abline(h=0.5, lwd = 2, lty=2, col="deepskyblue4")
 ```
 
 Several *BioStrings* functions also allow us to search sequences for specific patterns of interest. For example, we may want to confirm that each of our coding sequences begins with an `ATG` start codon. We can do this using the *BioStrings* functions `matchPattern()` and `countPattern()`. 
-```
+```r
 # return all matches in a DNAString subject sequence to a query pattern
 matchPattern("ATG", a.queen[[1]])
 
@@ -423,7 +423,7 @@ vmatch[[1]]
 ```
 
 We may also have several patterns that we want to search for in each our coding sequences. For example, perhaps we want to search for standard stop codons (`TAG`, `TAA`, `TGA`) in the *A.queenslandica* coding sequences. *BioStrings* functions `matchPDict()` and `vmatchPDict()` provide functionality for such tasks. e.g. 
-```
+```r
 # create a DNAStringSet of the stop codons 
 stop.codons <- DNAStringSet(c("TAG", "TAA", "TGA"))
 
@@ -467,12 +467,12 @@ An excellent *BioStrings* tutorial is available [here](https://bioconductor.org/
 The [BSgenome](https://bioconductor.org/packages/release/bioc/html/BSgenome.html) package provides BioConductor-based access to reference genome sequences that utilize the object classes of the *BioStrings* package discussed above (e.g. *DNAString* and *DNAStringSet*). 
 
 Check which genomes are currently available from BSGenome. 
-```{r}
+```r
 available.genomes()
 ```
 
 Lets use the `getBSgenome()` function to retrieve the human genome (build *hg38* from UCSC). 
-```{r}
+```r
 genome <- getBSgenome("BSgenome.Hsapiens.UCSC.hg38")
 
 # check the structure 
