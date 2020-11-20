@@ -217,8 +217,9 @@ You can see this available `TxDb` object is for gene annotations generated under
 * makeTxDbPackageFromBiomaRt() - Contsrtuct a TxDb object from Biomart
 * makeTxDbPackageFromGFF() - Contsrtuct a TxDb object from a GFF/GTF file (especially useful if you are working with a very niche or custom annotation/organism). 
 
-Lets construct a 
+Lets construct a TxDb object from the latest release for human genes from Ensembl. We won't actually build it from scratch right now as it takes a bit of time, but we have a pre-made TxDb ready for you to read into your environment and work with. 
 ```
+#### DO NOT RUN ####
 txdb <- makeTxDbFromEnsembl("homo_sapiens", release = 101)
                              
 Fetch transcripts and genes from Ensembl ... OK
@@ -227,27 +228,99 @@ Fetch chromosome names and lengths from Ensembl ...OK
 Gather the metadata ... OK
 Make the TxDb object ... OK
 
-txdb <- readRDS("")
+#### DO RUN ####
+txdb <- readRDS("../data/TxDb.Hsapiens.Ensembl.101.rds")
+txdb
+```
 
+Printing the object to the console tells us some basic information about the annotation. For example, you can see the data include hundreds of thousands of rows for unique transcripts, exons, and coding sequences. We can access this information with some basic accessor functions provided by the `GenomicFeatures` package.
+```r 
+# retrieve all transcript level info 
+txs <- transcripts(txdb)
+txs
+
+# what class is it? 
+class(txs)
+
+# how long is it
+length(txs)
+
+# what is the distribution of transcripts across strands 
+table(strand(txs))
+```
+
+The `transcripts()` function convieniently returns a **GRanges** class object. this means we can apply all the same methods and accessor functions we used in the previous lesson to the transcript data here (e.g. seqnames(), strand(), findOverlaps(), etc.). There are also several other useful accessor functions that bwe can use to return specific subsets of the data in our `TxDb` object. 
+```r
+# retireve all the exon ranges 
+ex <- exons(txdb)
+
+# retireve all the gene ranges 
+ge <- genes(txdb)
+
+# promoter ranges for a specified width around TSS
+prom <- promoters(txdb, upstream=1000, downstream=0)
+
+# non-overlapping introns or exons 
+exonicParts(txdb)
+intronicParts(txdb)
+```
+
+Some of these ranges might be a bit more useful to us if they were organized by their relation to a specific transcript or gene for example. There are several accessor functions that provide functionality to achieve this, and return **GRangesList** class object rather than ordinary Granges objects. 
+```r
+# return all transcript ranges organized by gene 
+txs_by_gene <- transcriptsBy(txdb, by = "gene")
+txs_by_gene
+
+# index by gene.id of interest to get all transcripts annotated to that gene 
+txs_by_gene["ENSG00000000419"]
+
+# index by exons by transcript (to identify unique exons)
+ex_by_gene <- exonsBy(txdb, by = "tx")
+ex_by_gene
+```
+
+Equivalent functions exist to return oganized GRangesLists for specific features, including:  
+* `exonsBy()` - exons by feature
+* `cdsBy()` - coding sequences by feature 
+* `intronsByTranscript()` - introns by transcript 
+* `exonsByTranscript()` - exons by transcript 
+* `threeUTRsByTranscript()` - 3'UTRs by transcript 
+* `fiveUTRsByTranscript()` - 5'-UTRs by transcript 
+
+
+
+For example, we might wish to return all the X for a specific transcript. 
+
+
+
+```r
+# look at the columns avaialble to be returned in the Txdb 
+columns(txdb) 
+
+# return the transcripts annotated to a specific gene of interest 
+gene_to_tx <- select(txdb, keys = "ENSG00000273696", columns="TXNAME", keytype="GENEID")
+gene_to_tx
+
+# return tx to gene mapping for top 500 RNA-seq diff. exp. results 
+gene_to_tx <- select(txdb, keys = head(rownames(results), 500) , columns="TXNAME", keytype="GENEID")
+head(gene_to_tx)
+dim(gene_to_tx)
+
+# check for duplicate entries 
+table(duplicated(gene_to_tx$GENEID))
+table(duplicated(gene_to_tx$TXNAME))
+
+# return exons IDs, their coordinates, and strand for top 10 transcripts from RNA-seq results 
+tx_to_exon <- select(txdb, keys = head(gene_to_tx, 10)$TXNAME , columns=c("EXONCHROM", "EXONNAME", "EXONSTART", "EXONEND", "EXONSTRAND"), keytype="TXNAME")
+tx_to_exon
+
+# again, check for duplicate entries 
+table(duplicated(tx_to_exon$TXNAME))
 ```
 
 
-GR <- transcripts(txdb)
-tx_strand <- strand(GR)
-PR <- promoters(txdb, upstream=2000, downstream=400)
-length(threeUTRsByTranscript(txdb))
-
-keytypes(txdb)
-columns(txdb)
-select(txdb, keys = keys, columns="TXNAME", keytype="GENEID")
-
-seqlevels(txdb))
-EX <- exons(txdb)
-
-CDS <- cds(txdb)
 
 
-EX <- exonsBy(txdb)
 
 
 
