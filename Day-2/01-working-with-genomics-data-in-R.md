@@ -280,12 +280,12 @@ ex_by_gene
 ```
 
 Equivalent functions exist to return oganized GRangesLists for specific features, including:  
-* exonsBy() - exons by feature
-* cdsBy() - coding sequences by feature 
-* intronsByTranscript() - introns by transcript 
-* exonsByTranscript() - exons by transcript 
-* threeUTRsByTranscript() - 3'UTRs by transcript 
-* fiveUTRsByTranscript() - 5'-UTRs by transcript 
+* `exonsBy()` - exons by feature
+* `cdsBy()` - coding sequences by feature 
+* `intronsByTranscript()` - introns by transcript 
+* `exonsByTranscript()` - exons by transcript 
+* `threeUTRsByTranscript()` - 3'UTRs by transcript 
+* `fiveUTRsByTranscript()` - 5'-UTRs by transcript 
 
 
 
@@ -293,9 +293,31 @@ For example, we might wish to return all the X for a specific transcript.
 
 
 
-keytypes(txdb)
-columns(txdb)
-select(txdb, keys = keys, columns="TXNAME", keytype="GENEID")
+```r
+# look at the columns avaialble to be returned in the Txdb 
+columns(txdb) 
+
+# return the transcripts annotated to a specific gene of interest 
+gene_to_tx <- select(txdb, keys = "ENSG00000273696", columns="TXNAME", keytype="GENEID")
+gene_to_tx
+
+# return tx to gene mapping for top 500 RNA-seq diff. exp. results 
+gene_to_tx <- select(txdb, keys = head(rownames(results), 500) , columns="TXNAME", keytype="GENEID")
+head(gene_to_tx)
+dim(gene_to_tx)
+
+# check for duplicate entries 
+table(duplicated(gene_to_tx$GENEID))
+table(duplicated(gene_to_tx$TXNAME))
+
+# return exons IDs, their coordinates, and strand for top 10 transcripts from RNA-seq results 
+tx_to_exon <- select(txdb, keys = head(gene_to_tx, 10)$TXNAME , columns=c("EXONCHROM", "EXONNAME", "EXONSTART", "EXONEND", "EXONSTRAND"), keytype="TXNAME")
+tx_to_exon
+
+# again, check for duplicate entries 
+table(duplicated(tx_to_exon$TXNAME))
+```
+
 
 
 
