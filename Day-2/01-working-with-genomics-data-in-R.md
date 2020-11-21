@@ -287,12 +287,7 @@ Equivalent functions exist to return oganized GRangesLists for specific features
 * `threeUTRsByTranscript()` - 3'UTRs by transcript 
 * `fiveUTRsByTranscript()` - 5'-UTRs by transcript 
 
-
-
-For example, we might wish to return all the X for a specific transcript. 
-
-
-
+As an alternative way to return data from the Txdb object, you can use the `select()` method with the `columns` and `keytypes` arguments just as we did for *OrgDBb* objects above. This convienient approach is made possible by the fact that *TxDb* object inheret from *AnnotationDbi* objects, just as *OrgDb* objects do. Using `select` in this way allows us to return data for a large list of features, or a specific subset that we request using the `keys` argument. For example, we might wish to return transcript to gene mapping for specific gene IDs, or we may want to obtain all the exon IDs and their genomic location info for a specific set of transcripts. 
 ```r
 # look at the columns avaialble to be returned in the Txdb 
 columns(txdb) 
@@ -311,38 +306,67 @@ table(duplicated(gene_to_tx$GENEID))
 table(duplicated(gene_to_tx$TXNAME))
 
 # return exons IDs, their coordinates, and strand for top 10 transcripts from RNA-seq results 
-tx_to_exon <- select(txdb, keys = head(gene_to_tx, 10)$TXNAME , columns=c("EXONCHROM", "EXONNAME", "EXONSTART", "EXONEND", "EXONSTRAND"), keytype="TXNAME")
+tx_to_exon <- select(txdb, keys = head(gene_to_tx, 10)$TXNAME , 
+                      columns=c("EXONCHROM", "EXONNAME", "EXONSTART", "EXONEND", "EXONSTRAND", "GENEID"), keytype="TXNAME")
 tx_to_exon
 
 # again, check for duplicate entries 
 table(duplicated(tx_to_exon$TXNAME))
 ```
 
+### Example application: Variant annotation 
+
+ADD TEXT HERE 
 
 
 
 
 
 
+```r
+# import the variant locations in bed file format 
+bed <- import("/Users/OwenW/Desktop/TCGA.pcawg.chr17.bed", format="BED")
+bed
+
+# annotate the variants based on our Ensembl Txdb 
+vars <- locateVariants(bed, txdb, AllVariants())
+vars
+
+# sum up variants in each group 
+sum.tab <- table(vars$LOCATION)
+sum.tab
+
+# calculate a quick proprtions table 
+round(prop.table(sum.tab), digits = 2)
+
+# quick visualization 
+barplot(round(prop.table(table(coding$LOCATION)), digits = 2))
+```
 
 
 
-library(VariantAnnotation)
-vcf <- readVcf(fl, "hg19")
-head(vcf)
+
+add gene symbol to vars object 
+Then subset for genes of interest 
+plot ERBB2 and transcripts from txdb region using gviz 
 
 
 
-vcf_anno <- locateVariants(rowRanges(vcf_anno),
-    TxDb.Hsapiens.UCSC.hg19.knownGene,
-    CodingVariants())
-    
-head(vcf_anno)
+```r
+options(ucscChromosomeNames=FALSE)
 
+# 
+txTr <- GeneRegionTrack(txdb, chromosome = "17", 
+                        start = 35916307,  end = 35932999, name = "Ensembl v101")
 
-include some other stuff from VariantAnnotation package? perhaops overlap with known pathogenic variants..? 
+coding_sub <- coding[seqnames(coding) == "17" & start(coding) > 35916307 & end(coding) < 35932999]
 
+track1 <- AnnotationTrack(granges(coding_sub), name = "TCGA variants")
+gtrack <- GenomeAxisTrack()
 
+# 
+plotTracks(list(gtrack, txTr, track1), transcriptAnnotation = "symbol")
+```
 
 
 ### Genome reference sequences in Bioconductor 
