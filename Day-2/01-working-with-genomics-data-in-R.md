@@ -229,7 +229,7 @@ Gather the metadata ... OK
 Make the TxDb object ... OK
 
 #### DO RUN ####
-txdb <- readRDS("../data/TxDb.Hsapiens.Ensembl.101.rds")
+txdb <- loadDb("/Users/OwenW/Desktop/TxDb.Hsapiens.Ensembl.101.db")
 txdb
 ```
 
@@ -316,14 +316,13 @@ table(duplicated(tx_to_exon$TXNAME))
 
 ### Example application: Variant annotation 
 
-ADD TEXT HERE 
+Transcript annotation data can be used in many ways. One common usage example is for variant annotation, where we need to identify the transcriptional context of a variant set (e.g. promoter-associated, exon, intron, untranslated regions, etc.). 
 
-
-
-
-
+To demonstrate how we could use our TxDb object created above to annotate variants, we will leverage functionality from another BioConductor package, `VariantAnnotation` that uses TxDb objects directly to annotate a set of variants (that can be in GRanges format). An example variant set is also provided, representing variants identified as present over multiple cancer types, as part of The Cancer Genome Atlas (TCGA) Pan-cancer analysis project. Genomic coordinates (hg38) for all identified variants present on chromosome 17 are included in the file `../data/TCGA.pcawg.chr17.bed`. 
 
 ```r
+library(VariantAnnotation)
+
 # import the variant locations in bed file format 
 bed <- import("/Users/OwenW/Desktop/TCGA.pcawg.chr17.bed", format="BED")
 bed
@@ -331,7 +330,11 @@ bed
 # annotate the variants based on our Ensembl Txdb 
 vars <- locateVariants(bed, txdb, AllVariants())
 vars
+`
 
+As you can see by printing this object to the console, we now have variants annotated by their transcriptional context, as it relates to the human Ensembl annotation release 101. We can perform some simple operations on this object to explore it further and answer some basic questions, such as how many variants are annotated in each group variuant class. 
+
+```r
 # sum up variants in each group 
 sum.tab <- table(vars$LOCATION)
 sum.tab
@@ -343,30 +346,52 @@ round(prop.table(sum.tab), digits = 2)
 barplot(round(prop.table(table(coding$LOCATION)), digits = 2))
 ```
 
-
-
-
-add gene symbol to vars object 
-Then subset for genes of interest 
-plot ERBB2 and transcripts from txdb region using gviz 
-
-
-
+It would also be nice to have the gene symbols included in the TxDb object. We can do this using the `select()` method as we did previously. This allows us to easily search for genes of interest, by their transcript ID, gene ID, or gene symbol. 
 ```r
+# 
+anno <- read.table("/Users/OwenW/GRCh38.p12_ensembl-101.txt", sep="\t", header=TRUE, stringsAsFactors = F)
+
+# return indicies of ENSEMBL geneIDs from variants annotation in the Ensembl v101 annotation data 
+indicies_of_matches <- match(vars$GENEID, anno$Gene.stable.ID)
+
+# add gene symbols to vars object 
+vars$GENE.SYMBOL <- anno$Gene.name[indicies_of_matches]
+
+# exmaple gene of interest: 
+vars_erbb2 <- vars[vars$GENE.SYMBOL %in% "ERBB2",]
+vars_erbb2
+
+# check how many of each variant type 
+table(vars_erbb2$LOCATION)
+```
+
+We could also use the visualization approaches we learn't in the last lesson to plot the variants in this region using the `Gviz` package. 
+```r
+# required to set expectation for format of chromosome names ('chr17' vs '17')
 options(ucscChromosomeNames=FALSE)
 
-# 
-txTr <- GeneRegionTrack(txdb, chromosome = "17", 
-                        start = 35916307,  end = 35932999, name = "Ensembl v101")
+# set gene region track from our txdb 
+txTr <- GeneRegionTrack(txdb, 
+                        chromosome = "17", 
+                        start = (min(start(vars_cd79b)) - 500),  
+                        end =  (max(start(vars_cd79b) + 500)), 
+                        name = "Ensembl v101")
 
-coding_sub <- coding[seqnames(coding) == "17" & start(coding) > 35916307 & end(coding) < 35932999]
-
-track1 <- AnnotationTrack(granges(coding_sub), name = "TCGA variants")
+# create the annotation track for the variants of interest 
+track1 <- AnnotationTrack(granges(vars_cd79b), name = "TCGA variants", 
+                          col.line = "red", fill = "red")
+                          
+# add the genome axis for scale 
 gtrack <- GenomeAxisTrack()
 
-# 
-plotTracks(list(gtrack, txTr, track1), transcriptAnnotation = "symbol")
+# generate the plot 
+plotTracks(list(gtrack, txTr, track1), main="CD97B variants")
 ```
+
+![](../figures/cd97b-variants.png)
+
+
+
 
 
 ### Genome reference sequences in Bioconductor 
