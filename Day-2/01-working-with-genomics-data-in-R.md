@@ -388,7 +388,7 @@ gtrack <- GenomeAxisTrack()
 plotTracks(list(gtrack, txTr, track1), main="CD97B variants")
 ```
 
-![](../figures/cd97b-variants.png)
+<img src="../figures/cd97b-variants.png" height="550" width="750"/>
 
 
 
