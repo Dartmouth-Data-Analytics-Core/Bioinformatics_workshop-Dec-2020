@@ -707,64 +707,38 @@ After you write the file, go to your the bash command line and have a look at yo
 
 If you did have direct access to the reference genome locally and other functionality in Bioconductor wasn't a priority for you, you could perform this analysis at the command line in bash with [*bedtools*](https://bedtools.readthedocs.io/en/latest/) and its `getfasta` tool, which allows you to extract sequences from a BED/GTF/VCF file and export them to a FASTA file. 
 
-
-
-
-
+---
 
 #### Using *BioStrings* without *BSGenome*
 
-Lets explore some BioStrings functionality using a some real coding sequences for a marine sponge organism native to the Great Barrier Reef,  *Amphimedon queenslandica* downloaded from NCBI [RefSeq ID:NC_008944.1](https://www.ncbi.nlm.nih.gov/genome/2698). 
+It is also worth noting that *BioStrings* can be used independently from *BSGenome* with any set of sequences you are able to define in your R environment as an *XString* or *XStringSet* class object. For example, perhaps you are studying the *Amphimedon queenslandica*, a marine sponge organism native to the Great Barrier Reef, and want to explore some basic features of its coding sequences. 
 
-*A.queenslandica* is described on the NCBI Genome webpage as: 
-> *"This species exemplifies many sessile and sedentary marine invertebrates (e.g., corals, ascidians, bryozoans): They disperse during a planktonic larval phase, settle in the vicinity of conspecifics, ward off potential competitors (including incompatible genotypes), and ensure that brooded eggs are fertilized by conspecific sperm."*
+<img src="../figures/Amphimedon_queenslandica_adult.png" height="450" width="650"/>
 
-!Image source: [Wikipedia](https://en.wikipedia.org/wiki/Amphimedon_queenslandica)](../figures/Amphimedon_queenslandica_adult.png)
+Image source: [Wikipedia](https://en.wikipedia.org/wiki/Amphimedon_queenslandica)
 
-The coding sequences (13 overall) are in FASTA format, and BioStrings provides functionality for reading in FASTA files with the `readDNAStringSet()` function. 
-
-Lets read in the FASTA file and have a look at it. 
+We can retrieve a FASTA file for the coding sequences  (13 overall) from NCBI [(RefSeq ID: NC_008944.1)](https://www.ncbi.nlm.nih.gov/genome/2698) and read the FASTA file into R as a DNAStringSet object using the `readDNAStringSet()` function. 
 ```{r}
-fasta.file <- "/Users/OwenW/Desktop/a.queenslandica.fasta"
+fasta.file <- "../data/a.queenslandica.fasta"
 a.queen <- readDNAStringSet(fasta.file, "fasta") 
 a.queen
 ```
 
-We have now imported the coding sequences as a `DNAStringSet` object, which we can pass to all of the same functions as we did before. For example: 
+Just as we have done earlier in this lesson, we can again use the *BioStrings* functions to perform basic operations on these sequences. For example: 
 ```r
 # confirm how long it is 
 length(a.queen)
 
-# base frequencies
+# what is the frequency of each base in your sequence 
 base.freqs <- alphabetFrequency(a.queen, baseOnly=TRUE, as.prob=TRUE)
 base.freqs
 
-# translate to protein 
-translate(a.queen)
-
-# find the longest consecutive string of A bases 
-longestConsecutive(a.queen, "A") 
+# what is the frequency of your favourite base 
+a.freqs <- letterFrequency(a.queen, "A", as.prob=TRUE)
+a.freqs
 ```
 
-Perhaps we are interested in the GC content of each coding sequence. One way to compare GC content across these regions: 
-```r
-# create a variable to store GC content 
-gc.content <- rep(NA, length(a.queen))
-
-# use a loop to calculate GC content for each coding region 
-for(i in 1:length(gc.content)){
-  gc.content[i] <- sum(base.freqs[i,"C"], base.freqs[i,"G"])
-}
-gc.content
-
-# visualize 
-plot(gc.content, col="firebrick",
-     xlab="Coding region", ylab="GC content", main="GC content comparison",
-     las = 1, pch=16, cex = 1.3)
-abline(h=0.5, lwd = 2, lty=2, col="deepskyblue4")
-```
-
-Several *BioStrings* functions also allow us to search sequences for specific patterns of interest. For example, we may want to confirm that each of our coding sequences begins with an `ATG` start codon. We can do this using the *BioStrings* functions `matchPattern()` and `countPattern()`. 
+*BioStrings* also implements extensive functionality for **pattern matching**, allowing you to search sequences for specific patterns of interest. For example, we may want to confirm that each of our coding sequences begins with an `ATG` start codon. We can do this using the *BioStrings* functions `matchPattern()` and `countPattern()`. 
 ```r
 # return all matches in a DNAString subject sequence to a query pattern
 matchPattern("ATG", a.queen[[1]])
@@ -810,17 +784,6 @@ matches[[4]]
 matches[[4]][[3]]
 ```
 
-Such an approach might be useful if you were trying to estimate gene models in a set of preliminary coding sequences. Other applications of these pattern matching methods might include searching for/or designing probe sequences, or searching for reads containing custom barcodes in a single cell sequencing experiment. 
-
-
-
-
-
-
-
-
-
-
 #### Other functionality in *BioStrings*
 
 *BioStrings* also provides functionality for a number of other analytical tasks that you may want to perform on a set of sequences stored using the *XString* and *XStringSet* method, for example:  
@@ -839,8 +802,6 @@ An excellent *BioStrings* tutorial is available [here](https://bioconductor.org/
 ### visualize mouse histone mark data with genomation 
 ### elude to other packages that can do this in R, but also out of R, maybe find a place to do this with deeptools 
 
-genomation: 
-reading in genomics data with r trackleyer and other file formats (Rsamtools for FASTQ..?/FASTA)
 
 
 
@@ -849,20 +810,10 @@ reading in genomics data with r trackleyer and other file formats (Rsamtools for
 
 
 
-
-
-
-
-several overviews of annotation functionalities in Bioconductor exist. 
-[here](http://www.bioconductor.org/packages/release/workflows/vignettes/annotation/inst/doc/Annotation_Resources.html#biomart)
-
-
-Note: There are various ways to achieve what we did here using different Biconductor/R-packages. One way is not necessairily better than the other, however it is important to understand the resource/database that you package is pulling from, so always read the documentation. 
 
 
 ## Data containers, maybe Part 3..?
 SummarizedExperiment style packages
-adding gene annotation data to these 
 counting up over genomic regions 
 singlecellexperiment package 
 
