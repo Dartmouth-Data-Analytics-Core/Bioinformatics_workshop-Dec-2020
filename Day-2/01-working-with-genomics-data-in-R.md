@@ -907,11 +907,5 @@ An excellent *BioStrings* tutorial is available [here](https://bioconductor.org/
 
 
 
-## Data containers, maybe Part 3..?
-SummarizedExperiment style packages
-counting up over genomic regions 
-singlecellexperiment package 
-
-### elude to other packages that can do this in R, but also out of R, maybe find a place to do this with deeptools 
-
-
+## Potential TO DOs:
+- Data containers, e.g. SummarizedExperiment
