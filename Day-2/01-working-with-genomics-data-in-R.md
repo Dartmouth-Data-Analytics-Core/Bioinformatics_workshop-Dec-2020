@@ -236,7 +236,7 @@ Gather the metadata ... OK
 Make the TxDb object ... OK
 
 #### DO RUN ####
-txdb <- loadDb("/Users/OwenW/Desktop/TxDb.Hsapiens.Ensembl.101.db")
+txdb <- loadDb("data/TxDb.Hsapiens.Ensembl.101.db")
 txdb
 ```
 
@@ -331,7 +331,7 @@ To demonstrate how we could use our TxDb object created above to annotate varian
 library(VariantAnnotation)
 
 # import the variant locations in bed file format 
-bed <- import("/Users/OwenW/Desktop/TCGA.pcawg.chr17.bed", format="BED")
+bed <- import("data/TCGA.pcawg.chr17.bed", format="BED")
 bed
 
 # annotate the variants based on our Ensembl Txdb 
@@ -356,7 +356,7 @@ barplot(round(prop.table(table(coding$LOCATION)), digits = 2))
 It would also be nice to have the gene symbols included in the TxDb object. We can do this using the `select()` method as we did previously. This allows us to easily search for genes of interest, by their transcript ID, gene ID, or gene symbol. 
 ```r
 # 
-anno <- read.table("/Users/OwenW/GRCh38.p12_ensembl-101.txt", sep="\t", header=TRUE, stringsAsFactors = F)
+anno <- read.table("data/GRCh38.p12_ensembl-101.txt", sep="\t", header=TRUE, stringsAsFactors = F)
 
 # return indicies of ENSEMBL geneIDs from variants annotation in the Ensembl v101 annotation data 
 indicies_of_matches <- match(vars$GENEID, anno$Gene.stable.ID)
@@ -763,7 +763,7 @@ Once peak regions have been identified to describe the potential binding locatio
 
 ```r
 # read in peaks
-bed <- import("/Users/OwenW/Desktop/CTCF-mouse-forebrain-mm10.bed", format="BED")
+bed <- import("data/CTCF-mouse-forebrain-mm10.bed", format="BED")
 bed
 
 # extract sequences for peak regions and print to console 
