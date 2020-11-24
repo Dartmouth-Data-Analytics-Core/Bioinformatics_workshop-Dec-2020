@@ -428,10 +428,6 @@ Before working with a complete reference genome sequence from *BSGenome*, lets d
 
 The most basic object class in *BioStrings* is the *XString* class, which is technically a '*virtual class*' (meaning it cannot actually store objects itself, but can be used to set rules for a a group of classes) encompassing object classes for DNA, RNA, and protein sequences: `DNAString`, `RNAString`, and `AAString`. Today we will focus on DNA sequences using *DNAString* class objects. 
 
-
-
-
-
 Lets start by creating a **really** simple *DNAString* object and looking at some basic features of it:
 ```r
 # use the DNAString contructor function to create a 10 letter DNA sequence 
@@ -656,16 +652,63 @@ Beyond the basic *BioStrings* based methods, there is one very important method 
 
 Once peak regions have been identified to describe the potential binding locations of a particular transcription factor (TF), a common task in the analysis ChIP-seq data is to scan the sequences immediately surrounding these peaks in order to identify sequences enriched over these peak regions that may represent the binding motif for that TF. In order to achieve this, we need to obtain the sequences surrounding peaks. This is commonly done by 
 
-INSERT CARTOON IMAGE DESCRIBING MOTIF ANALYSIS PRINCIPLE AND BASICS 
-
+<img src="../figures/motif-example.png" height="550" width="900"/>
 
 ```r
+# read in peaks
+bed <- import("/Users/OwenW/Desktop/CTCF-mouse-forebrain-mm10.bed", format="BED")
+bed
 
-
-
-
-
+# extract sequences for peak regions and print to console 
+ctcf_seqs <- getSeq(genome, bed)
+ctcf_seqs
 ```
+
+Since the object returned by `getSeq()` is a DNAStringSet class object, we can use *BioStrings* based methods to perform operations on the sequences directly. For example, we might be interested in checking the nucleotide frequencies across all peaks. 
+```r
+# calculate nucleotide freqs. 
+nt_freqs <- alphabetFrequency(ctcf_seqs, baseOnly=TRUE, as.prob=TRUE)
+
+# calculate mean value for nucleotide freqs across all peaks 
+round(apply(nt_freqs, 2, mean), digits=2)
+```
+
+We might also be interested in visualizaing the distribution of the peak width, to get an idea of how much they vary. We can use the `width` accessor function to extract the width of each peak, and base R functions for plotting. 
+```r
+hist(width(ctcf_seqs), 
+     col = "darkgray", 
+     xlab = "Peak width (bp)",
+     main = "CTCF peak width distribution")
+```
+
+We could now export these sequences to a FASTA file (using `writeXStringSet()`) however several motif discovery softwares require that peaks be of the same size (width). To do this in a meaningful way for our ChIP-seq data, we will need to find the center of each peak, and then restrict to the a certain number of bases flanking either side of the center position. We will need to go back to the ranges from our original BED file to resize the peaks to the desired width around the center, then re-extract the sequences fopr those regions. 
+```r
+# resize the regions from the BED file 
+bed_centered <- resize(bed, width = 400, fix = "center")
+bed_centered
+
+# check their with 
+width(bed_centered)
+
+# extract sequences again
+ctcf_seqs_cent <- getSeq(genome, bed_centered)
+ctcf_seqs_cent
+```
+
+Now we are ready to export these sequences in FASTA file format, which is used as the default format as input to many motif discovery algorithms. As mentioned above, we can do this for DNAStringSet objects with the function `writeXStringSet()`. 
+```r
+# export peaks to FASTA file 
+writeXStringSet(ctcf_seqs, file=paste0(peak_dir, "CTCF-peaks-resized.fa"))
+``` 
+
+After you write the file, go to your the bash command line and have a look at your FASTA file to confirm it looks correct. 
+
+**Note:** As we have discussed before, there are several other ways you could have performed this task outside of the functionality implemented by *BioStrings* and *BSGenome*. The major advantage of performing this analkysis in R/Bioconductor is that you do not need to host any large reference genome files locally ()except for installing the *BSGenome* packages, functionality from other Bioconductor packages can be utilized (such as how we used the *GRanges* `resize()` function abiove), and you can easily leverage the other functionality for sequence operations available in *BioStrings* (of which there are many). 
+
+If you did have direct access to the reference genome locally and other functionality in Bioconductor wasn't a priority for you, you could perform this analysis at the command line in bash with [*bedtools*](https://bedtools.readthedocs.io/en/latest/) and its `getfasta` tool, which allows you to extract sequences from a BED/GTF/VCF file and export them to a FASTA file. 
+
+
+
 
 
 
