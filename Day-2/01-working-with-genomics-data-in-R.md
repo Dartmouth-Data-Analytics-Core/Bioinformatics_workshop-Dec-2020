@@ -757,10 +757,13 @@ Beyond the basic *BioStrings* based methods, there is one very important method 
 
 #### Example usage of a BSGenome package: Extracting peak flanking sequences from ChIP-seq data 
 
-Once peak regions have been identified to describe the potential binding locations of a particular transcription factor (TF), a common task in the analysis ChIP-seq data is to scan the sequences immediately surrounding these peaks in order to identify sequences enriched over these peak regions that may represent the binding motif for that TF. In order to achieve this, we need to obtain the sequences surrounding peaks. This is commonly done by 
+Once peak regions have been identified to describe the potential binding locations of a particular transcription factor (TF), a common task in the analysis ChIP-seq data is to scan the sequences immediately surrounding these peaks in order to identify sequences enriched over these peak regions that may represent the binding motif for that TF. In order to achieve this, we need to obtain the sequences for these peaks from the reference genome that the samples were aligned to (mm10). The cartoon below depicts this overall workflow. 
 
 <img src="../figures/motif-example.png" height="550" width="900"/>
 
+As an example, we will continue our mouse forebrain theme, using ChIP-seq data from the developing mouse forebrain that was performed using an antibody specific for the CTCF transcription factor (TF), a critical TF for diverse cellular processes that performs a plethora of transcriptional activation/repression functions at a genome-wide level. Called CTCF peaks for this experiment were downloaded from the ENCODE website [here](https://www.encodeproject.org/experiments/ENCSR677HXC/). 
+
+Lets read in the BED file as a *GRanges* object using *rtracklayer* function `import()` as we have done previously. We can then use the `getSeq()` function in Bioconductor to return the sequences from our previously assigned *BSGenome* (UCSC - mm10, assigned to `genome`) that cover the regions specified in the *GRanges* object. 
 ```r
 # read in peaks
 bed <- import("data/CTCF-mouse-forebrain-mm10.bed", format="BED")
