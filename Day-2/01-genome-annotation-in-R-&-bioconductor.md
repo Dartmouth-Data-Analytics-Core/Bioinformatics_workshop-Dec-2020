@@ -1,5 +1,5 @@
 
-# Part 1 -  Genomic data analysis in R
+# Part 1 -  Working with genomics data in R/Bioconductor
 
 In a typical analysis of an NGS dataset, like that depicted in the figure below, once we have performed most of the pre-processing and quality control steps we are usually left with some reduced representation of the data. For example:  
 * Raw counts matrix in RNA-seq  
