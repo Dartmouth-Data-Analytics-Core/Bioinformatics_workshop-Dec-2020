@@ -47,7 +47,7 @@ BiocManager::install()
 ```
 
 Bioconductor packages can then be loaded like regular R-packages: 
-```
+```r
 library(IRanges); library(GenomicRanges)
 ```
 
@@ -72,7 +72,7 @@ The *IRanges* package provides an efficient way to achieve these tasks on basic 
 For the purposes of IRanges however, simply consider them as a set of integer regions. In the figure, we can see how these would be specified in R if we used the `IRanges()` constructor function to generate an `IRanges` class object of the integer regions shown in orange. Each object shows that each region has a `start`, `end` and `width`. 
 
 We could construct these two regions with the following code: 
-```
+```r
 # 1st region
 IRanges(start = c(1), width = 4)
 
@@ -81,13 +81,13 @@ IRanges(start = c(11), width = 3)
 ```
 
 *IRanges* objects can contain mutiple regions, which we could have contructed for these regions like this: 
-```
+```r
 ir <- IRanges(start = c(1,11), width = c(4, 3))
 ir
 ```
 
 IRanges provides numerous functions for operating on and maniuplating these regions. For example, the functions `shift()`, `narrow()`, and `resize()` for adjusting start, end and width sizes of regions stored in an `Iranges` object. Lets work through a couple of examples: 
-```
+```r
 # shift all of the regions by a specified offset 
 shift(ir, 2)
 
@@ -96,7 +96,7 @@ resize(ir, fix="center", width=1)
 ```
 
 Lets contruct an *Iranges* class object that contains all of the integer regions shown in the figure above (normally, these regions would be defined by your data, so you wouldn't need to do this step, but it is helpful to understand). 
-```
+```r
 ir <- IRanges(start = c(1,2,3,3,5,6,7,7,8,11), 
               width = c(4,4,4,4,3,3,3,3,3,3))
 ir
@@ -107,7 +107,7 @@ ir
 The *GenomicRanges* package extends the functionality introduced by IRanges to allow for analysis of genomic regions within the Bioconductor framework, and severs as a foundation for accessing and manipulating genomic regions for other BioConductor packages, some of which we will discuss (e.g. [*rtracklayer*](https://bioconductor.org/packages/release/bioc/html/rtracklayer.html), [*BSGenome*](https://bioconductor.org/packages/release/bioc/html/BSgenome.html), [*GenomicAlignments*](https://bioconductor.org/packages/release/bioc/html/GenomicAlignments.html)). 
 
 At the core of the package is the *GRanges* class, which is analogous to the IRanges class but specifies genomic ranges denoted by a start, and end on a specific sequence (e.g. a chromosome). Lets construct a `GRanges` object for the ranges shown in the figure. 
-```
+```r
 gr <- GRanges(
     seqnames = rep("chr1", 10),
     ranges = IRanges(start = c(1,2,3,3,5,6,7,7,8,11), width = c(4,4,4,4,3,3,3,3,3,3)),
@@ -132,7 +132,7 @@ mcols(gr)
 Now lets imagine that these regions all represent sequencing reads in an NGS experiment. A common analytical task to perform on these regions would be to ask **what is the read coverage at each genomic position?** 
 
 The `coverage` function provides a convient way to address this question, by returning a vector that indicates the frequency of reads overlapping each of the genomic positions. 
-```
+```r
 # calculate coverage of each base over this genomic region 
 coverage(gr)
 
@@ -159,7 +159,7 @@ Instead, *GenomicRanges* leverages functionaility inrtoduced by *IRanges* to com
 ##### Manipulating GRanges objects 
 
 *GRanges* objects can be indexed similar to regular objects in R, their intervals can be manipulating using the same functions introduced above for *IRanges* objects, and queried/manipulated using additional method functions available in the GenomicRanges package. Lets explore some of these. 
-```
+```r
 # index GRange object for specific elements 
 gr[1]
 gr[[1]]
@@ -178,7 +178,7 @@ There are also numerous range-based operations can be performed on *GRanges* obj
 **Image source:** [GRanges tutorial](https://www.bioconductor.org/help/course-materials/2015/SeattleApr2015/B_GenomicRanges.html)
 
 Lets try a few out on our GRanges object: 
-```
+```r
 # shift all regions 5bp 
 shift(gr, 5)
 
@@ -211,7 +211,7 @@ Namely, we will start by contrasting the locations of ChIP-seq peaks for two chr
 Both *H3K27ac* and *H3K9ac* are known to be found at regions of active chromatin and particularly enhancers, therefore by comparing their distribution across forebrain and heart tissues at a specific stage of development (we will use **E15.5**), we can gain insight into which regions of the mouse genome are important for tissue-specific development. 
 
 To make things easier, we have downloaded the called peaks (in broadpeak format) for you from the [ENCODE website](https://www.encodeproject.org/), therefore the first thing we need to do is read these data into R. Since `.broadpeak` files are a form of extended `BED` file, we can use functions from the `rtracklayer` package to read them into our current session. 
-```
+```r
 # we need to establish a vector describing what the extra extended BED columns are
 extraCols_narrowPeak <- c(signalValue = "numeric", pValue = "numeric",
                           qValue = "numeric", peak = "integer")
@@ -241,7 +241,7 @@ length(ht_h3k27ac)
 Now that we have loaded in the H3K27ac ChIP-seq peaks, we want to get a basic idea of how these peaks overlap, which tells us about how similar the chromatin states are between forebrain and heart tissue in the developing mouse at E15.5. 
 
 **GenomicRanges** has specific functionality for doing this sort of analysis:
-```
+```r
 # use findOverlaps() to return matches of genomic ranges between a 'query' and a 'subject'
 overlaps <- findOverlaps(query = fr_h3k27ac, subject = ht_h3k27ac)
 overlaps
@@ -272,7 +272,7 @@ fr_h3k27ac_uniq1
 ```
 
 Now lets read in the peaks for H3K9ac in both forebrain and heart. To help keep the objects in our R environment organized, we can use another class available in **GenomicRanges**, the `GRangesList` class, which allows us to store multiple Granges objects in a list. This makes sense to do for our analysis, as we have multiple sets of peaks for each tissue that we want to be in our R environment. 
-```
+```r
 # forebrain H3K9ac ChIP-seq peaks
 fr_h3k9ac <- rtracklayer::import("forebrain_E15.5_H3K9ac.bed", 
                                   format = "BED", 
@@ -305,7 +305,7 @@ length(fr[[2]])
 ```
 
 We can use the GRangesLists to explore the overlap between marks within a given tissue, using the same approach with the `findOverlaps()` function as we did above. 
-```
+```r
 # subset for overlapping regions within the forebrain peaks, across both histone marks 
 fr_overlaps <- findOverlaps(query = fr$h3K27ac, subject = fr$h3K9ac)
 fr_overlaps
@@ -323,7 +323,7 @@ length(ht_h3k27ac_ov_h3K9ac)/length(ht$h3K27ac)*100
 ```
 
 You could also obtain the overlapping regions between histone marks within each tissue more directly using the `susetByOverlaps()` function:
-```
+```r
 fr_ov2 <- subsetByOverlaps(fr$h3K27ac, fr$h3K9ac)
 fr_ov2
 
@@ -338,7 +338,7 @@ Comparing the % of overlap for H3K27ac and H3K9ac in both tissues, we can see th
 Bioconductor (and many packages outside Bioconductor) provide packages with extensive functionality for plotting genomics data, especially for data stored with GRanges class objects. One useful package is `GViz` which includes a diverse array of functionality for producing complex plot of genomics data. Especially useful, are the functionalities in Gviz that allow you to plot *'tracks'* that correspond to data from one sample or observation type (e.g. forebrain H3K27ac peaks), just as you might use view them in a genome browser. 
 
 Lets use `Gviz` to create a simple visualization of a specific genomic region, so that we can compare the peaks present for H3K27ac in forebrain and heart within that region. 
-```
+```r
 # create an annotation track from the Granges object for H3K27ac
 fr_h3k27ac_track <- AnnotationTrack(fr$h3K27ac, chromosome = "chr17", start = 9e6, end = 10e6,
                          name = "Forebrain - H3K27ac", stacking = "dense", col = "indianred")
