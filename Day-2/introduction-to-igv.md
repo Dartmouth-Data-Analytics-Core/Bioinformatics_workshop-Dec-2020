@@ -53,7 +53,7 @@ exploring the gene track (+/- strand)
 ### Loading genomes and data into an IGV session
 
 
-![](../figures/igv_ex.png)
+![](../figures/igv-ex.png)
 
 
 
