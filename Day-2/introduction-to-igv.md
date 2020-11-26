@@ -30,7 +30,7 @@ If you use IGV in your publications, you should at cite at least the original pu
 
 IGV can be installed and run locally on MacOS, Linux and Windows as a Java desktop application (which is how we will use it today). You should have all downloaded and installed the Desktop version of IGV for the operating system you are working on. 
 
-<img src="../figures/igv_example.png" height="100" width="100"/>
+<img src="../figures/igv-example.png" height="100" width="100"/>
 
 There is now also an [IGV web-app](https://igv.org/app/) that does not use Java and only needs an internet browser. 
 
