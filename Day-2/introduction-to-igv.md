@@ -1,13 +1,11 @@
 
 # Introduction to the Integrative Genomics Viewer (IGV) 
 
-### What is IGV?
+## What is IGV?
 
 The **Integrative Genomics Viewer (IGV)** is a very powerful piece of genomics software produced and distributed by researchers from the Broad Institute at MIT. IGV provides a fast and easy way to explore and visualize genomics data stored in various formats. 
 
-<img src="../figures/igv.png" height="50" width="100"/>
-
-<img src="../figures/igv_example.png" height="50" width="100"/>
+<img src="../figures/igv.png" height="100" width="100"/>
 
 File types suppoprted by IGV include:  
 * .BAM - alignments  
@@ -28,13 +26,15 @@ The IGV server also hosts a number of reference genomes and annotations, meaning
 
 If you use IGV in your publications, you should at cite at least the original publication [(found here)](https://www.nature.com/articles/nbt.1754). 
 
-### How do we use IGV?
+## How do we use IGV?
 
 IGV can be installed and run locally on MacOS, Linux and Windows as a Java desktop application (which is how we will use it today). You should have all downloaded and installed the Desktop version of IGV for the operating system you are working on. 
 
+<img src="../figures/igv_example.png" height="100" width="100"/>
+
 There is now also an [IGV web-app](https://igv.org/app/) that does not use Java and only needs an internet browser. 
 
-### Learning objectives: 
+## Learning objectives: 
 
 In todays lesson, we will:  
 * Overview of the IGV user interface and basic navigation
