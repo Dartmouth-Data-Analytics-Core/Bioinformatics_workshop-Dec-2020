@@ -54,6 +54,9 @@ exploring the gene track (+/- strand)
 
 
 ![](../figures/igv_ex.png)
+
+
+
 #### Working BAM files (alignments) in IGV
 
 
