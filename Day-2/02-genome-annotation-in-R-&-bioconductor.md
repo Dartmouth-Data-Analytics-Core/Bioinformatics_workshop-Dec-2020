@@ -4,8 +4,8 @@ As discussed at the end of part 1, there are many instances in genomic data anal
 
 Examples of common annotation tasks include:  
 * Mapping unique gene identifiers (e.g. ENSEMBL or NCBI IDs) to gene symbols in an RNA-seq experiment 
-* Annotate coding variants from a WGS/WES dataset based on transcriptional context (e.g. coding variants) for a specific genome annotation (e.g. Ensembl transcripts)
-* Annotate the genomic context (e.g. promoter, intron, exon, intergenic), and obtain sequence information for, peaks from a ChIP- or ATAC-seq experiment (e.g. for motif analysis).
+* Annotating coding variants from a WGS/WES dataset based on transcriptional context (e.g. coding variants) for a specific genome annotation (e.g. Ensembl transcripts)
+* Annotating the genomic context (e.g. promoter, intron, exon, intergenic), and obtain sequence information for, peaks from a ChIP- or ATAC-seq experiment (e.g. for motif analysis).
 
 In this lesson, we will introduce the major Bioconductor packages for genome annotation and how you might use them to achieve common tasks in NGS data analysis. 
 
@@ -19,7 +19,7 @@ In this lesson, we will introduce the major Bioconductor packages for genome ann
 | *BS.genome*              | Full sequences for common reference genomes                 |
 | *genomation*             | annotation of genomic context and basic data visualization  |
 
-In understanding the overall framework for how these packages work synergistercally to simplify the process of obtaining the annotation data you need, it is useful to distginuish the *annotation-centric* packages*, from the *method-centric* packages. 
+In understanding the overall framework for how these packages work synergistercally to simplify the process of obtaining the annotation data you need, it is useful to distginuish the *annotation-centric* packages from *method-centric* packages. 
 
 *Annotation-centric* packages such as *Org.X.Db*, *EnsDb.X.vX*, *biomaRT*, and *BS.genome* are designed to provide access to specific annotations, e.g. Ensembl annotations for all organisms from a specific release, or access to legacy Ensembl genome annotations. 
 
@@ -34,7 +34,7 @@ OrgDb represents a family of Bioconductor packages that store gene identifiers f
 OrgDb packages also provide access to some basic additional annotation data such as membership in gene ontology groups. Just as we did in the last lesson, you can navigate through Bioconductor's package index to view all of the existing Org.X.db packages. 
 [here](https://www.bioconductor.org/packages/release/BiocViews.html#___OrgDb)
 
-It is worth noting that you are not loading annotation data for a specific genome build when using OrgDb packages (which should be obvious from the package names). OrgDb packages pertain to identifiers based on what are usually the most recent genome annotations since they are updated every few months. If you need annotations for an older build specifically, you may need to adopt a different approach than using OrgDb. 
+It is worth noting that you are not loading annotation data for a specific genome build (e.g. hg38 vs. hg19) when using OrgDb packages (which should be obvious from the package names). OrgDb packages pertain to identifiers based on what are usually the most recent genome (hg38) annotations since they are updated every few months. If you need annotations for an older build (hg19) specifically, you may need to adopt a different approach than using OrgDb. 
 
 Load the org.db package for the human genome:
 ```r
@@ -62,7 +62,7 @@ head(entrez.ids)
 length(entrez.ids)
 ```
 
-The situation we usually end up in however, is when we want to return a set of keytypes given one set of keytypes, for example, returning the gene symbol, entrez ID, and RefSeq ID from a list of Ensembl IDs. For thie we can use the `select()` method or `mapIds` method. 
+The situation we usually end up in however, is when we want to return a set of keytypes given one set of keytypes, for example, returning the gene symbol, entrez ID, and RefSeq ID from a list of Ensembl IDs. For thie we can use the `select()` method or `mapIds()` method. 
 ```r
 # use ensembl id of first 6 in entrez.ids to get desired keytypes
 select(org.Hs.eg.db, keys = head(entrez.ids), columns = c("SYMBOL","ENTREZID", "REFSEQ"), keytype="ENSEMBL")
@@ -89,17 +89,17 @@ Now use mapIDs to obtain 1:1 mappings between the Ensembl ID and the gene symbol
 # using mapIds but only to get gene symbol 
 gene.symbols <- mapIds(org.Hs.eg.db, keys = rownames(results), column = c("SYMBOL"), keytype="ENSEMBL")
 
-# add to results 
+# add a symbols column to results with the gene symbols we just retreived 
 results$symbol <- gene.symbols
 
 # check the new results table 
 head(results) 
 
-# make sure there are no NAs..
+# make sure there are no NAs in the symbols column we just created
 table(is.na(results$symbol))
 ```
 
-Uh Oh! There are lots of NAs, meaning many genes didn't have a symbol mapped to them... Turns out Org.Db is most built around **entrez IDs** and does not contain the annotations for many Ensembl genes, which includes a lot of non-coding RNAs like lincRNAs. Instead, we can use an Ensembl package, `EnsDb.Hsapiens.v86` to pull data directly from Ensembl. 
+Uh Oh! There are lots of NAs, meaning many genes didn't have a symbol mapped to them... Turns out Org.Db is most built around **entrez IDs** and does not contain the annotations for many Ensembl genes, which includes a lot of non-coding RNAs like lincRNAs. Instead, we can use an Ensembl package, `EnsDb.Hsapiens.v86` to pull data directly from Ensembl.
 
 ```r
 library(EnsDb.Hsapiens.v86)
@@ -192,7 +192,7 @@ tail(listAttributes(ensembl), 10)
 nrow(listAttributes(ensembl))
 ```
 
-The flagship function of the BiomaRt package is `getBM()` (for get BiomaRt presumably) which means allows us to obtain specific data (attributes) given a set of values that we provide (e.g. Ensembl IDs). The process is very similar to how we used the `select()` and `mapIDs()` functions from OrgDb. Lets use `getBM()` to return annotation data from BiomaRt for our RNA-seq data. 
+The flagship function of the BiomaRt package is `getBM()` (for get BiomaRt presumably) which allows us to obtain specific data (attributes) given a set of values that we provide (e.g. Ensembl IDs). The process is very similar to how we used the `select()` and `mapIDs()` functions from OrgDb. Lets use `getBM()` to return annotation data from BiomaRt for our RNA-seq data. 
 ```r
 # submit query for 1st 2000 genes (to save time in class) in our RNAseq results
 anno_bm <- getBM(attributes=c("ensembl_gene_id", "hgnc_symbol", "chromosome_name", "start_position", "end_position", "strand"),
@@ -202,7 +202,7 @@ anno_bm <- getBM(attributes=c("ensembl_gene_id", "hgnc_symbol", "chromosome_name
 head(anno_bm, 10)
 ```
 
-You can see we now have a `data.frame` stored in anno_BM in our environment that looks similar to the text file that we downloiaded directly from biomaRt and read into R. You could follow a similar protocol to that which we performed to merge the BiomaRt data downloaded in the text file with our RNA-seq results. 
+You can see we now have a `data.frame` stored in anno_bm in our environment that looks similar to the text file that we downloaded directly from biomaRt and read into R. You could follow a similar protocol to that which we performed to merge the BiomaRt data downloaded in the text file with our RNA-seq results. 
 
 ---
 
@@ -219,7 +219,7 @@ txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 txdb
 ```
 
-You can see this available `TxDb` object is for gene annotations generated under the UCSC annotation pipeline. What if your genome is not included in the available `TxDb` packages, for example, if we wanted to continue using an Ensembl annotation? Or perhaps there is no pre-constructed `TxDb` object avaialble for your organism. `GenomicFeatures` provides a number of function specifically to address these issues, for example:  
+You can see this available `TxDb` object is for gene annotations generated under the UCSC annotation pipeline. What if your genome is not included in the available `TxDb` packages, for example, if we wanted to continue using an Ensembl annotation? Or perhaps there is no pre-constructed `TxDb` object avaialble for your organism. `GenomicFeatures` provides a number of functions specifically to address these issues, for example:  
 * makeTxDbFromEnsembl() - Contsrtuct a TxDb object from Ensembl
 * makeTxDbPackageFromBiomaRt() - Contsrtuct a TxDb object from Biomart
 * makeTxDbPackageFromGFF() - Contsrtuct a TxDb object from a GFF/GTF file (especially useful if you are working with a very niche or custom annotation/organism). 
@@ -256,7 +256,7 @@ length(txs)
 table(strand(txs))
 ```
 
-The `transcripts()` function convieniently returns a **GRanges** class object. this means we can apply all the same methods and accessor functions we used in the previous lesson to the transcript data here (e.g. seqnames(), strand(), findOverlaps(), etc.). There are also several other useful accessor functions that bwe can use to return specific subsets of the data in our `TxDb` object. 
+The `transcripts()` function convieniently returns a **GRanges** class object. this means we can apply all the same methods and accessor functions we used in the previous lesson to the transcript data here (e.g. seqnames(), strand(), findOverlaps(), etc.). There are also several other useful accessor functions that we can use to return specific subsets of the data in our `TxDb` object. 
 ```r
 # retireve all the exon ranges 
 ex <- exons(txdb)
@@ -272,7 +272,7 @@ exonicParts(txdb)
 intronicParts(txdb)
 ```
 
-Some of these ranges might be a bit more useful to us if they were organized by their relation to a specific transcript or gene for example. There are several accessor functions that provide functionality to achieve this, and return **GRangesList** class object rather than ordinary Granges objects. 
+Some of these ranges might be a bit more useful to us if they were organized by their relation to a specific transcript or gene. There are several accessor functions that provide functionality to achieve this, and return a **GRangesList** class object rather than ordinary Granges objects. 
 ```r
 # return all transcript ranges organized by gene 
 txs_by_gene <- transcriptsBy(txdb, by = "gene")
@@ -294,7 +294,7 @@ Equivalent functions exist to return oganized GRangesLists for specific features
 * `threeUTRsByTranscript()` - 3'UTRs by transcript 
 * `fiveUTRsByTranscript()` - 5'-UTRs by transcript 
 
-As an alternative way to return data from the Txdb object, you can use the `select()` method with the `columns` and `keytypes` arguments just as we did for *OrgDBb* objects above. This convienient approach is made possible by the fact that *TxDb* object inheret from *AnnotationDbi* objects, just as *OrgDb* objects do. Using `select` in this way allows us to return data for a large list of features, or a specific subset that we request using the `keys` argument. For example, we might wish to return transcript to gene mapping for specific gene IDs, or we may want to obtain all the exon IDs and their genomic location info for a specific set of transcripts. 
+As an alternative way to return data from the Txdb object, you can use the `select()` method with the `columns` and `keytypes` arguments just as we did for *OrgDBb* objects above. This convienient approach is made possible by the fact that *TxDb* objects inheret from *AnnotationDbi* objects, just as *OrgDb* objects do. Using `select` in this way allows us to return data for a large list of features, or a specific subset that we request using the `keys` argument. For example, we might wish to return transcript to gene mapping for specific gene IDs, or we may want to obtain all the exon IDs and their genomic location info for a specific set of transcripts. 
 ```r
 # look at the columns avaialble to be returned in the Txdb 
 columns(txdb) 
@@ -337,7 +337,7 @@ bed
 # annotate the variants based on our Ensembl Txdb 
 vars <- locateVariants(bed, txdb, AllVariants())
 vars
-`
+```
 
 As you can see by printing this object to the console, we now have variants annotated by their transcriptional context, as it relates to the human Ensembl annotation release 101. We can perform some simple operations on this object to explore it further and answer some basic questions, such as how many variants are annotated in each group variuant class. 
 
@@ -459,7 +459,7 @@ fr_h3K27ac_anno
 class(fr_h3K27ac_anno)
 ```
 
-It would be useful if we could run `annotatePeak()` on all samples in one line. We can achieve this using `lapply`: 
+It would be useful if we could run `annotatePeak()` on all samples in one line. We can achieve this using `lapply()`: 
 ```r
 annolist <- lapply(list(fr$h3K27ac, ht$h3K27ac, fr$h3K9ac, ht$h3K9ac), 
                    annotatePeak, 
@@ -482,9 +482,9 @@ plotAnnoBar(annolist)
 
 <img src="../figures/chip-anno-example.png" height="550" width="750"/>
 
-While the proprotion of H3K27ac peaks distributed across the various annotation groups seem relatively stable between the forebrain and heart peak sets, there seems to be a substantially larger proportion of promoter-associated peaks in the H3K9ac peak set from heart tissue compared to that of the forebrain. Perhaos this suggests more transcriptional activity in the heart tissue. 
+While the proprotion of H3K27ac peaks distributed across the various annotation groups seem relatively stable between the forebrain and heart peak sets, there seems to be a substantially larger proportion of promoter-associated peaks in the H3K9ac peak set from heart tissue compared to that of the forebrain. Perhaps this suggests more transcriptional activity in the heart tissue. 
 
-If we were interested in specifically exploring the promoter-associated peaks further on their own, we could subset the 
+If we were interested in specifically exploring the promoter-associated peaks further on their own, we could subset them. 
 ```
 extract annotation data for heart h3k9ac 
 ht_h3K9ac_anno <- annolist$Heart_H3K9ac@anno
@@ -586,13 +586,13 @@ This table was adapted from [Johnson, 2010, *Bioinformatics*](https://www.ncbi.n
 
 An extended IUPAC genetic alphabet was also described in 2010 [(Johnson, 2010, *Bioinformatics*)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2865858/#B1). The extended code uses additional characters, underlining, and bolding as well as the original 16 character code (all meanings maintained) to denote all possible combinations or relationships between bases. Among other uses, this has been valuable for representing genetic varaition in DNA sequences. You can explore the details on the extended code in **Tables 2 & 3** of [(Johnson, 2010)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2865858/#B1). 
 
- If you working with *BioStrings* objects, and need a reminder of the basic characters of the extended code, you can just type `IUPAC_CODE_MAP` when you have the *BioStrings* package loaded into your R session. 
+ If you're working with *BioStrings* objects, and need a reminder of the basic characters of the extended code, you can just type `IUPAC_CODE_MAP` when you have the *BioStrings* package loaded into your R session. 
 
-For example, entering the below into your command-line..
+For example, entering the command below into your command-line..
 ```
 IUPAC_CODE_MAP
 ```
-...will return the below to your console: 
+...will return the following to your console: 
 ```r
      A      C      G      T      M      R      W      S      Y      K      V      H      D      B  N 
    "A"    "C"    "G"    "T"   "AC"   "AG"   "AT"   "CG"   "CT"   "GT"  "ACG"  "ACT"  "AGT"  "CGT" "ACGT" 
@@ -697,7 +697,7 @@ str(genome)
 metadata(genome) 
 ```
 
-By default, the *BSGenomes* come with no sequence masking, for example of known repetitive regions that you may wish to ignore in your analyses. To obtain a masked genome, you should set `masked=TRUE` in the `getBSgenome()` function. This will load a genome in which specific sequences have been masked in a hierachical fashion using the following criteria:  
+By default, the *BSGenomes* come with no sequence masking of, for example known repetitive regions that you may wish to ignore in your analyses. To obtain a masked genome, you should set `masked=TRUE` in the `getBSgenome()` function. This will load a genome in which specific sequences have been masked in a hierachical fashion using the following criteria:  
 1. Gaps in the genome assembly
 2. Sequences with intra-contig ambiguities
 3. regions flagged by [*RepeatMasker*](http://www.repeatmasker.org/)
@@ -727,11 +727,11 @@ seqinfo(genome)
 genome$chr1
 ```
 
-Lets move forward with teh masked genome for today. Remove the `genome` variable from your working environment and replace it with teh masked genome for convienience. 
+Lets move forward with the masked genome for today. Remove the `genome` variable from your working environment and replace it with the masked genome for convienience. 
 ```r
 rm(genome)
 
-genome.m <- getBSgenome("BSgenome.Mmusculus.UCSC.mm10.masked")
+genome <- getBSgenome("BSgenome.Mmusculus.UCSC.mm10.masked")
 ```
 
 We can perform all the same *BioStrings* based-methods on the sequences stored in our *BSGenome* object. For example: 
@@ -757,7 +757,7 @@ Beyond the basic *BioStrings* based methods, there is one very important method 
 
 #### Example usage of a BSGenome package: Extracting peak flanking sequences from ChIP-seq data 
 
-Once peak regions have been identified to describe the potential binding locations of a particular transcription factor (TF), a common task in the analysis ChIP-seq data is to scan the sequences immediately surrounding these peaks in order to identify sequences enriched over these peak regions that may represent the binding motif for that TF. In order to achieve this, we need to obtain the sequences for these peaks from the reference genome that the samples were aligned to (mm10). The cartoon below depicts this overall workflow. 
+Once peak regions have been identified to describe the potential binding locations of a particular transcription factor (TF), a common task in the analysis of ChIP-seq data is to scan the sequences immediately surrounding these peaks in order to identify sequences enriched over these peak regions that may represent the binding motif for that TF. In order to achieve this, we need to obtain the sequences for these peaks from the reference genome that the samples were aligned to (mm10). The cartoon below depicts this overall workflow. 
 
 <img src="../figures/motif-example.png" height="550" width="900"/>
 
@@ -813,7 +813,7 @@ writeXStringSet(ctcf_seqs, file=paste0(peak_dir, "CTCF-peaks-resized.fa"))
 
 After you write the file, go to your the bash command line and have a look at your FASTA file to confirm it looks correct. 
 
-**Note:** As we have discussed before, there are several other ways you could have performed this task outside of the functionality implemented by *BioStrings* and *BSGenome*. The major advantage of performing this analkysis in R/Bioconductor is that you do not need to host any large reference genome files locally ()except for installing the *BSGenome* packages, functionality from other Bioconductor packages can be utilized (such as how we used the *GRanges* `resize()` function abiove), and you can easily leverage the other functionality for sequence operations available in *BioStrings* (of which there are many). 
+**Note:** As we have discussed before, there are several other ways you could have performed this task outside of the functionality implemented by *BioStrings* and *BSGenome*. The major advantage of performing this analysis in R/Bioconductor is that you do not need to host any large reference genome files locally except for installing the *BSGenome* packages, functionality from other Bioconductor packages can be utilized (such as how we used the *GRanges* `resize()` function above), and you can easily leverage the other functionality for sequence operations available in *BioStrings* (of which there are many). 
 
 If you did have direct access to the reference genome locally and other functionality in Bioconductor wasn't a priority for you, you could perform this analysis at the command line in bash with [*bedtools*](https://bedtools.readthedocs.io/en/latest/) and its `getfasta` tool, which allows you to extract sequences from a BED/GTF/VCF file and export them to a FASTA file. 
 
