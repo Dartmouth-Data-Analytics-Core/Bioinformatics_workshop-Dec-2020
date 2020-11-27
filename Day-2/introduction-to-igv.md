@@ -5,6 +5,11 @@
 
 The **Integrative Genomics Viewer (IGV)** is a very powerful piece of genomics software produced and distributed by researchers from the Broad Institute at MIT. IGV provides a fast and easy way to explore and visualize genomics data stored in various formats. 
 
+
+other genome browswers and UCSC
+
+
+
 <img src="../figures/igv.png" height="100" width="100"/>
 
 File types suppoprted by IGV include:  
@@ -62,6 +67,21 @@ exploring the gene track (+/- strand)
 
 ### Loading genomes and data into an IGV session
 
+![](../figures/igv-01.png)
+![](../figures/igv-02.png)
+![](../figures/igv-03.png)
+![](../figures/igv-05.png)
+![](../figures/igv-06.png)
+![](../figures/igv-07.png)
+![](../figures/igv-08.png)
+![](../figures/igv-09.png)
+![](../figures/igv-10.png)
+![](../figures/igv-11.png)
+![](../figures/igv-12.png)
+![](../figures/igv-13.png)
+![](../figures/igv-14.png)
+![](../figures/igv-15.png)
+![](../figures/igv-16.png)
 
 
 
@@ -164,6 +184,7 @@ comparing tracks in igv, need for normalization
 
 
 split view and compare 2 regions 
+Neurod2 Stat5b Top2a
 
 
 
