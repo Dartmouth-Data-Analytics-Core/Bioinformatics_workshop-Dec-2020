@@ -71,7 +71,7 @@ Some of the main UI features include:
 * **Gene track** - Shows gene included in currently loaded annotation (Refseq genes in example). Right click track for additional formatting options. Features included in annotation are indicated by thickness (introns, exons, UTRs). Gene orientation is shown (FWD/+ vs REV/- strand). 
 
 **Figure 1 - Basics of the IGV user interface**
-![](../figures/igv-1.png)
+![](../figures/igv-01.png)
 
 
 
@@ -104,22 +104,22 @@ Now we have zoomed in closer, we can see more detail about teh reads (e.g. direc
 
 To gain more information on specific reads, hover over a single read. Some of this information may loko familar based on our discussions of the BAM file format. 
 
-** Figure 4 - IGV highlights bases mismatched to the reference **
+**Figure 4 - IGV highlights bases mismatched to the reference **
 ![](../figures/igv-04.png)
 
 You can also see some features on specific reads are highlighed. IGV uses colors within reads to highlight features of individual bases. For example, IGV will highlight bases that are mismatched compared the reference. Such bases could represent genetic variants. 
 
-** Figure 5 - IGV highlights bases mismatched to the reference **
+**Figure 5 - IGV highlights bases mismatched to the reference **
 ![](../figures/igv-05.png)
 
 If you right click in the alignment track, you will see a number of options appear for changing how th alignments are displayed. One useful option is `View reads as pairs`. Provided your data are paired-end, R1 and R2 reads will be connected by a small gray line, representing the unsequenced portion of the insert. 
 
-** Figure 6 - Alignment viewing options can be changed by right-clicking **
+**Figure 6 - Alignment viewing options can be changed by right-clicking **
 ![](../figures/igv-06.png)
 
 Insertions and deletions are also highlighted using a purple I (for insertions) or a horizontal black line (for deletions). 
 
-** Figure 7 - IGV shows insertions and deletions in reads **
+**Figure 7 - IGV shows insertions and deletions in reads **
 ![](../figures/igv-07.png)
 
 You can start to appreciate how IGV helps idnetify features of our data, e.g. potential variants. Infact IGV allows us to bring in multiple file types simulatneously so that they can be evaluated together. 
@@ -128,17 +128,17 @@ For example, it can be very useful to visualize variant calls alongside the alig
 
 To demonstrate this, load in the VCF file (`1000G.chr20.sub.vcf.gz`) for the same region on chr20, containing all the called variants across subjects in the 1000 Genomes project. 
 
-** Figure 8 - Viewing VCF files in IGV **
+**Figure 8 - Viewing VCF files in IGV **
 ![](../figures/igv-08.png)
 
 All variants are summarized at the top of the variant track, however since this VCF file also includes subject-specific genotypes, those are also represented here using the colors indicated in the figure below. 
 
-** Figure 9 - Viewing individual-level variant calls in IGV **
+**Figure 9 - Viewing individual-level variant calls in IGV **
 ![](../figures/igv-09.png)
 
 IGV allows you to customize how tracks are presented, and can be modified using `Preferences` found under the `View` tab. 
 
-** Figure 10 - Preferences for tyrack views in IGV**
+**Figure 10 - Preferences for tyrack views in IGV**
 ![](../figures/igv-10.png)
 
 #### Alignment distributions are unique to experimental procedures
@@ -162,7 +162,7 @@ In such experiments, we are usually interested in **which regions** show increas
 
 We are also often in interested in *how much signal* these regions show in comparison to their surrounding regions, and commonly represent these data using the BigWig file format, often referred to as a *signal track*. 
 
-** Figure 11 - ChIP signal, peak regions, and alignments for an example experiment**
+**Figure 11 - ChIP signal, peak regions, and alignments for an example experiment**
 ![](../figures/igv-11.png)
 
 Lets read in some example ChIP-seq data (as shown in Figure 11) to demonstrate how you might go about exploring these types of data. We will use data from a recently published study of the dynamic regulaorty landscape in the developing mouse ([Gorkin *et al*, 2020](https://www.nature.com/articles/s41586-020-2093-3?proof=t)). 
@@ -193,21 +193,21 @@ However, commonly in a ChIP-seq analysis, we are interested in comparing how TF 
 
 Peaks called for each histone mark in either forebrain or heart tissue are now visible. Use the right click options to set the color of these tracks to aid in visualization. Can you see any regions where the chromatin marks differ between the groups? 
 
-** Figure 12 - ChIP peaks for H3K27ac and H3K9ac in mouse E15.5 forebrain & heart tissues**
+**Figure 12 - ChIP peaks for H3K27ac and H3K9ac in mouse E15.5 forebrain & heart tissues**
 ![](../figures/igv-12.png)
 
 Now use the search bar to navigate to the *Neurod2* gene. Clearly, the presence of peaks in forebrain tissues and the absence in heart suggests this region is only transcriptionally active in the developing forebrain. 
 
 However, without any information on the relative ChIP signal at these regions, we don't have any idea of  how transcriptionally active this region is compared to others. For this, we need to load in the signal track data in BigWig format. Load these in from the same directory now. 
 
-** Figure 13 - ChIP peaks **& signal** for H3K27ac and H3K9ac in mouse E15.5 forebrain & heart tissues**
+**Figure 13 - ChIP peaks **& signal** for H3K27ac and H3K9ac in mouse E15.5 forebrain & heart tissues**
 ![](../figures/igv-13.png)
 
 Note the differences in the scales shown at the top left of each signal track. To fairly compare differences between samples, we need to use the same scale. Highlight the signal tracks and right click to select the `Autoscale` option. 
 
 Setting signal tracks to be on the same scale is very important when comparing between them. It is also important to know how the data have been normalized, since values that have been normalized in different ways aren't comparable on the same scale anyway (make sure you know what you are looking at). 
 
-** Figure 14 - ChIP peaks **& signal** for region surrounding *Neurod2* **
+**Figure 14 - ChIP peaks **& signal** for region surrounding *Neurod2* **
 ![](../figures/igv-14.png)
 
 IGV can also be used to compare multiple regions simultaneously using the split view functionality. There are a number of ways the split view can be activated, but perhaps the easiest is using the search bar. 
@@ -215,12 +215,12 @@ IGV can also be used to compare multiple regions simultaneously using the split 
 Enter the following into the search bar to activate split view: 
 `Neurod2 Stat5b Top2a`
 
-** Figure 15 - ChIP peaks **& signal** for region surrounding *Neurod2* **
+**Figure 15 - ChIP peaks **& signal** for region surrounding *Neurod2* **
 ![](../figures/igv-15.png)
 
 Split view has a number of useful aplications, however it is especially useful when reviewing alignment evidence for complex structural variants or translocations (although we won't cover that today). 
 
-#### Saving and restoring sessions in IGV 
+### Saving and restoring sessions in IGV 
 
 We did a lot of work loading in all these data and setting everything up just how we want it. It would be a shame to have to do this everytime we want to revisit these data. Fortunately, IGV allows you to save sessions, allowing you to re-load everything just as you had it before. 
 
@@ -229,7 +229,7 @@ Try saving the current session using `Save session...` under the `File` tab.
 ** Figure 16 - Saving sessions in IGV **
 ![](../figures/igv-10.png)
 
-#### Loading custom references and annotations 
+### Loading custom references and annotations 
 
 TO DO .......
 
