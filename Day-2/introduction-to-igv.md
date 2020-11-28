@@ -260,7 +260,7 @@ We did a lot of work loading in all these data and setting everything up just ho
 Try saving the current session using `Save session...` under the `File` tab. 
 
 
-![](../figures/igv-10.png)
+![](../figures/igv-16.png)
 |:--:| 
 | ** Figure 16 - Saving sessions in IGV ** |
 
