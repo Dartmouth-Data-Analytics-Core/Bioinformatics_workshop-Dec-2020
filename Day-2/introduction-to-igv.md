@@ -70,7 +70,8 @@ Some of the main UI features include:
 
 * **Gene track** - Shows gene included in currently loaded annotation (Refseq genes in example). Right click track for additional formatting options. Features included in annotation are indicated by thickness (introns, exons, UTRs). Gene orientation is shown (FWD/+ vs REV/- strand). 
 
-**Figure 1 - Basics of the IGV user interface**
+| **Figure 1 - Basics of the IGV user interface** |
+|:--:| 
 ![](../figures/igv-01.png)
 
 
