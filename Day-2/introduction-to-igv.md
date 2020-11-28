@@ -88,7 +88,9 @@ As discussed in previous lessons, the index can be constructed using samtools:
 samtools index $bam
 ```
 
-![**Figure 2 - Example alignments on chromosome 20 of hg19**](../figures/igv-02.png)
+![](../figures/igv-02.png)
+|:--:| 
+| **Figure 2 - Example alignments on chromosome 20 of hg19** |
 
 You can see a large number of reads shown in red and blue. Reads aligning to the FWD strand of the reference are shown in red. Reads aligning to the reverse strand are shown in blue. 
 
