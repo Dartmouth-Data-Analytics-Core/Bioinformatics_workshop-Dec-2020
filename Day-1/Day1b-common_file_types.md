@@ -286,7 +286,8 @@ cover zwero and 1 -based coord systems
 - Add basic concepts of alignment, assembly, quantification, peak calling as file types are introduced  
 - VCF files 
 - normalization, FPKM, TPM etc,
-- quantification and opeak calling basics 
+- bed files
+- quantification and peak calling basics 
 
 
 
