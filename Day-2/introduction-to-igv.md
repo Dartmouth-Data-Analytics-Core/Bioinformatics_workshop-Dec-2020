@@ -18,7 +18,7 @@ The range of file formats supported by IGV means it is able to facilitate explor
 * Gene expression data (RNA-seq)  
 * SNP, mutation and copy number data (WES, WGS)  
 * Transcription factor binding sites (ChIP-seq)  
-* Hostone modifications (ChIP-seq)  
+* Histone modifications (ChIP-seq)  
 * Chromatin accessibility (ATAC-seq)  
 * Methylation (Bisulfite sequencing)  
 
@@ -62,7 +62,7 @@ In todays lesson, we will cover:
 The layout of the IGV desktop application is relatively simple and easy to use after you familiarize yourself with the layout of the user interface. 
 
 Some of the main UI features include: 
-* **Currently loaded genome** - Shown in top left. Drop down menu allows you to toggle between pre-packaged genomes or access those available from the IGV server. Genomes cal also be loaded using the `File` tab. 
+* **Currently loaded genome** - Shown in top left. Drop down menu allows you to toggle between pre-packaged genomes or access those available from the IGV server. Genomes can also be loaded using the `File` tab. 
 
 * **Current chromosome/contig** - Name of the chromosome, contig, or other sequence type currently being shown. Can be changed using drop down menu.  
 
@@ -82,13 +82,13 @@ Some of the main UI features include:
 
 ---
 
-## Working BAM files (alignments) in IGV
+## Working with BAM files (alignments) in IGV
 
-IGV is a very powerful way to explore read alignments (.BAM). BAM files can be loaded using the `File` tab and selecting `Load from file`. We will use an example BAM file that contains a small number of alignments on chromosome 20 (to reduce file size) of *hg19*, generated from low pass whole-genome sequencing of 1 individual in the [*1000 Genomes Project*](https://www.internationalgenome.org/home) 
+IGV is a very powerful way to explore read alignments (.BAM). BAM files can be loaded using the `File` tab and selecting `Load from file`. We will use an example BAM file that contains a small number of alignments on chromosome 20 (to reduce file size) of *hg19*, generated from low pass whole-genome sequencing of an individual in the [*1000 Genomes Project*](https://www.internationalgenome.org/home) 
 
 Load this file in now (located in `data/misc/HG00099.chrom20-sub.low_coverage.bam`.)
 
-**Important note:** There is another file in this directory under the same number, but the suffix `.bai`. This is the **index file** and needs to be in the same directory as the BAM file for IGV to load it. BAM files are typically very big and the index creates an efficient index, like you would find in the back of a book, that helps us navigate through teh file quickly. 
+**Important note:** There is another file in this directory under the same number, but the suffix `.bai`. This is the **index file** and needs to be in the same directory as the BAM file for IGV to load it. BAM files are typically very big and the index creates an efficient index, like you would find in the back of a book, that helps us navigate through the file quickly. 
 
 As discussed in previous lessons, the index can be constructed using samtools:
 ```bash
@@ -109,9 +109,9 @@ Zoom in closer to view the *MYLK2* gene.
 |:--:| 
 | **Figure 3 - Alignments to MYLK2 gene** |
 
-Now we have zoomed in closer, we can see more detail about teh reads (e.g. direction indicated by their arrowhead) and the gene features they cover. Since this is WGS data, it makes sense for alignments to cover exons, introns, UTRs, and intergenic regions. 
+Now we have zoomed in closer, we can see more detail about the reads (e.g. direction indicated by their arrowhead) and the gene features they cover. Since this is WGS data, it makes sense for alignments to cover exons, introns, UTRs, and intergenic regions. 
 
-To gain more information on specific reads, hover over a single read. Some of this information may loko familar based on our discussions of the BAM file format. 
+To gain more information on specific reads, hover over a single read. Some of this information may look familar based on our discussions of the BAM file format. 
 
 
 ![](../figures/igv-04.png)
@@ -137,7 +137,7 @@ Insertions and deletions are also highlighted using a purple I (for insertions) 
 |:--:| 
 | **Figure 7 - IGV shows insertions and deletions in reads** |
 
-You can start to appreciate how IGV helps idnetify features of our data, e.g. potential variants. Infact IGV allows us to bring in multiple file types simulatneously so that they can be evaluated together. 
+You can start to appreciate how IGV helps idnetify features of our data, e.g. potential variants. In fact IGV allows us to bring in multiple file types simulatneously so that they can be evaluated together. 
 
 For example, it can be very useful to visualize variant calls alongside the alignment file used to generate them, in order to review evidence for specific variants. 
 
@@ -166,18 +166,18 @@ IGV allows you to customize how tracks are presented, and can be modified using 
 
 As mentioned above, we expect reads to span all types of genomic features in a WGS experiment. However, in other types of experiments we may have very specific expectations of where alignments should be loacted. 
 
-For example, in RNA-seq, read should only align to regions that are transcribed, as libraries are prepared from the transcriptome. The figure below shows an example region with some RNA-seq alignments to hg38. 
+For example, in RNA-seq, reads should only align to regions that are transcribed, as libraries are prepared from the transcriptome. The figure below shows an example region with some RNA-seq alignments to hg38. 
 
-** WGS alignments vs RNA-seq alignments in hg19 **
+**WGS alignments vs RNA-seq alignments in hg19**
 ![](../figures/igv-rnaseq.png)
 
-Reads clearly line up over exons and span introns, which fits with our expectation that on the transcribed regions should contain alignments. If this is not the case, something may be wrong (check loaded genome version!). 
+Reads clearly line up over exons and span introns, which fits with our expectation that only the transcribed regions should contain alignments. If this is not the case, something may be wrong (check loaded genome version!). 
 
 ---
 
 ## Visualizing signal tracks and genomic regions with IGV
 
-IGV also allows us to visualize a number of other genomic file types beyond BAM and VCF files. Very often in genomics experiments, we are interested in identifying regions of the genome that demonstrate increased signal compared to background. For example, DNA regions immunoprecipitated with a trnascription-factor specific antibody in a ChIP-seq experiment. 
+IGV also allows us to visualize a number of other genomic file types beyond BAM and VCF files. Very often in genomics experiments, we are interested in identifying regions of the genome that demonstrate increased signal compared to background. For example, DNA regions immunoprecipitated with a transcription-factor specific antibody in a ChIP-seq experiment. 
 
 In such experiments, we are usually interested in **which regions** show increased signal, which we call *peaks* and often store the genomic corrdinates for these peaks in BED format. 
 
@@ -190,18 +190,18 @@ We are also often in interested in *how much signal* these regions show in compa
 
 Lets read in some example ChIP-seq data (as shown in Figure 11) to demonstrate how you might go about exploring these types of data. We will use data from a recently published study of the dynamic regulaorty landscape in the developing mouse ([Gorkin *et al*, 2020](https://www.nature.com/articles/s41586-020-2093-3?proof=t)). 
 
-In this study, the autors generate an atlas of the dynamic chromatin landscape at various time points during mouse embryonic development, conducting over 1100 ChIP-seq experiments and 132 ATAC-seq experiments spanning 72 stages of development across various tissues.
+In this study, the authors generate an atlas of the dynamic chromatin landscape at various time points during mouse embryonic development, conducting over 1100 ChIP-seq experiments and 132 ATAC-seq experiments spanning 72 stages of development across various tissues.
 
 **Figure 1A-B from Gorkin *et al*, 2020, Nature**. 
 ![](../figures/mouse-atlas-fig1a.png)
 
-In particular, we will use ChIP-seq data generated in immunoprecipation experiments for several histone modifications, whose presence and absence can be used to infer the functional state of chromatin at specific loci (e.g. active transcription, enhancers, heterochromatin). These data have been downloaded and made available in this github repo, in: `Bioinformatics_workshop/Day-2/data/gorkin-et-al/`.
+In particular, we will use the ChIP-seq data generated in immunoprecipation experiments for several histone modifications, whose presence and absence can be used to infer the functional state of chromatin at specific loci (e.g. active transcription, enhancers, heterochromatin). These data have been downloaded and made available in this github repo, in: `Bioinformatics_workshop/Day-2/data/gorkin-et-al/`.
 
 Specifically, we will use ChIP-seq data for two histone modifications that are known to represent transcriptionally active chromatin regions:  
 * H3K27ac - Acetylation of lysine 27 of histone 3
 * H3K9ac - Acetylation of lysine 9 of histone 3
 
-Since this experiment uses alignment generated against mouse refernce mm10, we need to switch the genome slected in IGV before we load in any data. Then, load in the following files:  
+Since this experiment uses an alignment generated against mouse refernce mm10, we need to switch the genome slected in IGV before we load in any data. Then, load in the following files:  
 * `forebrain_E15.5_H3K27ac-chr11.bw` - ChIP signal
 * `forebrain_E15.5_H3K27ac.bed` - Peak coordinates
 * `forebrain_E15.5_H3K27ac-chr11.bam` - Read alignments
