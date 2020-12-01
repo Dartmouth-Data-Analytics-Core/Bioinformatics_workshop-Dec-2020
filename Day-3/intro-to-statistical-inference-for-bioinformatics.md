@@ -6,6 +6,7 @@ As we discussed on day 1, bioinformatics draws on knowledge from multiple discip
 <p align="center">
   <img src="../figures/bioinfo-venn.png" height="400" width="400"/>
 </p>
+
 Adapted from Md Arman Hossen on [Medium](https://medium.com/datadriveninvestor/i-have-designed-my-own-bioinformatics-degree-260b24767d87). 
 
 Statistics involves the analysis of numerical data that we wish to use for making inferences on a larger population. Generally, ***statistical learning*** refers to the models and procedures with which we analyze these numerical datasets. 
