@@ -65,6 +65,7 @@ Below, we provide more speicifc introductions to both supervised and unsupercise
 
 ### Supervised learning - Basic linear modeling 
 
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
 
 
