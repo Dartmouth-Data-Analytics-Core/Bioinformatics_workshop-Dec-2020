@@ -69,7 +69,7 @@ Below, we provide more speicifc introductions to both supervised and unsupercise
 
 
 
-$$  Y= \beta_0+\beta_1X + \epsilon $$ 
+$  Y= \beta_0+\beta_1X + \epsilon $
 
 
 
