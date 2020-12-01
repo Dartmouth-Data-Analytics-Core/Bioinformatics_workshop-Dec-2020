@@ -116,9 +116,93 @@ Andes and polaris are shared memory computers which run jobs that require a lot 
 
 You will also notice there is a lot more memory on polaris than andes, jobs that require a lot of memory and scratch space should be executed interactively on polaris as discovery may not have the scratch space or memory available to execute these types of jobs.
 
-## SSH clients (filezilla, cyberduck)
+## SFTP clients (filezilla, cyberduck, WinSCP)
 
-Sometimes you will want to move files from your account on the cluster to your local computer, an SSH client is useful for this. 
+Sometimes you will want to move files from your account on the cluster to your local computer, one way you can do this is with the commands `scp` and `rsync`. The `scp` and `rsync` command have a similar syntax, for simplicity let's focus on the scp command. The `scp` command takes two arguments each will be a path to copy from/to and the order does not matter (though in `rsync` the source comes first and the destination comes second - so lest stick with that syntax here). 
+
+`scp source_path destination_path`
+
+Let's use these commands to move the (empty) directory we just made from the HPC to your local computer. To start open a new terminal window, this window should default to your local home directory (you can check this with `pwd`). From this new terminal window enter the following command:
+
+```bash
+
+# Move the file from the cluster to your local machine
+scp -r netID@discovery7.dartmouth.edu:/dartfs-hpc/rc/home/h/netID/fundamentals_of_bioinformatics/ ./
+
+```
+
+You will be prompted for your password to ensure you have permissions to access the file on discovery, and the directory will be copied to your local computer (you can check with the `ls` command). You will notice that we used the `-r` option with this command this stands for recursive, when copying a directory this will enable you to copy that directory and all of its contents organized exactly as they are in the location you are copying from. You will also notice I used the `./` to indicate the destination, his is shorthand to mean the directory that I am currently in.
+
+
+Another way to do this that can be a little less daunting when you are new to the command line is to use an SFTP client. I use [FileZilla](https://filezilla-project.org) for this but there are many other programs available to visualize the files that you have locally and on a remote site of your choosing. 
+
+You will notice on the left is a list of the files in my local directory and on the right is a list of files in my remote directory. Once we have a connection established double-clicking a filename will transfer the file from one location to the other. If the filename already exists in the receiving directory a warning will pop up asking if you would really like to replace the current version of the file. In order to make sure the directories in both locations are showing the most current version of their contents it is often useful to use the **Refresh** button on the top menu. 
+
+<p align="center">
+  <img src="../figures/Intro_SFTP_client.png" title="xxxx" alt="context"
+	width="100%" height="100%" />
+ </p>
+ </p>
+
+To establish a connection to a new site you would click on the **Site Manager** image on the top left of the screen. From there you would select the **SFTP** option under the protocol drop down menu, then enter the address of the remote host you would like to connect to, your user name (netID in this case), and password. Click connect and you should see a list displayed on the right pane of the window showing the contents of your home directory. 
+
+<p align="center">
+  <img src="../figures/logging_in2.png" title="xxxx" alt="context"
+	width="100%" height="100%" />
+ </p>
+ </p>
+
+
+## Customizing your working environment on discovery/polaris/andes 
+
+Each person who uses the HPCs at Dartmouth has a different set of tasks and data that they need to work on, and as such we do not need all the same software loaded to complete the tasks that you are interested. Instead discovery/polaris/andes have modules that contain pre-loaded software that you can load into your current environment so that they are available for you to use. In order to see the modules you currently have loaded in your environment use the command `modules list`. To see the breadth of software available for you to load use the command `module avail`.
+
+<p align="center">
+  <img src="../figures/modules_avail.png" title="xxxx" alt="context"
+	width="100%" height="100%" />
+ </p>
+ </p>
+
+You can see that not only is there a lot of software available for you, there are multiple versions of the same software (java 1.6, 1.7, & 1.8) in case a circumstance calls for a specific version of that software. Let's add the latest version of R (R/3.3.1) to your current environment.
+
+```bash
+
+# Load a module to the current environment
+module load R/3.3.1
+
+# List your module to check that the module was loaded
+module list
+```
+There may also be circumstances where you want to remove a loaded module as the software is interfering with another process that you would like to run or you want to load a different version of the same software. Let's remove the module we just loaded.
+
+```bash
+
+# Remove the module
+module rm R/3.3.1
+
+# Check that the module was removed
+module list
+
+```
+
+There are some pieces of software that you will want to make sure are loaded each time that you log onto the HPC. It would be annoying if you had to use the command `module load` with each piece of software you always want loaded every time you log in. Instead you can edit a hidden file that is located in each of your home directories called `.bash_profile`. This file has preferences for setting up your environment and is executed each time that you log into the HPC. To edit a file from your command line interface we will use the tool `nano`. First let's look at the current contents of your `.bash_profile`
+
+```bash
+
+# Look at the contents of your .bash_profile
+cat .bash_profile
+
+```
+
+You can see there is a location that says `# put your own module loads here` under this line is where we will add the commands for the modules that we would like to load. Use the `nano` command to add the latest R version to your environment each time you log in by adding the line `module load R/3.3.1` under the line `# put your own module loads here`. Then use **ctrl+X** to exit the `nano` program. You will be asked if you would like to save the changes you made, type `Y`, and if the changes should be saved to the file name .bash_profile hit return. Let's check that the changes we made have been saved.
+
+```bash
+
+#Look at the contents of your modified .bash_profile
+cat .bash_profile
+
+``` 
+
 
 ## Submitting a job to the cluster
 
@@ -166,11 +250,3 @@ The lines that start with `#PBS` are the lines that are denoting the settings we
 
 
 
-## customizing your account on discovery/polaris/andes 
-modules   
-List the modules you currently have loaded `module list`. 
-List the modules you could potentially load `module avail`. 
-Load a module from the list of available modules for the current login session you are running `module load`  
-Remove a module from the list that are loaded `module rm`  
-conda environments -bioconda vs. yml file   
-.bash_profile - what is it and how do you use it  
