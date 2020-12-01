@@ -22,24 +22,115 @@ Dartmouth's HPC is maintained by [Research Computing](https://rc.dartmouth.edu)(
 
 ## Discovery
 
-`ssh netID@discovery7.dartmouth.edu`
+Discovery is a linux cluster with 2016 cores, 14.5TB of memory, and 1.8PB of disk space. The compute nodes are managed by a [job scheduler](https://rc.dartmouth.edu/index.php/using-discovery/scheduling-jobs/scheduler-policy/) when you log onto discovery you are automatically directed to the head node where data processing should **not be executed**. Let's log onto the discovery cluster now. We will use a secure shell command `ssh` to log onto the discovery cluster. 
 
-Discovery is a linux cluster with 2016 cores, 14.5TB of memory, and 1.8PB of disk space. The compute nodes are managed by a [job scheduler](https://rc.dartmouth.edu/index.php/using-discovery/scheduling-jobs/scheduler-policy/) when you log onto discovery you are automatically directed to the head node where data processing should not be executed. Interactive processing on discovery should only be performed on the test node x01. Once you are satisfied that the commands work as you expect they can be submitted to the scheduler using a PBS script.   
+```bash
 
-To use the test node simply log onto the test node interactively `mksub -I -l node=x01 -l walltime=3:00:00` and execute the commands that you want to test. 
+# Establish the secure shell connection
+ssh netID@discovery7.dartmouth.edu
 
-To submit a job to the scheduler it is best practice to denote the submission options along with the data processing commands from within a PBS script and then submit that script to the scheduler `mksub my_script.pbs`. 
+# Enter your password at the prompt (when you type no characters will show up to preserve privacy)
+netID@discovery7.dartmouth.edu's password:
 
-An example PBS script:
+# You're in! 
+(base) [netID@discovery7 ~]$
+
+```
+It is always useful to orient yourself when you're working on an HPC so that you know where the output of all of the commands you run will end up. Lets run our first command to get your location. 
+
+```bash
+
+# Check your location on the cluster
+pwd
+
+```
+
+You should see something like `/dartfs-hpc/rc/home/h/netID` displayed in response to your command. Initially when you log on you will always be directed to your home directory (the address or path listed above). It is a good idea when working on projects on an HPC to stay organized so lets start by making a folder, or directory to store all of the work you do today we will call it `fundamentals_of_bioinformatics`. You will notice that I chose a title that has no spaces in it, this is because the space is a special character, special characters need to be *escaped* with the `\` and so `funadmentals_of_bioinformatics` would look like `fundamentals\ of\ bioinformatics` with the escape characters. You can see that file names with spaces become unweildy to type out so most programmers will replace spaces with `_`, `.`, or `-` in their filenames to keep everything neat.
+
+```bash
+
+# Create a directory 
+mkdir fundamentals_of_bioinformatics
+
+# enter the directory
+cd fundamentals_of_bioinformatics
+
+# check your location on the cluster
+pwd 
+
+# list the contents of your directory
+ls
+
+```
+You can see that you have now created a directroy and entered it such that your path has an extended to include your new directory as part of your location on the cluster. You can also see that the new directory that you created is empty there are no files. Lets quickly navigate back to our home directory and check the contents of the home directory.
+
+```bash
+
+# navigate to the home directory
+cd ~
+
+# Check the contents of the home directory
+ls
+
+```
+
+The `~` stands for the path you saw when we typed `pwd` in your home directory and you can navigate to the home directory quickly from anywhere else on the cluster using that command. Another way we could have navigated to the home directory would be to go up one level with the command `cd ../` since the home directory was only one level up in our path from the `fundamentals_of_bioinformatics` directory where we were. 
+
+Especially if you type quickly typos and long filenames can trip you up, a good tip to remember is that you can use the `tab` key to autofinish a filename as long as it is unique. If we had two directories one calles `fundamentals_of_bioinformatics` and one called `fundamentals_of_chess` after you typed `fund` and used the tab key you would see `fundamentals_of_` with the prompt asking you to type more so that the correct directory can be entered. If you then typed `fundamentals_of_b` and hit the tab the rest of the name would finish for you. This seems like a little thing but it can be a real time saver if you have many hundreds of similarly named files with long complicated names. 
+
+## Working interactively
+
+Interactive processing on discovery should only be performed on the *test node x01*. Once you are satisfied that the commands you're testing work as you expect they can be submitted to the scheduler using a PBS script. To use the test node simply log onto the test node interactively and execute the commands that you want to test. 
+
+```bash
+
+# Log onto to the test node x01 interactively (the -I flag) for up to 3 hours, the -l flags indicate the details of the submission that you are asking for 
+mksub -I -l nodes=x01 -l walltime=3:00:00 
+
+```
+#### Andes/Polaris
+
+Alternatively you can work interactively on Andes/Polaris clusters. Lets take a minute to log onto Polaris. 
+
+```bash
+
+# Exit discovery
+exit
+
+# Ssh onto Polaris, notice the command is the same except that the location that you are logging into has changed from discovery7 to polaris
+ssh netID@polaris.dartmouth.edu
+
+# Enter your password at the prompt (the password is the same as the one you used for discovery)
+netID@polaris.dartmouth.edu's password:
+
+# You're in! 
+(base) [netID@polaris ~]$
+
+#check your location on polaris
+pwd
+
+```
+You will notice the the inital location you are logged into on polaris is the same home directory you found yourself in after your initial login to discovery. You can even see that all of the same files are there with the `ls` command. The content of your directories does not change whether you are logged onto discovery or polaris, what changes are the capabilities of the computing nodes that you are hosted on. 
+
+Andes and polaris are shared memory computers which run jobs that require a lot of memory or scratch space (temp files that are created during processing but discarded later). Andes has 60 cores, 512 GB of memory, and 5TB of scratch space. Polaris has 40 cores, 1TB of memory, and 5TB of scratch space. You will notice that there are far fewer cores on andes/polaris, these clusters do not use a job scheduler and jobs are executed interactively on these HPCs. If you feel more comfortable executing jobs interactively this is where you should work. 
+
+You will also notice there is a lot more memory on polaris than andes, jobs that require a lot of memory and scratch space should be executed interactively on polaris as discovery may not have the scratch space or memory available to execute these types of jobs.
+
+## SSH clients (filezilla, cyberduck)
+
+Sometimes you will want to move files from your account on the cluster to your local computer, an SSH client is useful for this. 
+
+## Submitting a job to the cluster
+
+For many tasks that you will want to run the task will require lots of memory and perhaps even threading to spread parts of the job onto multiple cores to get the job completed more efficiently (think of a car being built in a factory it makes sense to build the headlights and doors in separate locations at the same time). We do this by submitting a job to the scheduler, in your submission you will tell the scheduler the name you want to give your job, the number and types of nodes you need, the time you think the job should take, where to send notification when the job begins/ends or runs into an error, and what directory the output files from the job should be placed in. It is possible to do this all in one command but often the best practice is to use a script with all of this information endcoded and submit that script to the scheduler. In this way you have a written record of the parameters you used to submit the job and if anything goes wrong you can easily modify the script and resubmit it rather than typing the whole command out again. 
+
+Let's take a look at an example of a job submission script below: 
+
 ```bash
 #!/bin/bash -l  
 #declare a name for this job to be my_serial_job  
 #it is recommended that this name be kept to 16 characters or less  
 #PBS -N my_job  
-
-#request the queue (enter the possible names, if omitted, default is the default)  
-#this job is going to use the default  
-#PBS -q default  
 
 #request 1 node and 16  processors on that node  
 #PBS -l nodes=1:ppn=16  
@@ -62,24 +153,18 @@ cd $PBS_O_WORKDIR
 some command that I would like to submit to the scheduler  
 ```
 
-Though it is possible to submit a command to the scheduler without a pbs script `mksub -N my_job -l nodes=1;ppn:16 -l walltime=0:15:00 -M my_email@dartmouth.edu -m ea my command goes here` saving the command and the submission settings the form of a PBS script enables you to easily resubmit the job if you run into an error, or edit and resubmit th job using different parameters. 
+The lines that start with `#PBS` are the lines that are denoting the settings we would like for the scheduler to use for our command.
 
-## Andes/Polaris
+- `#PBS -N` declares the name that you would like to use for your job
+- `#PBS -l nodes=1:ppn=16` tells the scheduler you need 1 node with at least 16 cores to run this job
+- `#PBS -l walltime=0:15:00` tells the scheduler you need a maximum of 15 minutes to complete this job, the job will be killed after 15 minutes so it is always best to err on the side of more time 
+- `#PBS -m bea` tells the scheduler that you would like to be notified when the job starts, ends, and if any errors are encountered while running the job
+- `#PBS -M` tells the scheduler how to contact you with the information you requested in the `-m` argument
+- `cd $PBS_O_WORKDIR` tells the scheduler to put outfiles, log files and error files in the directory that you submitted your code from. Leaving this out will cause these files to be placed in your home directory. 
 
-`ssh netID@andes.dartmouth.edu`  
 
-`ssh netID@polaris.dartmouth.edu`
 
-Andes and polaris are shared memory computers which run jobs that require a lot of memory or scratch space (temp files that are created during processing but discarded later). Andes has 60 cores, 512 GB of memory, and 5TB of scratch space. Polaris has 40 cores, 1TB of memory, and 5TB of scratch space. You will notice that there are far fewer cores on andes/polaris, these clusters do not use a job scheduler and jobs are executed interactively on these HPCs. If you feel more comfortable executing jobs interactively this is where you should work. 
 
-You will also notice there is a lot more memory on polaris than andes, jobs that require a lot of memory and scratch space should be executed interactively on polaris as discovery may not have the scratch space or memory available to execute these types of jobs.
-
-## Logging onto an hpc
-Logging onto an hpc -ssh  `ssh netID@discovery7.dartmouth.edu`
-
-creating an alias for logging on  `alias discovery="ssh netID@discovery.dartmouth.edu"`
-
-Interacting with files on your hpc from your local computer - SSH clients (filezilla, cyberduck)
 
 ## customizing your account on discovery/polaris/andes 
 modules   
