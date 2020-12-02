@@ -176,8 +176,7 @@ plot(dat$gene_exp ~ dat$hba1c,
 lm1 <- lm(dat$gene_exp ~ dat$hba1c)
 lm1
 ``` 
-
-![]("../figures/lm_example-0.png")
+<img src="../figures/lm_example-0.png" height="500" width="550"/>
 
 The coefficient for the independent/predictor variable, Hba1c, describes its relation to the response variable, expression of gene X. Here, the coefficient in telling us that *for every 1 unit increase in gene expression measured, Hba1c levels increase by ~0.96 units*. 
 
@@ -203,8 +202,7 @@ segments(dat$hba1c, dat$gene_exp, dat$hba1c, pre,
 	col="cornflowerblue")
 #### Note: These are the residuals! 
 ```
-
-![]("../figures/lm_example.png")
+<img src="../figures/lm_example.png" height="500" width="550"/>
 
 The regression line (shown in black) illustrates the clear linear relationship between exprerssion of gene X and Hba1c levels. 
 
@@ -267,8 +265,7 @@ segments(dat2$hba1c, dat2$gene_exp, dat2$hba1c, pre, col="cornflowerblue")
 
 ```
 
-
-![]("../figures/lm_example-2.png")
+<img src="../figures/lm_example-2.png" height="500" width="550"/>
 
 
 The flatter slope of the regression line, and larger values of the residuals, suggests there is no useful relationship between Hba1c levels and expression of gene Y, which is supported by the large *P*-value returned by the model. 
@@ -307,7 +304,7 @@ summary(lm_2)
 # add regression line to the plot 
 abline(lm1, lty=2)
 ```
-<img src="../figures/../figures/lm_example-3.png" height="500" width="550"/>
+<img src="../figures/lm_example-3.png" height="500" width="550"/>
 
 Looking at the model output, the *P*-value is very small, therefore we can conclude that there is an association between expression of gene X and disease status in this sample. 
 
