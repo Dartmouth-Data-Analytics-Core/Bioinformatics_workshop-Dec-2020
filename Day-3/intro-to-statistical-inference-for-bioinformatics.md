@@ -305,8 +305,7 @@ summary(lm_2)
 # add regression line to the plot 
 abline(lm1, lty=2)
 ```
-
-![]("../figures/lm_example-3.png")
+<img src="../figures/../figures/lm_example-3" height="500" width="550"/>
 
 Looking at the model output, the *P*-value is very small, therefore we can conclude that there is an association between expression of gene X and disease status in this sample. 
 
