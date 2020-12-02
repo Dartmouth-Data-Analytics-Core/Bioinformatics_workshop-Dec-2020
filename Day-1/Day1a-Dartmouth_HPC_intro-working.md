@@ -116,13 +116,24 @@ Andes and polaris are shared memory computers which run jobs that require a lot 
 
 You will also notice there is a lot more memory on polaris than andes, jobs that require a lot of memory and scratch space should be executed interactively on polaris as discovery may not have the scratch space or memory available to execute these types of jobs.
 
-## SFTP clients (filezilla, cyberduck, WinSCP)
+## Moving files between computers 
 
-Sometimes you will want to move files from your account on the cluster to your local computer, one way you can do this is with the commands `scp` and `rsync`. The `scp` and `rsync` command have a similar syntax, for simplicity let's focus on the scp command. The `scp` command takes two arguments each will be a path to copy from/to and the order does not matter (though in `rsync` the source comes first and the destination comes second - so lest stick with that syntax here). 
+Sometimes you will want to move files from your account on the cluster to your local computer, or visa versa. You can do this is with the commands `scp` and `rsync`. The `scp` and `rsync` command have a similar syntax, for simplicity let's focus on the scp command. The `scp` command takes two arguments each will be a path to copy from/to and the order does not matter (though in `rsync` the source comes first and the destination comes second - so lest stick with that syntax here). 
 
 `scp source_path destination_path`
 
-Let's use these commands to move the (empty) directory we just made from the HPC to your local computer. To start open a new terminal window, this window should default to your local home directory (you can check this with `pwd`). From this new terminal window enter the following command:
+Let's use these commands to move the file `all_counts.txt` which should be in the Day1 directory you copied from the github repository, into your `fundamentals_of_bioinformatics` directory on discovery. To start open a new terminal window, this window should default to your local home directory (you can check this with `pwd`), navigate to the location you copied the github repo to so that you can see the `all_counts.txt` file when you use the `ls` command. From this new terminal window enter the following command:
+
+```bash
+
+# Move the file from the cluster to your local machine
+scp all_conuts.txt netID@discovery7.dartmouth.edu:/dartfs-hpc/rc/home/h/netID/fundamentals_of_bioinformatics/ 
+
+```
+
+You will be prompted for your password to ensure you have permissions to access the file on discovery, and you should see the `all_counts.txt` file in your fundamentals_of_bioinformatics directory (you can check with the `ls` command).
+
+Now lets copy the `fundamentals_of_bioinformatics` directory to your local directory, using the `scp` command.
 
 ```bash
 
@@ -131,8 +142,9 @@ scp -r netID@discovery7.dartmouth.edu:/dartfs-hpc/rc/home/h/netID/fundamentals_o
 
 ```
 
-You will be prompted for your password to ensure you have permissions to access the file on discovery, and the directory will be copied to your local computer (you can check with the `ls` command). You will notice that we used the `-r` option with this command this stands for recursive, when copying a directory this will enable you to copy that directory and all of its contents organized exactly as they are in the location you are copying from. You will also notice I used the `./` to indicate the destination, his is shorthand to mean the directory that I am currently in.
+You will notice that we used the `-r` option with this command this stands for recursive, when copying a directory this will enable you to copy that directory and all of its contents organized exactly as they are in the location you are copying from. You will also notice I used the `./` to indicate the destination, his is shorthand to mean the directory that I am currently in.
 
+#### SFTP clients (FileZilla, CyberDuck, WinSCP)
 
 Another way to do this that can be a little less daunting when you are new to the command line is to use an SFTP client. I use [FileZilla](https://filezilla-project.org) for this but there are many other programs available to visualize the files that you have locally and on a remote site of your choosing. 
 
