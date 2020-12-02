@@ -336,7 +336,7 @@ We fit the data using a **generalized linear model (GLM)**. GLM's are a family o
 - use of probability distributions other than the normal distribution 
 - the use of a *link-function* that links the expression values in the linear model to the experimental groups, in a way that these other distributions can be used. 
 
-<img src="../figures/neg-binom.png" height="300" width="500"/>
+<img src="../figures/neg-binom.png" height="400" width="600"/>
 
 For example, bulk RNA-seq data typically exhibit a distribution referred to as the *negative-binomial* and therefore require a GLM of the *negative-binomial family* in order to appropriately model RNA-seq counts and test them for differential expression. 
 
