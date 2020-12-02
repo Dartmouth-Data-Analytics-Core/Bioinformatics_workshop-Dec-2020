@@ -216,7 +216,9 @@ cat .bash_profile
 ``` 
 
 
-
+## TO DO: 
+Storage - 50GB for personal accounts and 1TB for lab accounts
+Scratch drive
 
 
 
