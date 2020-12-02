@@ -138,5 +138,12 @@ if (!any(rownames(installed.packages()) == "BSgenome")){
 }
 library(TxDb.Mmusculus.UCSC.mm10.knownGene)
 
+if (!any(rownames(installed.packages()) == "ChIPseeker")){
+  if (!requireNamespace("BiocManager", quietly = TRUE))
+      install.packages("BiocManager")
+  BiocManager::install("ChIPseeker")
+}
+library(ChIPseeker)
+
 sessionInfo()
 ```
