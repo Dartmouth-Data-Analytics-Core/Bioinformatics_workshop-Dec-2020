@@ -267,7 +267,9 @@ segments(dat2$hba1c, dat2$gene_exp, dat2$hba1c, pre, col="cornflowerblue")
 
 ```
 
+
 ![]("../figures/lm_example-2.png")
+
 
 The flatter slope of the regression line, and larger values of the residuals, suggests there is no useful relationship between Hba1c levels and expression of gene Y, which is supported by the large *P*-value returned by the model. 
 
