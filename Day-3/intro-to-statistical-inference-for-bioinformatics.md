@@ -50,7 +50,7 @@ By fitting statistical models to the data (the *learning* part), we aim to learn
 
 There are times when observations are not associated with a predictor (the *dependent variable*) and we simply wish to explore the relationships that exist in our data in a way that is *not supervised* by any such variable. This is often true in *exploratory data analysis* when we want to explore how samples are related to each other without assiging samples to a specific group for modeling purposes. For example, we may wish to confirm samples in an RNA-seq experiment fo not cluster by batch. 
 
-Alternatively, we may not have a predictor/dependent variable that can be used to model our observations. For example, in analysis of single cell sequencing data, we are often interested in studying subpopulations of cells that come from the same sample, and therefore require some way assessing similarities and differences between the cells so that wse can identify potential subpopulations of interest.  
+Alternatively, we may not have a dependent variable that can be used to model our observations. For example, in analysis of single cell sequencing data, we are often interested in studying subpopulations of cells that come from the same sample, and therefore require some way assessing similarities and differences between the cells so that wse can identify potential subpopulations of interest.  
 
 **Examples of unsupervised methods:**    
 - Dimensionality reduction (e.g. PCA, NMF, t-SNE, UMAP)
@@ -63,20 +63,43 @@ Below, we provide more speicifc introductions to both supervised and unsupercise
 
 
 
-### Supervised learning - Basic linear modeling 
+### Supervised learning - Linear modeling 
 
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+Simple linear models, or linear regression, is used pervasively in bioinformatics and genomics for statistical inference. Linear models are relatively simple, flexible, and interpretable, meaning they make excellent tools for statistical inference and scale well to thousands of observations, which is critical for common genomics datasets. Example applications of linear models include:  
+- RNA-seq (differential expression)
+- ChIP-seq (differential binding)
+- ATAC-seq (differential accessibility)
+- Microarray analysis (e.g. DNA methylation)
+- Variant identification (WES/WGS/RNA-seq)
+- Genome-wide association studies (GWAS)
+
+Understanding the basics of linear modeling is central to being able to perform these types of analyses in a statistical programming environment such as R. Given their importance and pervasive use in bioinformatics and genomics, we will introduce the fundamental concepts of linear models, and how you can fit these models in R. 
+
+> **Note:** Linear modeling is the topic of entire independent courses and again requires knowledge of appropriate mathematics and proprability to understand completely. Thus, this should be considered an introduction rather than a standalone resurce. 
+
+In a standard linear model, we assume that some *response* variable (*Y*) can be represented as a linear combination of a set of *predictors* (*X*, independent variables). In building a linear model, we estimate a set of *coefficients* that explain how the *predictors* are related to the *response*. We can use these *coefficients* for statistical inference to better understand which predictors are associated with our response, or for applying the model to new data where we wish to predict the response variable using only a set of predictors. 
+
+Before reviewing out the statistical notation for a simple linear model, it can be useful to first consider the main components: 
+
+Main components of a linear model: *response* = *predictor(s)* + *error* 
+
+- **The *response*** is the dependent variable we wish to model based on some set of predictors
+- **The *predictor(s)*** is the independent variable, or variables, that we wish to model as a linear combination of the response 
+- **The *error*** component represents the information not explained by the model, and exists since we know that no set of predictors will perfectly explain the response variable. These are often referred to as the *residuals* of the model. 
+
+When using the statistical notation for a simple linear regression model, the response variable *Y* constitutes the left hand side of the equation, and is represented as a linear combination of one or more independent variables *&beta;<sub>i</sub>*, each with their own coefficients *X;<sub>i</sub>*. 
+
+Y = &beta;<sub>0</sub> +  &beta;<sub>i</sub> X<sub>i</sub> + &epsilon;
+
+- &beta;<sub>0</sub> refers to the model intercept
+- &epsilon; refers to the error term, or residuals 
 
 
 
 
-$  Y= \beta_0+\beta_1X + \epsilon $
 
 
 
-Linear modeling is a common approach for statistical inference in bioinformatics, especially for genomics. Linear models provide flexible and generally interpretable ways of performing these statistical inferences. 
-
-Critical for RNA-seq, ChIP-seq, microarray data, GWAS, 
 
 
 multiple regression - Batch correction example 
@@ -93,82 +116,4 @@ glms
 
 ### Unsupervised learning - Dimension reduction & clustering 
 
-As mentioned above, two commonly used types of unsupervised learning are *dimension reduction* and *clustering-based* methods. Both encompass a number of distinct methodologies that have various strengths and weaknesses. 
-
-To gain an appreciation for how these methods are used and presented in bioinformatic and genomic data analyses, we will explore the fundamental aspects of *principal components analysis (PCA)* as an example of dimension reduction, and *hierachical clustering* as an example of clustering-based analyses. 
-
-#### Principal components analysis 
-
-
-
-t-SNE and UMAP 
-
-
-
-```r
-prcomp()
-```
-
-
-
-
-
-#### Hierachical clustering 
-
-
-
-
-# use CB book to help get an example function to use 
-```r
-pheatmap()
-```
-
-
-
-
----
-
-## Statistical inference 
-
-
-statsitical inference refers to: 
-estimation
-hypothesis testing 
-
-
-mention MLE 
-
-bayseian 
-
-
-### What is *hypothesis testing*?
-
-
-
-
-
-
-
-### What is a *P*-value?
-
-
-
-
-
-### The multiple testing problem
-
-
-
-
-
-
-### Methods for multiple testing correction
-
-
-
-
-
-
-
-
-
+As mentioned above, two commonly used types of unsupervised learning are *dimension reduction* and *clustering-based* methods. Both encompass a number of distinct methodologies that have various strengths and weaknes
