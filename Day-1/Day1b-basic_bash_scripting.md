@@ -2,8 +2,41 @@
 
 You have already learned some useful commands in the last section (`pwd`, `cd`, `ls`, `scp`, `cat`, & tab to autocomplete) there are a couple more commands that will come in handy as you begin to work with more files using the command line interface (CLI). 
 
+#### Viewing the contents of files
+
+We had previously used the `cat` command to look at the contents of our .bash_profile. The `cat` command will list the entire contents of a file to your screen, this is not a big deal when the file is small like the .bash_profile we were looking at, however this can be a little difficult to use for very large files or if you only wanted to see the first line in a file. There are a couple of other commands that enable you to view the contents of a file with a little more control. The `more` command shows you as much of the file as can be shown in the size of the terminal screen you have open, you can continue to "scroll" through the rest of the file by using the space bar which will proceed through the file page by page (a page being the size of the terminal window you have open), or the return key which will "scroll" through the file line by line. The `head` command will show you the first ten lines of a file, conversely the `tail` command shows you the last ten lines of a file. Either of these commands can be modified with the flag `-n` to show a different number of lines. 
+
+```bash
+
+# Show the first 20 lines of the all_counts.txt file
+head -n 20 all_counts.txt
+
+# Show the last 50 lines of the all_counts.txt file
+tail -n 50 all_counts.txt
+
+```
+
+#### Copying and renaming files 
+
+Sometimes you will want to copy a file into a new directory, this command is very similar to the `scp` command that we used in the previous lesson. Let's copy the all_counts.txt file from the fundamentals_of_bioinformatics directory to your home directory.
+
+```bash
+
+# Copy the all_counts.txt file to your home directory
+cp all_counts.txt ~/all_counts.txt
+
+```
+Another useful tool for your toolbelt is renaming a file using the `mv` command. Let's rename the copy of the all_counts.txt file that we just created.
+
+```bash
+
+# Rename the copied all_counts.txt file
+mv ~/all_counts.txt ~/all_counts.copy.txt
+
+```
+You can also use the `mv` command to move a file rather than copy a file
+
 creating directories and organizing files -  mv, cp  
-looking inside files - more, cat  
 manipulating file contents - cut, paste  
 piping commands to link them together
 
