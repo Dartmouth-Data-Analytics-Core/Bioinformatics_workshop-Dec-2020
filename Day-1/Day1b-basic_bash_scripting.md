@@ -1,22 +1,24 @@
-## Interacting with files from your hpc
+## Basic bash coding
 
+You have already learned some useful commands in the last section (`pwd`, `cd`, `ls`, `scp`, `cat`, & tab to autocomplete) there are a couple more commands that will come in handy as you begin to work with more files using the command line interface (CLI). 
+
+creating directories and organizing files -  mv, cp  
+looking inside files - more, cat  
+manipulating file contents - cut, paste  
+piping commands to link them together
+
+grep - looking for patterns in your files  
+sed - editing batches of files  
+redirecting output - >   
+regex special characters - \* ,\t, \n, ., ~, ^, $  
 navigating the prompt - ctrl+a/ctrl+e, ctrl+c   
 
 
-creating directories and organizing files -  mv, cp  
-navigating to directories - space limitations and the scratch directory  
+**NEEDS TO BE IN DAY1A** navigating to directories - space limitations and the scratch directory  
 
-regex special characters - \* ,\t, \n, ., ~, ^, $  
-uninterpreting special characters  
-looking inside files - more, cat  
-redirecting output - >   
-grep - looking for patterns in your files  
-sed - editing batches of files  
+
+
 Downloading data from external sources (NCBI, ensembl, SRA, etc.) - rsync, curl, wget  
-piping commands to link them together
-grep - looking for patterns in your files  
-sed - editing batches of files  
-manipulating file contents - cut, paste  
 
 
 ## For & while loops 
