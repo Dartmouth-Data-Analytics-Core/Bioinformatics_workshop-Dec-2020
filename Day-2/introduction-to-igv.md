@@ -7,7 +7,17 @@ The **Integrative Genomics Viewer (IGV)** is a very powerful piece of genomics s
 
 <img src="../figures/igv.png" height="100" width="100"/>
 
-File types suppoprted by IGV include:  
+## Learning objectives:  
+* Introduce IGV, its basic user interface, and basic data navigation
+* Loading genomes and data into an IGV session
+* Discuss and explore how IGV represents data stored across distinct file types 
+* Discuss exploratory analyses and visualizations that IGV is useful for
+* Reading in custom genomes
+* Saving and restoring an IGV session 
+
+<hr>
+
+IGV supports a wide-range of genomic file formats that contain data ranging from simple genomic regions, to complex alignments and signal tracks. File types suppoprted by IGV include:  
 * .BAM - alignments  
 * .GTF/GFF - genomic features  
 * .VCF - variant call format  
@@ -26,7 +36,7 @@ The IGV server also hosts a number of reference genomes and annotations, meaning
 
 If you use IGV in your publications, you should at cite at least the original publication [(found here)](https://www.nature.com/articles/nbt.1754). 
 
-Other genome broswers do exist and have various strengths/weaknesses. One example is the [*UCSC Genome Broswer*](https://genome.ucsc.edu/), an excellent web-based tool that allows you to perform many of the same visualizations that you would using IGV, however provides access to a large collection of hosted datasets. The major advantage of IGV is the ease and speed with which it allows you to explore your own data. 
+Other genome broswers do exist and have various strengths/weaknesses. For example, the [*UCSC Genome Broswer*](https://genome.ucsc.edu/), is an excellent web-based tool that allows you to perform many of the same visualizations that you would using IGV using your own data, however also provides access to a large collection of hosted datasets. The major advantage of IGV is the ease and speed with which it allows you to explore your own data, which can be slower to explore using a web-based tool. 
 
 ---
 
@@ -41,17 +51,7 @@ An example of how a typical IGV session might look is included below. In this ex
 
 ![](../figures/igv-example.png)
 
-There is now also an [IGV web-app](https://igv.org/app/) that does not use Java and only needs an internet browser. 
-
-## Learning objectives: 
-
-In todays lesson, we will cover:  
-* An overview of the IGV user interface and basic navigation
-* Loading genomes and data into an IGV session
-* Discuss and explore how IGV represents data stored across distinct file types 
-* Discuss exploratory analyses and visualizations that IGV is useful for
-* Reading in custom genomes
-* Saving and restoring an IGV session 
+There is now also an [IGV web-app](https://igv.org/app/) that does not use Java and only needs an internet browser, although is generally going to be slower than if you run the Desktop version. 
 
 ---
 
@@ -66,13 +66,13 @@ Some of the main UI features include:
 
 * **Current chromosome/contig** - Name of the chromosome, contig, or other sequence type currently being shown. Can be changed using drop down menu.  
 
-* **Current region of chromosome/contig** - Coordinates can be copied and pasted here directly to navigate to a region. Gene names can also be used (dependent upon the loaded annotation). 
+* **Current region of chromosome/contig** - Coordinates in the form *chr:start-end* can be copied and pasted here directly to navigate to a region. Gene names can also be used (dependent upon the loaded annotation). 
 
-* **Scroll bar** - Zoom in and out of the currently shown region 
+* **Zoom bar** - Zoom in and out of the currently shown region 
 
 * **Schematic of currently loaded chromosome or contig** - Red box indcates location of the region you are currently viewing. Full width of current region is shown below, with a scale bar indicating specific coordinates. Both can be used to navigate directly.
 
-* **Gene track** - Shows gene included in currently loaded annotation (Refseq genes in example). Right click track for additional formatting options. Features included in annotation are indicated by thickness (introns, exons, UTRs). Gene orientation is shown (FWD/+ vs REV/- strand). 
+* **Gene track** - Shows gene included in currently loaded annotation (Refseq genes in example). Right click track for additional formatting options. Features included in annotation are indicated by thickness (introns, exons, UTRs). Gene orientation is shown with arrows pointing right for FWD/+, left for REV/- strand. 
 
 
 ![](../figures/igv-01.png)
@@ -124,8 +124,11 @@ You can also see some features on specific reads are highlighed. IGV uses colors
 |:--:| 
 | **Figure 5 - IGV highlights bases mismatched to the reference** |
 
-If you right click in the alignment track, you will see a number of options appear for changing how th alignments are displayed. One useful option is `View reads as pairs`. Provided your data are paired-end, R1 and R2 reads will be connected by a small gray line, representing the unsequenced portion of the insert. 
+If you right click in the alignment track, you will see a number of options appear for changing how the alignments are displayed. One useful option is `View reads as pairs`. Provided your data are paired-end, R1 and R2 reads will be connected by a small gray line, representing the unsequenced portion of the insert. 
 
+Another useful alignment viewing option available from this menu is changing how reads are colored. By default, read are colored according to the strand they are aligned to, which is useful in several contexts, for example, when working with stranded RNA-seq data, however other coloring schemes can be selected, e.g. 
+- by read group
+- by library
 
 ![](../figures/igv-06.png)
 |:--:| 
@@ -141,22 +144,30 @@ You can start to appreciate how IGV helps idnetify features of our data, e.g. po
 
 For example, it can be very useful to visualize variant calls alongside the alignment file used to generate them, in order to review evidence for specific variants. 
 
-To demonstrate this, load in the VCF file (`1000G.chr20.sub.vcf.gz`) for the same region on chr20, containing all the called variants across subjects in the 1000 Genomes project. 
+Lets load in the VCF file (`1000G.chr20.sub.vcf.gz`) for the same region on chr20, containing all the called variants across subjects in the 1000 Genomes project, and explore the called variants using the VCF and alignment files simultaneously.  
 
+---
+While a comprehensive overview variant review contrasting called variants against read alignments is beyond the scope of this workshop and more of an advanced topic, some aspects typically considered include:  
+- Confiriming all ALT reads are not strand-specific 
+- Mapping qualities are consitent across reads representing the REF & ALT allele 
+- Variants are not called at end of reads
+---
 
 ![](../figures/igv-08.png)
 |:--:| 
-| **Figure 8 - Viewing VCF files in IGV ** |
+| **Figure 8 - Viewing VCF files in IGV** |
 
 All variants are summarized at the top of the variant track, however since this VCF file also includes subject-specific genotypes, those are also represented here using the colors indicated in the figure below. 
 
 
 ![](../figures/igv-09.png)
 |:--:| 
-| **Figure 9 - Viewing individual-level variant calls in IGV ** |
+| **Figure 9 - Viewing individual-level variant calls in IGV** |
 
-IGV allows you to customize how tracks are presented, and can be modified using `Preferences` found under the `View` tab. 
-
+IGV allows you to customize how tracks are presented, and can be modified using `Preferences` found under the `View` tab. Tweaking preference can be useful in a number of ways:  
+- Modifying the window size that IGV will start to load reads at
+- Changing the types of reads that are masked from viewing (e.g. supplemental reads)
+- Allowing *soft-clipped* bases to be shown
 
 ![](../figures/igv-10.png)
 |:--:| 
@@ -168,8 +179,9 @@ As mentioned above, we expect reads to span all types of genomic features in a W
 
 For example, in RNA-seq, reads should only align to regions that are transcribed, as libraries are prepared from the transcriptome. The figure below shows an example region with some RNA-seq alignments to hg38. 
 
-**WGS alignments vs RNA-seq alignments in hg19**
 ![](../figures/igv-rnaseq.png)
+|:--:| 
+| ** WGS alignments vs RNA-seq alignments in hg19** |
 
 Reads clearly line up over exons and span introns, which fits with our expectation that only the transcribed regions should contain alignments. If this is not the case, something may be wrong (check loaded genome version!). 
 
@@ -206,7 +218,7 @@ Since this experiment uses an alignment generated against mouse refernce mm10, w
 * `forebrain_E15.5_H3K27ac.bed` - Peak coordinates
 * `forebrain_E15.5_H3K27ac-chr11.bam` - Read alignments
 
-Peak regions for the BED file track clearly line up with the ChIP-signal track (.BigWig), and these regions also show high read densities, suggesting signal over the background level. 
+Peak regions for the BED file track clearly line up with the ChIP-signal track (.BigWig), and these regions also show high read densities, suggesting signal over the background level (as shown in *Figure 11*). 
 
 However, commonly in a ChIP-seq analysis, we are interested in comparing how TF binding sites or histone modifications change between samples. Lets load in some additional data so that we can compare chromatin states in the developing mouse forebrain to heart tissues. Start with the BED files:
 * `forebrain_E15.5_H3K27ac.bed`
@@ -225,6 +237,11 @@ Now use the search bar to navigate to the *Neurod2* gene. Clearly, the presence 
 
 However, without any information on the relative ChIP signal at these regions, we don't have any idea of  how transcriptionally active this region is compared to others. For this, we need to load in the signal track data in BigWig format. Load these in from the same directory now. 
 
+Bigwig files to load: 
+* `forebrain_E15.5_H3K27ac.bw`
+* `forebrain_E15.5_H3K9ac.bw`
+* `heart_E15.5_H3K27ac.bw`
+* `heart_E15.5_H3K9ac.bw`
 
 ![](../figures/igv-13.png)
 |:--:| 
