@@ -4,6 +4,8 @@ Before you attend the workshop there are a couple of things we would like you to
 
 For those of you that indicated that you did not have an account on *discovery* you should have received an email from me explaing how to set that up, please make sure this is done and you are able to log into your account **BEFORE** the workshop begins. 
 
+---
+
 ## Downloading the data ##
 
 For this workshop we will be using a dataset downloaded from the short read archive (SRA), a public repository of genomic data. This dataset comes from [this paper](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099625), and was collected from human airway smooth muscle cells to test gene pathways effected by exposure to Glucocorticoid drugs, which have been historically used for their anti-inflammatory effects to treat asthma. Four cell lines were treated with either a control vehicle (untreated), dexamethasone (dex), albuterol (alb), or both dexamethasone and albuterol (co-treated) for 18 hours before transcriptomes were extracted.
@@ -16,13 +18,17 @@ In your terminal window navigate to where you want to download the files needed 
 git clone https://github.com/Dartmouth-Data-Analytics-Core/Bioinformatics_workshop/
 ```
 
+---
+
 ## Install the Integrative Genomics Viewer (IGV)
 
 We will be using the [Integrative Genomics Viewer (IGV)](http://software.broadinstitute.org/software/igv/), a genome browser produced by researchers at the Broad Institute, to explore and visualize genomics data. 
 
-![](figures.igv.png). 
+![](figures/igv.png). 
 
 You will need to download and install the IGV desktop application for your operating system before the workshop begins. The latest versions of IGV can be found at their [downloads page](http://software.broadinstitute.org/software/igv/download). After installing IGV, try opening the application on your computer to confirm the installation was successful. 
+
+---
 
 ## Setting up a Conda Environment ## 
 
@@ -60,6 +66,9 @@ You will see that the activate command has worked when it reads (bioinfo-w) rath
 ```bash
 conda deactivate
 ```
+
+---
+
 
 ## Setting up an R project ##
 
