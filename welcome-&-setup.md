@@ -16,6 +16,14 @@ In your terminal window navigate to where you want to download the files needed 
 git clone https://github.com/Dartmouth-Data-Analytics-Core/Bioinformatics_workshop/
 ```
 
+## Install the Integrative Genomics Viewer (IGV)
+
+We will be using the [Integrative Genomics Viewer (IGV)](http://software.broadinstitute.org/software/igv/), a genome browser produced by researchers at the Broad Institute, to explore and visualize genomics data. 
+
+![](figures.igv.png). 
+
+You will need to download and install the IGV desktop application for your operating system before the workshop begins. The latest versions of IGV can be found at their [downloads page](http://software.broadinstitute.org/software/igv/download). After installing IGV, try opening the application on your computer to confirm the installation was successful. 
+
 ## Setting up a Conda Environment ## 
 
 Conda is a package management system that helps you find, install, and organize groups of packages needed for a particular task. Conda environments are really useful when working on high performance computing (HPC) environments like Dartmouth's Discovery system because you can install packages locally without needing administrator permission. Conda environments are also useful for project continuity, the versions of the packages that you install in your environment and all of their dependencies will remain the same (unless you update them). We will be using a conda environment to make sure we all have the same version of many different bioinformatics software programs available to us. 
@@ -147,3 +155,6 @@ library(ChIPseeker)
 
 sessionInfo()
 ```
+
+If you have issues with any part of the installation and setup, please reach out to us directly (contact details are in the workshop ReadMe page) or come to bioinformatics help hours (link included in your welcome email). 
+
