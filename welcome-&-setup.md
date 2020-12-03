@@ -24,7 +24,7 @@ git clone https://github.com/Dartmouth-Data-Analytics-Core/Bioinformatics_worksh
 
 We will be using the [Integrative Genomics Viewer (IGV)](http://software.broadinstitute.org/software/igv/), a genome browser produced by researchers at the Broad Institute, to explore and visualize genomics data. 
 
-![](figures/igv.png). 
+<img src="../figures/igv.png" height="100" width="100"/>
 
 You will need to download and install the IGV desktop application for your operating system before the workshop begins. The latest versions of IGV can be found at their [downloads page](http://software.broadinstitute.org/software/igv/download). After installing IGV, try opening the application on your computer to confirm the installation was successful. 
 
