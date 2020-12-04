@@ -28,6 +28,23 @@ Bioinformatics software can be obtained in several ways.  Depending on the softw
 ## Environments
 A command line environment is the collection of all programs and environment variables available to a user on a specific system.  Because all systems are different, it may be necessary to edit the environment before using certain software, or even create separate environments for using specific software. The `env` command will show all environment variables available in the current linux shell.  Some important variables are `$PATH`, `$PWD`, `$HOME`, and `$TMPDIR`.
 
+
+Environment variables 
+
+
+
+
+### Customizing your command line environment 
+
+
+alias rnaw='cd /dartfs-hpc/scratch/omw/'
+
+
+You can also make customizations of your command line environment persistent, meaning those changes will define your environment each time you open a new bash terminal. 
+
+
+
+
 ### The $PATH environment variable
 The `$PATH` environment variable stores a list of directories where programs are available.  The list is stored as strings separated by colons, so that many directories can be defined.  If the list contains multiple directories, it will be searched from left to right, until the command is found.  
 ```shell
