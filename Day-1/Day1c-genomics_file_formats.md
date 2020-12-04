@@ -383,6 +383,9 @@ This option works in a similar way to the qulaity threshold option `-q` BUT igno
 # Aligned read files, BAM/SAM/CRAM formats
 
 ### Principles of read alignment for RNA-seq
+
+# short read mapping using read/reference indexing (bowtie, bwa-mem,)
+#
 The goal of aliginging reads to a reference genome is to find the ***most likely location in that reference genome where the read originated from***. 
 
 Although we won't go into the theory here, aligning reads to reference genomes involves ***mapping*** to identify the most likely position of the read in the reference genome, followed by the ***alignment***, which describes the base-by-base relationship between the read and the reference. Alignments are often imperfect, and are associated with quality scores (***MAPQ scores***) that describe the quality of the alignment. 
@@ -528,8 +531,11 @@ samtool view -H sample.bam
 
 You can learn more about the SAM file format [here](https://samtools.github.io/hts-specs/SAMv1.pdf).
 
+# Add coding exercises for building an alignment with a couple of different programs
 
-## Quantification
+
+
+## Quantification (RNAseq and chipSeq)
 
 <p align="center">
 <img src="../figures/genoic-content.png" title="xxxx" alt="context"
@@ -549,7 +555,7 @@ You can learn more about the SAM file format [here](https://samtools.github.io/h
 
 ## TO DO: 
 - cover zwero and 1 -based coord systems 
-- Add basic concepts of alignment, assembly, quantification, peak calling as file types are introduced  
+- Add basic concepts of assembly, quantification, peak calling as file types are introduced  
 - VCF files 
 - normalization, FPKM, TPM etc,
 - bed files
