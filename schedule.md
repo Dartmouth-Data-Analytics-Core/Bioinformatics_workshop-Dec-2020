@@ -2,16 +2,26 @@
 # Bioinformatics_workshop
 
 ## Day1
-- Introduction 
+- 12 -12:30 Introduction 
   - Intro to workshop, DAC, and personal intros.
-- Introduction to bioinformatics lecture 
-- Fred sequencing lecture (45 min with time for discussion?)
-- Common file formats for bioinformatics
-  - FASTA and FASTQ (exercises for manipulating these files)
+  
+- 12:30-1 Fred sequencing lecture (30 min with time for discussion?)
+
+- 1-1:45 Intro to HPC and basic bash commands
+
+- 1:45-2:15 Break Out room #1
+
+- 2:15 - 3:00 Advanced scripting and Common file formats for bioinformatics
+  - FASTA and FASTQ ( looping exercises for manipulating these files)
   - Principles of alignments and BAM/SAM/CRAM 
   - Genomic region files (GTF/GFF, BED, BED+ examples (e.g. narrowPeak format for ChIP-seq))
-- Basic scripting (basic bash scripting, submitting jobs to HPC)
-- Installing bioinformatics software using a CLI 
+
+- 3:00 - 3:30 Break Out room #2
+
+- 3:30 - 4:30 Installing bioinformatics software using a CLI (do we want a break out room here) 
+
+- 4:30 - 5 Submitting Jobs on Discovery Basic scripting (basic bash scripting, submitting jobs to HPC)
+
 
 ## Day2
 - Basics of R programming (review)
