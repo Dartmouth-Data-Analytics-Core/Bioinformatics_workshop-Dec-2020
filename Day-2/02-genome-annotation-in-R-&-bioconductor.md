@@ -398,7 +398,7 @@ plotTracks(list(gtrack, txTr, track1), main="CD97B variants")
 <img src="../figures/cd97b-variants.png" height="550" width="750"/>
 
 
-### Example application 1: Peak annotation 
+### Example application 2: Peak annotation 
 
 Another example usage of how you might use a TxDb object is in the annotation of peak regions from a ChIP-seq experiment. To demonstrate how we could approach this task, we will return to the ChIP-seq data from [Gorkin *et al*, *Nature*, 2020](https://www.nature.com/articles/s41586-020-2093-3) used in the previous lesson, which describes the dynamic chromatin landscape of the developing mouse. 
 
@@ -531,7 +531,7 @@ Analyzing genomic sequence data directly can be used for a number of common rese
 
 #### Basic object-classes and methods in the *BioStrings* package
 
-Before working with a complete reference genome sequence from *BSGenome*, lets discuss the basic object-classes implemented in the *BioStrings* package to store sequence data, as well as the methods use to parse these sequences. 
+Before working with a complete reference genome sequence from *BSGenome*, lets discuss the basic object-classes implemented in the *BioStrings* package to store sequence data, as well as the methods used to parse these sequences. 
 
 The most basic object class in *BioStrings* is the *XString* class, which is technically a '*virtual class*' (meaning it cannot actually store objects itself, but can be used to set rules for a a group of classes) encompassing object classes for DNA, RNA, and protein sequences: `DNAString`, `RNAString`, and `AAString`. Today we will focus on DNA sequences using *DNAString* class objects. 
 
@@ -545,7 +545,7 @@ seq
 length(seq)
 
 # show the structure of the DNAString object 
-str(dna.st)
+str(seq)
 ``` 
 
 This sequence is a bit short and unrealistic. Lets make a longer sequence using the pre-stored *BioStrings* object `DNA_ALPHABET` and some functions from base R. 
@@ -554,7 +554,7 @@ This sequence is a bit short and unrealistic. Lets make a longer sequence using 
 DNA_ALPHABET
 ```
 
-You can see the 4 standard DNA bases are returned as the first 4 elements of this character string. The remaining elements represent ambiguous bases or specific combinations/relationships using something called the *extended The International Union of Pure and Applied Chemistry (IUPAC) genetic alphabet.* **BioStrings** and its object classes use the extended IUPAC genetic alphabet to describe nucelic acid sequences, therefore we will nbriefly cover the basics of the extended IUPAC alphabet now. 
+You can see the 4 standard DNA bases are returned as the first 4 elements of this character string. The remaining elements represent ambiguous bases or specific combinations/relationships using something called the *extended The International Union of Pure and Applied Chemistry (IUPAC) genetic alphabet.* **BioStrings** and its object classes use the extended IUPAC genetic alphabet to describe nucelic acid sequences, therefore we will briefly cover the basics of the extended IUPAC alphabet now. 
 
 The extended IUPAC code is a specific nomenclature designed to describe incompletely specified nucleic acids. The standard IUPAC code uses 16 characters to specify single bases (A, G, C, T, U) in nucleic acid sequences, or various possible states that a specific nucleic acid may exist as in a sequence. 
 
