@@ -1,8 +1,8 @@
-## Basic bash coding
+# Basic bash coding
 
 You have already learned some useful commands in the last section (`pwd`, `cd`, `ls`, `scp`, `cat`, & tab to autocomplete) there are a couple more commands that will come in handy as you begin to work with more files using the command line interface (CLI). 
 
-#### Viewing the contents of files
+## Viewing the contents of files
 
 We had previously used the `cat` command to look at the contents of our .bash_profile. The `cat` command will list the entire contents of a file to your screen, this is not a big deal when the file is small like the .bash_profile we were looking at, however this can be a little difficult to use for very large files or if you only wanted to see the first line in a file. There are a couple of other commands that enable you to view the contents of a file with a little more control. The `more` command shows you as much of the file as can be shown in the size of the terminal screen you have open, you can continue to "scroll" through the rest of the file by using the space bar which will proceed through the file page by page (a page being the size of the terminal window you have open), or the return key which will "scroll" through the file line by line. The `head` command will show you the first ten lines of a file, conversely the `tail` command shows you the last ten lines of a file. Either of these commands can be modified with the flag `-n` to show a different number of lines. 
 
@@ -16,7 +16,7 @@ tail -n 50 all_counts.txt
 
 ```
 
-#### Copying, renaming, and removing files 
+## Copying, renaming, and removing files 
 
 Sometimes you will want to copy a file into a new directory, this command is very similar to the `scp` command that we used in the previous lesson. Let's copy the all_counts.txt file from the fundamentals_of_bioinformatics directory to your home directory.
 
@@ -56,7 +56,7 @@ rm all_counts.copy.txt
 ```
 You will notice that before the file was deleted you were asked if you were sure you wanted this file deleted, you want to be careful not to remove files that you did not create. If you do accidentally remove a file that you realize you need later discovery uses snapshots to take yearly, monthly, and weekly records of the files in your directory and you can go into the `.snapshot/` directory to recover the file. If you only recently signed up for a discovery account you will not have much in your `.snapshot/` directory, but it's something that might come in useful to you someday.
 
-#### Manipulating file contents
+## Manipulating file contents
 
 There are times that you will only be interested in a subset of your data, for example, the all_counts.txt file is a counts matrix with the first column as the gene names and the next several columns list the number of reads mapping to each gene for each sample, with the sample name at the top of the column. We might be interested in pulling out the counts for only a certain subset of our samples. Let's first look at the list of samples (the first line in the file) 
 
@@ -66,7 +66,6 @@ There are times that you will only be interested in a subset of your data, for e
 head -n 1 all_counts.txt
 
 ```
-SRR1039508	SRR1039509	SRR1039510	SRR1039511	SRR1039512	SRR1039513	SRR1039514	SRR1039515	SRR1039516	SRR1039517	SRR1039518	SRR1039519	SRR1039520	SRR1039521	SRR1039522	SRR1039523
 
 Let's say that we would like to subset this count matrix so that we are only looking at the counts for Samples SRR1039508, SRR1039509, SRR1039510, and SRR1039511 (the first four samples). To do this we can use the `cut` command to subset our data, besides including the counts for these samples we will want to see them displayed next to the gene names (first column), so ultimately we would like to view only columns 1, 2, 3, 4, and 5 from our all_counts.txt file. 
 
@@ -99,38 +98,112 @@ wc -l all_counts.txt
 
 ```bash
 
-# List only the first 100 lines of onely samples SRR1039508 and SRR1039523
+# List only the first 100 lines of only samples SRR1039508 and SRR1039523
 cut -f 1,2,17 all_counts.txt|head -n 100
 
-# List only the first 100 lines of onely samples SRR1039508 and SRR1039523
+# List only the first 100 lines of only samples SRR1039508 and SRR1039523
 head -n 100 all_counts.txt| cut -f 1,2,17
 
 ```
 
-You can see that changing the order of the commands doesn't affect the output, the output from each command is identical.
+You can see that changing the order of the commands doesn't affect the output, the output from each command is identical. Now that we have had a chance to really look at the data by capturing the first hundred lines we might decide that we need to generate a new file containing only samples SRR1039508 and SRR1039523. To do this we will use the redirect command `>` to force the output of the command into a new file rather than printing it out to the screen. 
 
-**TO ADD STILL:**
-manipulating file contents -  paste  
+```bash
 
-## New section
-grep - looking for patterns in your files  
-sed - editing batches of files  
-redirecting output - >   
-regex special characters - \* ,\t, \n, ., ~, ^, $  
-navigating the prompt - ctrl+a/ctrl+e, ctrl+c   
+# Print the counts from SRR1039508 and SRR1039523 to a new file 
+cut -f 1,2,17 all_counts.txt > 8_23_counts.txt
+
+# list the contents of your directory
+ls
+
+```
+
+The redirect command comes in two flavors, the `>` version if the filename you indicate does not already exist will create a new file and add the output from your command OR if the filename does exist it will write over the existing file with the output of your command. The other version is often called the append `>>` again if the filename you indicate does not exist it will create a new file and write the output from your command, however if the filename already exists it will append the output of your command to the bottom of the existing file. We will see an example of this version used later on.  
+
+Another way that we can append content to files is to use the command `paste`, this command will add to an existing file, or combine two files but rather than adding to the bottom of the file like the append command `>>` does `paste` uses a tab delimiter to separate the contents of two files as multiple columns. One way we might want to use this is if we wanted to add a column to the 8_23_counts.txt file we created with the information from sample SRR1039509. 
+
+```bash
+
+## Add a column to the 8_23_counts.txt file with the info from sample SRR1039509
+
+#create a new file with the counts for sample SRR1039509
+cut -f 3 all_counts.txt > 9_counts.txt
+
+# Combine the contents of 8_23_counts.txt with 9_counts.txt and save to a new file 
+paste 8_23_counts.txt 9_counts.txt > 8_23_9_counts.txt
+
+# Check that the command behaved as expected
+head 8_23_9_counts.txt
+
+```
 
 
+## Looking for patterns in your files with Grep
 
+Often we will want to pull a specific piece of information from a large file, lets say that we were interested in the read counts for a specific gene, ALDH3B1, the aldehyde dehydrogenase 3 gene family B1 which plays a major role in the detoxification of aldehydes generated by alcohol metabolism and lipid peroxidation. First we know that in our all_counts.txt file the gene IDs are listed using their ensembl identifiers so we need to look for the ensembl identifier that corresponds to the ALDH3B1 gene, you can find that [here](https://uswest.ensembl.org/index.html) by selecting human in the drop down menu and typing the gene name in the field below. Once we have the ensemble ID we can use the tool `grep` to find that in our data. 
 
+```bash
 
-Downloading data from external sources (NCBI, ensembl, SRA, etc.) - rsync, curl, wget  
+# Get the count data for ENSG00000006534 (ALDH3B1) from all_counts.txt
+grep "ENSG00000006534" all_counts.txt
+
+```
+
+What was returned are the counts for this gene across all of your samples. `grep` is a pattern recognition tool and while it is useful to pull out pieces of information that you know it can be even more powerful to pull out pieces of information that all fit into a certain category. This is the real power of the `grep` tool, but in order to use the tool to its full potential we first need to discuss patterns, or regular expressions (regex). Regular expressions are special characters that stand for useful patterns, see the table below. 
+
+Regex| Pattern
+---|---
+* | wildcard stands for any number of anything
+^ | start of the line
+$ | end of the line
+[0-9] or \d| any number (0123456789)
+[a-z]| any lowercase letter
+[A-Z]| any uppercase letter
+\t | a tab
+\n | a newline
+\s | any white space (tab, newline, space)
+\S | non-white space (the opposite of \s)
+
+These regular expressions can be used with any of the tools that you have learned thus far, so if we wanted to list all of the files in our directory that end in .txt we could use the following command.
+
+```bash
+
+# List all files that end in .txt
+ls *.txt
+
+```
+
+We can even enhance the power of these regular expressions by specifying how many times we expect to see the regular expression with quantifiers.
+
+Quantifier| Operation
+---|---
+X* | 0 or more repetitions of X
+X+ | 1 or more repetitions of X
+X? | 0 or 1 instances of X
+X{*m*} | exactly *m* instances of X
+X{*m*,} | at least *m* instances of X
+X{*m*,*n*} | between *m* and *n* instances of X
+
+Now lets use some of these regular expressions in a `grep` command  to see their utility. Let's use regular expressions to see how many genes have no reads expressed for the first four samples.  
+
+```bash
+# Count the number of genes with no reads in the first four samples
+grep "^ENSG[0-9]*\t0\t0\t0\t0\t" all_counts.txt| wc -l
+
+# Count the number of genes with no reads expressed in any of the samples
+grep "^ENSG[0-9]*\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0$" all_counts.txt| wc -l
+
+```
 
 
 ## For & while loops 
 
+Here we are going to stretch your muscles a little we are going to switch from our counts file to a fastq file. Fastq files are the basic file format that most next-gen data are stored in their raw format. Fastq files store 
+##### Left off here 
 Loops allow us repeat operations over a defined variable or set of files. Essentially, you need to tell Bash what you want to loop over, and what operation you want it to do to each item. 
 
 Notice that the variable ***i*** set in the conditions for our loop is used to reference all the elements to be looped over in the operation using the term ***$i*** in this **for*** loop example: 
+
 ```bash 
 # loop over numbers 1:10, printing them as we go
 for i in {1..10}; do \
@@ -138,8 +211,8 @@ for i in {1..10}; do \
 done
 ``` 
 
-
 Alternatively, if you do not know how many times you might need to run a loop, using a ***while*** loop may be useful, as it will continue the loop until the boolean (logical) specified in the first line evaluates to `false`. An example would be looping over all of the files in your directory to perform a specific task. e.g. 
+
 ```bash
 ls *.fastq.gz | while read x; do \
    # tell me what the shell is doing 
