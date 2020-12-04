@@ -380,8 +380,6 @@ done
 This option works in a similar way to the qulaity threshold option `-q` BUT ignores Q-scores for streches of G bases, as some Illumina instruments, such as the NextSeq, generate strings of Gs when when the sequencer 'falls off' the end of a fragment and dark cycles occur, and therefore provides more appropriate quality trimming for data generated on these instrucments. 
 
 
-### Left off here 
-
 # Aligned read files, BAM/SAM/CRAM formats
 
 ### Principles of read alignment for RNA-seq
