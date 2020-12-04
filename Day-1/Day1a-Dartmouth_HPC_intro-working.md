@@ -319,7 +319,7 @@ What was returned are the counts for this gene across all of your samples. `grep
 
 Regex| Pattern
 ---|---
-* | wildcard stands for any number of anything
+\* | wildcard stands for any number of anything
 ^ | start of the line
 $ | end of the line
 [0-9] or \d| any number (0123456789)
