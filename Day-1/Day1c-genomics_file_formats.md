@@ -431,7 +431,7 @@ Read alignments are stored in the ***SAM (.sam)***, ***BAM (.bam))***, and ***CR
 
 Both formats contain a number of slots for each read alignment that describe key information about the alignment. 11 slots are mandatory, while others are optional and depend on the aligner used, and the settings used in that alignment.
 
-![SAM file](../figures/sam-file.png)
+![SAM file](../figures/sam_file.png)
 The image for the example BAM file is take from the [SAM/BAM file format documentation](https://samtools.github.io/hts-specs/SAMv1.pdf)
 
 #### Notes on select fields:
