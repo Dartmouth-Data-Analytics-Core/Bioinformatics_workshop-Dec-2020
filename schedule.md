@@ -7,18 +7,18 @@
   
 - 12:30-1 Fred sequencing lecture (30 min with time for discussion?)
 
-- 1-1:45 Intro to HPC and basic bash commands
+- 1-1:30 Intro to HPC and basic bash commands
 
 - 1:45-2:15 Break Out room #1
 
-- 2:15 - 3:00 Advanced scripting and Common file formats for bioinformatics
+- 2:15 - 3:00 Installing bioinformatics software using a CLI (do we want a break out room here) 
+
+- 3-4 Advanced scripting and Common file formats for bioinformatics
   - FASTA and FASTQ ( looping exercises for manipulating these files)
   - Principles of alignments and BAM/SAM/CRAM 
   - Genomic region files (GTF/GFF, BED, BED+ examples (e.g. narrowPeak format for ChIP-seq))
 
-- 3:00 - 3:30 Break Out room #2
-
-- 3:30 - 4:30 Installing bioinformatics software using a CLI (do we want a break out room here) 
+- 4:00 - 4:30 Break Out room #2
 
 - 4:30 - 5 Submitting Jobs on Discovery Basic scripting (basic bash scripting, submitting jobs to HPC)
 
