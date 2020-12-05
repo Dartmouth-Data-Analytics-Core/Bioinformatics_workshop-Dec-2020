@@ -2,10 +2,14 @@
 
 The Unix/Linux *'Shell'* describes a program that takes commands from a some input (essentially your keyboard) and passes them to an operating system that will execute them. In contrast to a *Graphical User Interface (GUI)* the Shell is both simulatenously a *command line interface (CLI)* and a programming language that allows you to perform tasks on your system. 
 
-Interacting with a system through the Shell has many advantages and can make basic tasks enormously easier than using a GUI. For example, the Shell allows you to do things like navigate quickly through directories on your computer, make, copy and search files in a systematic way, and construct pipelines that will execute complex tasks on big datasets. Importantly, the Shell allows us to do each of these in the context of Bioinformatics, and Bioinformatics softwares. 
+Interacting with a system through the Shell has many advantages over a GUI. The Shell allows you to quickly and easily navigate through directories on your computer, make, copy and search files in a systematic way, and construct pipelines that will execute complex tasks on big datasets. 
 
-**Why learn Shell?**
-Shell can be challenging to learn, however is an absolutely key skill in bioinformatics, as it is used to primary way in which we interface with a lot of bioinformatics software and file types. Some bioinformatics softwares provide GUIs that enable execute tasks with programs that you would otherwise execute using the Shell. Whuile such softwares can be powerful in the right context, they can also make it very easy to perform tasks in bioinformatics incorrectly, therefore they should be treated with caution. 
+Importantly, the Shell allows us to do each of these in the context of Bioinformatics, and Bioinformatics softwares. 
+
+**Why learn Shell?**  
+Shell can be challenging to learn, however is an absolutely key skill in bioinformatics, as it is used to primary way in which we interface with a lot of bioinformatics software and file types. 
+
+Some bioinformatics softwares provide GUIs that enable execute tasks with programs that you would otherwise execute using the Shell. Whuile such softwares can be powerful in the right context, they can also make it very easy to perform tasks in bioinformatics incorrectly, therefore they should be treated with caution. 
 
 > Since you should have all completed some basic introduction tutorials to Shell coding before the workshop, this lesson will be a quick and high-level introduction to revisit that content as consolidate that content, before we move on to working with bioinformatics data. 
 
@@ -138,96 +142,40 @@ rm all_counts.copy.txt
 
 You will notice that before the file was deleted you were asked if you were sure you wanted this file deleted. You want to be careful not to remove files that you did not create if you are working in shared directories. If you want to bypass this checkpoint, you can use the `-f` flag with `rm -f` to force the removal of a file, but be careful with this, as there is no *Trash* equivalent in the shell. 
 
-
-
-
-
-
-
-
-
-
-
 ### Manipulating file contents
 
-There are times that you will only be interested in a subset of your data, for example, the all_counts.txt file is a counts matrix with the first column as the gene names and the next several columns list the number of reads mapping to each gene for each sample, with the sample name at the top of the column. We might be interested in pulling out the counts for only a certain subset of our samples. Let's first look at the list of samples (the first line in the file) 
-
-```bash
-# List the column names in all_counts.txt
-head -n 1 all_counts.txt
-```
-
-Let's say that we would like to subset this count matrix so that we are only looking at the counts for Samples SRR1039508, SRR1039509, SRR1039510, and SRR1039511 (the first four samples). To do this we can use the `cut` command to subset our data, besides including the counts for these samples we will want to see them displayed next to the gene names (first column), so ultimately we would like to view only columns 1, 2, 3, 4, and 5 from our all_counts.txt file. 
-
-```bash
+Some commands enable you to maniuplate and subset files based on specific paramters. One useful example is the `cut` command, which allows you to 'cut' a file based on the options you select, such as the `f` option, which corresponds to fields (columns). We could use `cut` to obtain read counts for only the first 5 samples in `all_counts.txt`. 
+```bash 
 # Look at only the counts from the first four samples
 cut -f 1,2,3,4,5 all_counts.txt
 ```
 
-Teh `cut` command automatically cuts on the tab character and our columns in this file happen to be tab delimited so we only need to use the command `cut` and the argument for the fields we are interestsed in keeping. Now lets say that we are interested in looking at samples SRR1039508 and SRR1039523 (the first sample and the sixteenth sample). 
-
+To prevent all rows being printed to our console, we could combine the `cut` command with the `head` command using a *'pipe'*, specified by a '|'. Pipes send the output from one command an inital command to a subsequent command, all in the same line, such that you do not need to include an argument for the last command. 
 ```bash
-# Look at only the counts from SRR1039508 and SRR1039523
-cut -f 1,2,17 all_counts.txt
+# List only the first 100 lines of only samples SRR1039508 (col 2) and SRR1039523 (col 17)
+cut -f 1,2,17 all_counts.txt | head -n 100
 ```
 
-This file is pretty long, let's see how many lines this file has with the word count `wc` command using the lines `-l` argument.
-
-```bash
-# Count the lines in the all_counts.txt file
-wc -l all_counts.txt
-```
-
-60,623 lines is unweild to get a feel for how counts are different between two samples that we are interested in, but we can combine our `cut` command with the `head` command that we previously learned to look at only the first 100 lines of the file and get a feel for how different our samples are using the `|` to join the commands. The `|` uses the output from the first command as the input for the second command.
-
-```bash
-# List only the first 100 lines of only samples SRR1039508 and SRR1039523
-cut -f 1,2,17 all_counts.txt|head -n 100
-
-# List only the first 100 lines of only samples SRR1039508 and SRR1039523
-head -n 100 all_counts.txt| cut -f 1,2,17
-```
-
-You can see that changing the order of the commands doesn't affect the output, the output from each command is identical. Now that we have had a chance to really look at the data by capturing the first hundred lines we might decide that we need to generate a new file containing only samples SRR1039508 and SRR1039523. To do this we will use the redirect command `>` to force the output of the command into a new file rather than printing it out to the screen. 
-
+Similarly to how we used the redirect command (>) above, we could redirect the output of the cut command to create a new counts file, that only contains the columns 1 (gene IDs), and samples in columns 2 and 17. 
 ```bash
 # Print the counts from SRR1039508 and SRR1039523 to a new file 
-cut -f 1,2,17 all_counts.txt > 8_23_counts.txt
+cut -f 1,2,17 all_counts.txt > all_counts_sub.txt
 
-# list the contents of your directory
-ls
+# look at head of this new file 
+all_counts_sub.txt
 ```
 
-The redirect command comes in two flavors, the `>` version if the filename you indicate does not already exist will create a new file and add the output from your command OR if the filename does exist it will write over the existing file with the output of your command. The other version is often called the append `>>` again if the filename you indicate does not exist it will create a new file and write the output from your command, however if the filename already exists it will append the output of your command to the bottom of the existing file. We will see an example of this version used later on.  
+### Pattern matching with *Grep*
 
-Another way that we can append content to files is to use the command `paste`, this command will add to an existing file, or combine two files but rather than adding to the bottom of the file like the append command `>>` does `paste` uses a tab delimiter to separate the contents of two files as multiple columns. One way we might want to use this is if we wanted to add a column to the 8_23_counts.txt file we created with the information from sample SRR1039509. 
-
-```bash
-## Add a column to the 8_23_counts.txt file with the info from sample SRR1039509
-
-#create a new file with the counts for sample SRR1039509
-cut -f 3 all_counts.txt > 9_counts.txt
-
-# Combine the contents of 8_23_counts.txt with 9_counts.txt and save to a new file 
-paste 8_23_counts.txt 9_counts.txt > 8_23_9_counts.txt
-
-# Check that the command behaved as expected
-head 8_23_9_counts.txt
-```
-
-
-### Looking for patterns in your files with *Grep*
-
-Often we will want to pull a specific piece of information from a large file, lets say that we were interested in the read counts for a specific gene, ALDH3B1, the aldehyde dehydrogenase 3 gene family B1 which plays a major role in the detoxification of aldehydes generated by alcohol metabolism and lipid peroxidation. First we know that in our all_counts.txt file the gene IDs are listed using their ensembl identifiers so we need to look for the ensembl identifier that corresponds to the ALDH3B1 gene, you can find that [here](https://uswest.ensembl.org/index.html) by selecting human in the drop down menu and typing the gene name in the field below. Once we have the ensemble ID we can use the tool `grep` to find that in our data. 
-
+Often we will want to pull a specific piece of information from a large file, lets say that we were interested in the read counts for a specific gene, ALDH3B1 (Ensembl ID: ENSG00000006534). We can use the `grep` command to search for this ID, or any other character string we are interested in, in our counts matrix. 
 ```bash
 # Get the count data for ENSG00000006534 (ALDH3B1) from all_counts.txt
 grep "ENSG00000006534" all_counts.txt
 ```
 
-What was returned are the counts for this gene across all of your samples. `grep` is a pattern recognition tool and while it is useful to pull out pieces of information that you know it can be even more powerful to pull out pieces of information that all fit into a certain category. This is the real power of the `grep` tool, but in order to use the tool to its full potential we first need to discuss patterns, or regular expressions (regex). Regular expressions are special characters that stand for useful patterns, see the table below. 
+`grep` is a pattern recognition tool that searches in files for a character string we can define. We can define the entire character string, as we did above, or combine regular characters with special characters (or 'wildcards') to search for specific types of matches. the most commonly used special characters are included in the table below. 
 
-Regex| Pattern
+Operator | Effect
 ---|---
 \* | wildcard stands for any number of anything
 ^ | start of the line
@@ -266,18 +214,11 @@ grep "^ENSG[0-9]*\t0\t0\t0\t0\t" all_counts.txt| wc -l
 
 # Count the number of genes with no reads expressed in any of the samples
 grep "^ENSG[0-9]*\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0$" all_counts.txt| wc -l
-
 ```
-
-
-
-
-
-
 
 ### Shell environment variables 
 
-The command line *evironment* essentially describes a collection of variables that have been set to provide context for the commands that you run. These variable are referred to as *environment variables*. A number of environment variables are set automatically everytime you log into the bash shell. The `env` command will show all environment variables available in the current shell. Try that now:
+The command line *environment* essentially describes a collection of variables that have been set to provide context for the commands that you run. These variable are referred to as *environment variables*. A number of environment variables are set automatically everytime you log into the bash shell. The `env` command will show all environment variables available in the current shell. Try that now:
 ```bash
 env
 ```
