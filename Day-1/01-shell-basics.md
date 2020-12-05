@@ -1,4 +1,4 @@
-# Basic coding with the Unix/Linux Shell
+# Unix/Linux Shell basics
 
 The Unix/Linux *'Shell'* describes a program that takes commands from a some input (essentially your keyboard) and passes them to an operating system that will execute them. In contrast to a *Graphical User Interface (GUI)* the Shell is both simulatenously a *command line interface (CLI)* and a programming language that allows you to perform tasks on your system. 
 
@@ -6,7 +6,7 @@ Interacting with a system through the Shell has many advantages over a GUI. The 
 
 Importantly, the Shell allows us to do each of these in the context of Bioinformatics, and Bioinformatics softwares. 
 
-**Why learn Shell?**  
+## Why learn Shell?  
 Shell can be challenging to learn, however is an absolutely key skill in bioinformatics, as it is used to primary way in which we interface with a lot of bioinformatics software and file types. 
 
 Some bioinformatics softwares provide GUIs that enable execute tasks with programs that you would otherwise execute using the Shell. Whuile such softwares can be powerful in the right context, they can also make it very easy to perform tasks in bioinformatics incorrectly, therefore they should be treated with caution. 
