@@ -1,0 +1,395 @@
+# Basic coding with the Unix/Linux Shell
+
+The Unix/Linux *'Shell'* describes a program that takes commands from a some input (essentially your keyboard) and passes them to an operating system that will execute them. In contrast to a *Graphical User Interface (GUI)* the Shell is both simulatenously a *command line interface (CLI)* and a programming language that allows you to perform tasks on your system. 
+
+Interacting with a system through the Shell has many advantages and can make basic tasks enormously easier than using a GUI. For example, the Shell allows you to do things like navigate quickly through directories on your computer, make, copy and search files in a systematic way, and construct pipelines that will execute complex tasks on big datasets. Importantly, the Shell allows us to do each of these in the context of Bioinformatics, and Bioinformatics softwares. 
+
+**Why learn Shell?**
+Shell can be challenging to learn, however is an absolutely key skill in bioinformatics, as it is used to primary way in which we interface with a lot of bioinformatics software and file types. Some bioinformatics softwares provide GUIs that enable execute tasks with programs that you would otherwise execute using the Shell. Whuile such softwares can be powerful in the right context, they can also make it very easy to perform tasks in bioinformatics incorrectly, therefore they should be treated with caution. 
+
+> Since you should have all completed some basic introduction tutorials to Shell coding before the workshop, this lesson will be a quick and high-level introduction to revisit that content as consolidate that content, before we move on to working with bioinformatics data. 
+
+## The Bash shell 
+
+### The absolute basics 
+
+There are different different types of Unix shells, however the most popular is Bash (the *Bourne Again Shell*) and is also now the most common. Since the majority of participants will be using the Bash shell, and this is the default shell used on Dartmouth's high performance computing system (which we will be using), this lesson will be introduce the Shell through using the Bash shell, however most, if not all, content should be transferable to other Unix shells. 
+
+> Use the Cheat Sheet in the GitHub repo to help you learn commands and available options. 
+
+Accessing the (bash) shell:  
+- On a mac or linux system, the *Terminal* application provides access to the shell. There are also applications that you can download that provide customizations not present in the Terminal application, such as [iTerm2](https://iterm2.com/). 
+- On a Windows system, you can use an applicatrion such as [MobaXterm](https://mobaxterm.mobatek.net/). 
+
+![](../figures/shell.png)
+
+When you open your terminal application you will be presented with the command prompt `$` when you are able to input commands. If the terminal is busy and cannot currently accept new commands, you will not be presented with the prompt. 
+
+When the prompt is shown, you can enter commands by typing them in after the prompt. Commands are typically composed of three components:  
+- the command itself  
+- any flags or options you wish to run the command with (not always required)
+- and an argument
+
+In the above example, we are asking the Shell to pass the `mkdir` command to the operating system (for making directories) with the `-p` option (which just lets us make parent and sub directroies at the same time) and the argument detailing what directories we want the command to make. 
+
+Manual pages for specific commands can be accessed using the `man` command. 
+```bash
+man mkdir
+```
+
+The shell provides us with a number of commands that allow us to list files in our current working directory, as well as change the current working directory to another location. For example: 
+```bash
+# 'ls' command lists files in our current wopkring directory 
+ls 
+
+# run ls with the '-a' option to include hidden files 
+ls -a
+
+# pwd show you your current working directory 
+pwd 
+
+# cd allows you to change your current working directory ('.' means current directory)
+cd ./ 
+
+# '..' tells the shell to move your current directory up one directory 
+cd ..
+
+# check you directory again
+pwd 
+
+# now go back down the tree 
+cd OwenW/
+pwd 
+```
+
+To go back down the directory structure, we specified a directory that was in our current working directory (cd). This is called a **relative path**, since it is relative to our cd and will only work provided our cd is relative to the directory we are trying to reach in the way written in the command.  
+
+Relative paths are contrasted to **absolute paths** which always starts with a '/' and will start at the root (highest level) of the directory tree, and work from wherever you are in the directory substructure. For example:
+```bash 
+ls /Users/OwenW/
+```
+
+By default, your terminal application will start your current directory as your *home directory* (more on that later). No matter where you are, you can always get back to your home directory using the tilde `~` with the `cd` command. 
+```bash
+cd ~/
+```
+
+Another useful command is `echo` which will evaluate and print characters provided to it. 
+```bash
+echo 'bla bla bla'
+```
+
+We can use the redirect command (>) to redirect the output of commands like echo into a file. As an example, lets save the important note we made above to a text file. 
+```bash
+echo 'bla bla bla' > mynotes.txt
+```
+
+### Viewing the contents of files
+
+The shell provides us with a number of commands to view the contents of files in define ways. The `cat` command for example (standing for concatenate) will print the entire contents of a file to the terminal. This can be useful for smaller files, like our important notes file we made above. 
+```bash
+cat mynotes.txt
+```
+
+However, when working with larger files, which we are usually doing in bioinformatics, you may not wish to print the whole file as it would overrun your terminal. Other commans exist that allows you to explore file contents with more control. 
+- `more` shows you as much of the file as can be shown in the size of the terminal screen you have open, and you can continue to "scroll" through the rest of the file by using the space bar  
+- `head` will print the first 10 lines by default, but this number can be controlled with the `-n` option
+- `tail` will print the final lines of a file, and can also be controlled with the `n` option 
+
+We will use a larger text file to show the utility of these commands, as well as other commands in the subsequent parts of this lesson. This file (`all_counts.txt`) provides raw read counts for an RNA-seq experiment, with genes in rows and samples in columns. 
+```bash
+# Show the first 20 lines of the all_counts.txt file
+head -n 20 all_counts.txt
+
+# Show the last 50 lines of the all_counts.txt file
+tail -n 50 all_counts.txt
+
+# use word count (wc) command with the lines option (-l) to show how many lines (rows) are in the dataset
+```
+
+### Copying, renaming, and removing files 
+
+Sometimes you will need to copy a file, or move one into another directory, which can be achieved wuith the `cp` and `mv` commands, respectively. Let's copy the all_counts.txt file from the fundamentals_of_bioinformatics directory to your home directory.
+
+```bash
+# Copy the all_counts.txt file to your home directory
+cp all_counts.txt ~/all_counts.txt
+```
+Now let's rename the copy of the all_counts.txt file that we just created.
+```bash
+# Rename the copied all_counts.txt file
+mv ~/all_counts.txt ~/all_counts.copy.txt
+```
+You can also use the `mv` command to move a file to a new location. Let's move the alll_counts.copy.txt from your home directory into your fundamentals_of_bioinformatics directory.
+```bash
+# Move the all_counts.copy.txt into your fundamentals_of_bioinformatics directory
+mv ~/all_counts.copy.txt fundamentals_of_bioinformatics/
+
+#check the contents of your fundamentals_of_bioinformatics directory
+ls
+```
+
+Copying the all_counts.copy.txt file was just an exercise to show you how the tools works, in practice you will want to keep your directories as neat as possible as you accumulate a lot of files. Let's remove the all_counts.copy.txt file with the `rm` command.
+
+```bash
+# Remove the all_counts.copy.txt file
+rm all_counts.copy.txt
+```
+
+You will notice that before the file was deleted you were asked if you were sure you wanted this file deleted. You want to be careful not to remove files that you did not create if you are working in shared directories. If you want to bypass this checkpoint, you can use the `-f` flag with `rm -f` to force the removal of a file, but be careful with this, as there is no *Trash* equivalent in the shell. 
+
+
+
+
+
+
+
+
+
+
+
+### Manipulating file contents
+
+There are times that you will only be interested in a subset of your data, for example, the all_counts.txt file is a counts matrix with the first column as the gene names and the next several columns list the number of reads mapping to each gene for each sample, with the sample name at the top of the column. We might be interested in pulling out the counts for only a certain subset of our samples. Let's first look at the list of samples (the first line in the file) 
+
+```bash
+# List the column names in all_counts.txt
+head -n 1 all_counts.txt
+```
+
+Let's say that we would like to subset this count matrix so that we are only looking at the counts for Samples SRR1039508, SRR1039509, SRR1039510, and SRR1039511 (the first four samples). To do this we can use the `cut` command to subset our data, besides including the counts for these samples we will want to see them displayed next to the gene names (first column), so ultimately we would like to view only columns 1, 2, 3, 4, and 5 from our all_counts.txt file. 
+
+```bash
+# Look at only the counts from the first four samples
+cut -f 1,2,3,4,5 all_counts.txt
+```
+
+Teh `cut` command automatically cuts on the tab character and our columns in this file happen to be tab delimited so we only need to use the command `cut` and the argument for the fields we are interestsed in keeping. Now lets say that we are interested in looking at samples SRR1039508 and SRR1039523 (the first sample and the sixteenth sample). 
+
+```bash
+# Look at only the counts from SRR1039508 and SRR1039523
+cut -f 1,2,17 all_counts.txt
+```
+
+This file is pretty long, let's see how many lines this file has with the word count `wc` command using the lines `-l` argument.
+
+```bash
+# Count the lines in the all_counts.txt file
+wc -l all_counts.txt
+```
+
+60,623 lines is unweild to get a feel for how counts are different between two samples that we are interested in, but we can combine our `cut` command with the `head` command that we previously learned to look at only the first 100 lines of the file and get a feel for how different our samples are using the `|` to join the commands. The `|` uses the output from the first command as the input for the second command.
+
+```bash
+# List only the first 100 lines of only samples SRR1039508 and SRR1039523
+cut -f 1,2,17 all_counts.txt|head -n 100
+
+# List only the first 100 lines of only samples SRR1039508 and SRR1039523
+head -n 100 all_counts.txt| cut -f 1,2,17
+```
+
+You can see that changing the order of the commands doesn't affect the output, the output from each command is identical. Now that we have had a chance to really look at the data by capturing the first hundred lines we might decide that we need to generate a new file containing only samples SRR1039508 and SRR1039523. To do this we will use the redirect command `>` to force the output of the command into a new file rather than printing it out to the screen. 
+
+```bash
+# Print the counts from SRR1039508 and SRR1039523 to a new file 
+cut -f 1,2,17 all_counts.txt > 8_23_counts.txt
+
+# list the contents of your directory
+ls
+```
+
+The redirect command comes in two flavors, the `>` version if the filename you indicate does not already exist will create a new file and add the output from your command OR if the filename does exist it will write over the existing file with the output of your command. The other version is often called the append `>>` again if the filename you indicate does not exist it will create a new file and write the output from your command, however if the filename already exists it will append the output of your command to the bottom of the existing file. We will see an example of this version used later on.  
+
+Another way that we can append content to files is to use the command `paste`, this command will add to an existing file, or combine two files but rather than adding to the bottom of the file like the append command `>>` does `paste` uses a tab delimiter to separate the contents of two files as multiple columns. One way we might want to use this is if we wanted to add a column to the 8_23_counts.txt file we created with the information from sample SRR1039509. 
+
+```bash
+## Add a column to the 8_23_counts.txt file with the info from sample SRR1039509
+
+#create a new file with the counts for sample SRR1039509
+cut -f 3 all_counts.txt > 9_counts.txt
+
+# Combine the contents of 8_23_counts.txt with 9_counts.txt and save to a new file 
+paste 8_23_counts.txt 9_counts.txt > 8_23_9_counts.txt
+
+# Check that the command behaved as expected
+head 8_23_9_counts.txt
+```
+
+
+### Looking for patterns in your files with *Grep*
+
+Often we will want to pull a specific piece of information from a large file, lets say that we were interested in the read counts for a specific gene, ALDH3B1, the aldehyde dehydrogenase 3 gene family B1 which plays a major role in the detoxification of aldehydes generated by alcohol metabolism and lipid peroxidation. First we know that in our all_counts.txt file the gene IDs are listed using their ensembl identifiers so we need to look for the ensembl identifier that corresponds to the ALDH3B1 gene, you can find that [here](https://uswest.ensembl.org/index.html) by selecting human in the drop down menu and typing the gene name in the field below. Once we have the ensemble ID we can use the tool `grep` to find that in our data. 
+
+```bash
+# Get the count data for ENSG00000006534 (ALDH3B1) from all_counts.txt
+grep "ENSG00000006534" all_counts.txt
+```
+
+What was returned are the counts for this gene across all of your samples. `grep` is a pattern recognition tool and while it is useful to pull out pieces of information that you know it can be even more powerful to pull out pieces of information that all fit into a certain category. This is the real power of the `grep` tool, but in order to use the tool to its full potential we first need to discuss patterns, or regular expressions (regex). Regular expressions are special characters that stand for useful patterns, see the table below. 
+
+Regex| Pattern
+---|---
+\* | wildcard stands for any number of anything
+^ | start of the line
+$ | end of the line
+[0-9] or \d| any number (0123456789)
+[a-z]| any lowercase letter
+[A-Z]| any uppercase letter
+\t | a tab
+\n | a newline
+\s | any white space (tab, newline, space)
+\S | non-white space (the opposite of \s)
+
+These regular expressions can be used with any of the tools that you have learned thus far, so if we wanted to list all of the files in our directory that end in .txt we could use the following command.
+
+```bash
+# List all files that end in .txt
+ls *.txt
+```
+
+We can even enhance the power of these regular expressions by specifying how many times we expect to see the regular expression with quantifiers.
+
+Quantifier| Operation
+---|---
+X* | 0 or more repetitions of X
+X+ | 1 or more repetitions of X
+X? | 0 or 1 instances of X
+X{*m*} | exactly *m* instances of X
+X{*m*,} | at least *m* instances of X
+X{*m*,*n*} | between *m* and *n* instances of X
+
+Now lets use some of these regular expressions in a `grep` command  to see their utility. Let's use regular expressions to see how many genes have no reads expressed for the first four samples.  
+
+```bash
+# Count the number of genes with no reads in the first four samples
+grep "^ENSG[0-9]*\t0\t0\t0\t0\t" all_counts.txt| wc -l
+
+# Count the number of genes with no reads expressed in any of the samples
+grep "^ENSG[0-9]*\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0$" all_counts.txt| wc -l
+
+```
+
+
+
+
+
+
+
+### Shell environment variables 
+
+The command line *evironment* essentially describes a collection of variables that have been set to provide context for the commands that you run. These variable are referred to as *environment variables*. A number of environment variables are set automatically everytime you log into the bash shell. The `env` command will show all environment variables available in the current shell. Try that now:
+```bash
+env
+```
+
+One important environment variable is `$HOME`, which describes your home directory. Variable such as home can be evaluated by placing the `$` in front of them. For example:
+```bash
+echo $HOME
+```
+
+Environment variables can also be set on the fly and then called as needed. These can be virtually anything. For example, perhaps you want to save the name of the genome version you are working with in your current session, so it can be easily called multiple times in some bash code you are writing. 
+```bash
+# set the variable 
+genv='hg38.patch13'
+
+# call it with echo and the $
+echo $genv
+```
+
+You can also use environment variables to store commands that you want to run without having to type the entire command out each time. For example, we might run the `ls` command often with the flags `-lah` to show files in a list format, including all hidden files, and with file sizes in human readable format. The entire command would be `ls -lah`, however if we save the command to a variable, and then call the varaible directly, the command will be evaluated by the shell. 
+
+```bash
+# save to variable 
+ll="ls -lah"
+
+# call variable to execute command 
+$ll
+```
+
+It is possible to make variables you add to your environment persistent, meaning those changes will define your environment each time you start a new bash session. This can be achieved by adding the variable assignment to one of the *environment files*, which are a set of files that are executed everytime you start a new bash session. These files are typically hidden, so we need to use `ls` wuth the `-a` flag to see them. 
+
+List all files in your working directory and locate the `.bash_profile` environment file, and view its contents with the `cat` command. 
+```bash
+# view files in current working directory and include hidden files 
+ls -a
+
+# view contents of bash profile
+cat .bash_profile
+```
+
+The `.bash_profile` is run everytime you start a bash session and contains variables used to configure the bash environment in a way that is specific to the contents of the `.bash_profile` file. You can add lines to the `.bash_profile` to set environment variables that will be established each time you start a new session. Lets add the command we created above to our `.bash_profile`. 
+```bash
+# use the nano text editor to add the line ' ll="ls -lah" ' to your bash_profile
+nano `.bash_profile`
+
+# run the new bash_profile to set the environment variables (or start a new bash session) 
+source ~/.bash_profile
+
+# now run the command as we did above 
+$ll
+```
+
+Now `$ll` will be set as an environment variable everytime we start a new bash terminal. It is also possible to avoid using the `$` to evaluate this variable by using the `alias` command in bash. `alias` allows you to set command that can be called directly using whatever characters you define, and can be added to your `.bash_profile` in the same way as we did above. 
+```bash 
+# make an alias for the ls -lah command 
+alias ll="ls -lah"
+
+# call command directly with ll
+ll
+```
+
+Another effective use of an alias is for accessing specific directories quickly. For example, if we had a project sub directory that we regularly want to access, such as `~/project/with/many/directories/`, we would need to write this out everytime to get there from our $HOME directory, using `cd /project/with/many/directories/`. Using an alias, we can save this command so that it is more easily callable. 
+```bash 
+# make a long directory that you may want to get to quickly in the future 
+mkdir -p ~/project/with/many/directories/
+
+# make the alias for it 
+alias pd="cd ~/project/with/many/directories/"
+
+# now call the alias 
+pd
+
+# check your current dir
+pwd 
+```
+
+Again, just like above, we could add this line defining the alias command to our `.bash_profile` to make this alias available every time we start a new bash session, without even having to set it (after we have put it in our `.bash_profile`). Do this again with nano:
+```bash
+nano .bash_profile
+```
+
+### The $PATH environment variable
+
+Another very important environment variable is `$PATH`, which stores a list of directories that tells bash where specific programs that we want to be available to us are stored. Programs are all essentially just files, and bash needs to know where these files are in order to run the commands as we call them. 
+
+The list is stored as strings separated by colons, so that many directories can be defined. Use `echo` to print `$PATH` variable. 
+```shell
+echo $PATH
+
+# make more readable using 'tr' to swap the colons for newlines
+echo $PATH| tr ":" "\n"
+```
+
+As you can see, many of the directory names end in `bin` which standards for *binary*, which is a common directory name to store executables (programs). 
+
+Importantly, you can add directories to your `$PATH` as you either create or install programs, making them available to you as executables. Since the `$PATH` variable is set each time your `.bash_profile` is run at the start of a new session, the executables you add to `$PATH` will be available for you in a new bash session, without having to add them to your `$PATH` again. 
+
+We will create an executable file and add it to our $PATH in another lesson, however below is a toy example of how you would add a new executables directory to your `$PATH` variable: 
+```
+export PATH="~/location/of/new/executables:$PATH"
+```
+
+A command for finding where a program lives in the $PATH is the `which` command. This can be useful for debugging environment issues as they arise when trying to use or instal new software. Check where the executable for the `echo` command is located: 
+```r
+which echo
+/usr/bin/echo
+```
+
+Many commands like `ls` will also accept wildcards, which are special character instances that allow you to do things like operate on multiple files at one time, or search for specific patterns (either in files or file names). We don't have time to review all the wildcard characters, however the most commonly used one is the asterisk, which can be used to represent any number of characters. 
+```bash 
+# list all files in my current directory with the file extension .txt 
+ls *.txt
+```
+
+> As we move through the subsequent lessons, we will introduce more complex bash commands in order to manipulate common bioinformatics file types. If you are ever confused about what a command does, remeber you can always use `man` to check out the manual page (or google it). It you are confused about how commands are used in conjuction with each other, it can also be helpful to break them down and run parts individually, in order to understand what the constituent parts do. 
+
