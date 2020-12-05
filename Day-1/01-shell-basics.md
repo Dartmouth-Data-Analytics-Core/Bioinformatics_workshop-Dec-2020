@@ -323,7 +323,6 @@ export PATH="~/location/of/new/executables:$PATH"
 A command for finding where a program lives in the $PATH is the `which` command. This can be useful for debugging environment issues as they arise when trying to use or instal new software. Check where the executable for the `echo` command is located: 
 ```r
 which echo
-/usr/bin/echo
 ```
 
 Many commands like `ls` will also accept wildcards, which are special character instances that allow you to do things like operate on multiple files at one time, or search for specific patterns (either in files or file names). We don't have time to review all the wildcard characters, however the most commonly used one is the asterisk, which can be used to represent any number of characters. 
