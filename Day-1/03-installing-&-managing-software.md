@@ -50,39 +50,56 @@ In Python, packages are available in PyPI. To install Python packages from PyPI 
 pip install matplotlib
 ```
 
-## Full package and environment management tools (eg. Conda)
+## Conda - Full package and environment management
 
+[Conda](https://docs.conda.io/projects/conda/en/latest/) is an open source package and environment manager that runs on Windows, MacOS and Linux. Conda allows you to install and update software packages as well as organize them efficiently into *environments* that you can switch between to manage software collections and versions.
 
+<img src="../figures/conda.png" height="80" width="350"/>
 
+Conda allows you to create a virtually unlimited number of software environments that can be used for specific analyses, and therefore presents efficient and reproducible way to manage your software across multiple projects.
+
+<img src="../figures/conda-envs.png" height="250" width="300"/>
+
+Environments can be created with or without specific versions of software. For example, to create a new environment called `env1` that uses python 3.7.1:
 ```bash
-conda create -n python=3.7.1
+conda create -n env1 python=3.7.1
 ```
 
-
-
+After creating a conda environment, you will need to activate it.
 ```bash
-conda activate x
+conda activate env1
 ```
 
-<img src="../figures/conda.png" height="250" width="350"/>
+After activating it, you will see the name of the environment appear in parentheses to the left of your command prompt. You can see all of the installed software in your environment using the `list` command.
+```bash
+conda list
+```
 
+Once your conda environment is activated, you can install new software by running a single line of code. For example, if we wanted to install `samtools` to this environment, we would run:
+```bash
+# DO NOT RUN NOW, AS IT MAY TAKE A SHORT WHILE
+conda install -c bioconda samtools
+```
+
+`bioconda` refers to the specific *'channel'* that samtools will be installed from. Conda, and its parent dstribution *Anaconda*, are organized into channels that contain specific collections of software. `bioconda` contains a lot of bioinformatics software.
+
+The easiest way to identify the install details for a specific package is to search for it on the conda website. The image below shows an example of the page for the bioconda distribution of samtools (available [here](https://anaconda.org/bioconda/samtools)).
+
+<img src="../figures/conda-samtools.png" height="250" width="300"/>
+
+When you are finished with your environment, or if you wish to switch to a different environment, you can simply run `conda deactivate` and you will be returned to your original software environment.
 ```bash
 conda deactivate
 ```
 
-# channels
+Conda is an excellent way to install and manage software for bioinformatics, since typical programs used in bioinformatics require a large number of dependency packages, and we often want/need to use different versions for different projects.
 
-
-<img src="../figures/conda_screenshot.png" height="250" width="350"/>
-
-
-
-
+> Research computing provides an introduction to using Conda on the Dartmouth computing infrastructure (link [here](https://services.dartmouth.edu/TDClient/1806/Portal/KB/ArticleDet?ID=72888)), which describes how to best make use of Conda on Discovery/Polais/Andes.
 
 ## Pre-compiled binary executable
 Some developers will pre-compile releases of their software for several operating systems and make them available for download. If a pre-compiled executable is available for the Linux system we are using (for Discovery, this is CentOS 7), this can be a painless way to install software. It only requires downloading the executable to a directory and running it.
 
-Programs written in Java are frequently distributed as JAR files, which are similar to pre-compiled binaries, in that only a single file is required to download and install the software.  The JAR file is then run using the `java -jar` command.
+Programs written in Java are frequently distributed as JAR files, which are similar to pre-compiled binaries, in that only a single file is required to download and install the software. The JAR file is then run using the `java -jar` command.
 ```shell
 java -jar some_software.jar
 ```
@@ -100,6 +117,8 @@ make install
 With package managers becoming more widespread, you should only rarely need to install software by compiling source code.
 
 ## Virtual machine images (eg. Docker, Singularity)
-Virtual machine images allow software to be distributed along with an entire linux environment.  This ensures that anyone running the software will be able to, regardless of software installed or environment variables.  However, Docker is not currently available on Discovery, as it requires administrator permissions to run.  Some images may be run with Singularity.
+Virtual machine images allow software to be distributed along with an entire linux environment. This ensures that anyone running the software will be able to, regardless of software installed or environment variables, and make software management seamless.
 
-![](../figures/containers.png)
+However, containers can raise security issues when working with high performance computing clusters such as discovery. Docker cannot currently be used on discovery, and singularity images that can be currently used is somewhat limited.
+
+<img src="../figures/containers.png" height="150" width="350"/>
