@@ -1,4 +1,18 @@
 
+
+- PERHAPS CHANGE THIS SECTION TO INTRODUCE RSUBREAD FIRST, FOR WORKING WITH FASTWQ DATA BRIEFLY AND COUNTING READS TO GENERATE A COUNT MATRIX THAT COULD BE ANALYZED IN A NUMBER OF WAYS
+
+- ACTUALLY MAYBE NEED A SECTION ON PEAK CALLING BEFORE QUANTIFICATION, BECASE YOU NEED TH PEAKS FOR CHIP Quantification
+
+- SO MAYBE A SECTION ON PEAK CALLING AND QUANTIFICATION WHICH PERHAPS INCLUDES SOME OF MY DESCRIPTIONS OF RUN LENGTH ENDOCING, BIGWIGS AND BED FILES FROM BIOCONDUCTOR PART 1
+
+
+
+
+
+
+
+
 # Part 1 -  Working with genomics data in R/Bioconductor
 
 In a typical analysis of an NGS dataset, like that depicted in the figure below, once we have performed most of the pre-processing and quality control steps we are usually left with some reduced representation of the data. For example:  
@@ -13,6 +27,18 @@ At this point in the analysis, we often want to perform various tasks on the red
 genomic or transcriptional context, or perform complex statistical analysis. The **R statistical programming environment**, and more specifically **Bioconductor** provides one avenue through which to perform these downstream analysis.
 
 By far the largest advantage to using R to perform specific stages of genomic data analysis are the large number of packages available that facilitate efficient analysis of high-throughput data. [**Bioconductor**](https://www.bioconductor.org/) represents a specific collection of R-packages maintained as part of an open source project, that provides a wide-range of data analysis software packages for biological data analysis, and particularly genomics. These **Bioconductor** introduce several particuarly useful object classes and methods that provide effecient storage of, access to, and maniuplation of various forms of genomics and high throughput sequencing data.
+
+
+
+
+Note on what we won't cover: Data type specific analysis packages like DESeq2, as we cant go into data type soecific nuascens and statistical considerations in this course without the prereqs etc. We will focus on generalized tasks that are be appropriate to a range of data and analysis types, e.g. how to leverage bioconductor packages, working with genomic region data, and obtaining & applying annotation data. 
+
+
+
+
+
+
+
 
 
 ** Visit the Bioconductor website and explore the available packages and how they are organized. **
