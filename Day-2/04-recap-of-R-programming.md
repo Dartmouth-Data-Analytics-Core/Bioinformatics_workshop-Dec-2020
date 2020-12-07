@@ -1,4 +1,4 @@
-interrogate# Basic programming with R
+# Basic programming with R
 
 R is a free, open source programming language and statistical software environment that is used extensively in bioinformatics. In addition to the large collection of functions included in base distribution, there are an enormous number of packages designed to extend R's functionality for specific applications.
 
@@ -6,7 +6,7 @@ R is also a very powerful way to create high quality graphics, using both functi
 
 Visit the *R-Project* homepage [here](https://www.r-project.org/)
 
-![](../figures/r-logo.png)
+<img src="../figures/r-logo.png" height="110" width="150"/>
 
 > **Note:** This is not a comprehensive introduction to R-programming, but rather a review of the basics to help get you started. In addition to the materials provided to you before the workshop, there are some links to more comprhensive tutorials for R in the 'Useful_links.md' in the parent directory of the workshop repository.
 
@@ -14,7 +14,7 @@ Visit the *R-Project* homepage [here](https://www.r-project.org/)
 
 RStudio is an IDE ()
 
-![](../figures/r-studio-logo.png)
+<img src="../figures/r-studio-logo.png" height="130" width="300"/>
 
 
 
@@ -340,7 +340,7 @@ df <- data.frame(subject_id = c("s1", "s2", "s3", "s4"),
 str(df)
 ```
 
-Data frames can be subset in similar ways to matrices using brackets or the `$` subsetting operator.
+Data frames can be subset in similar ways to matrices using brackets or the `$` subsetting operator. Columns/variables can also be added using the `$` operator.
  ```r
 # get first row
 df[1,]
@@ -356,6 +356,9 @@ df[, c("gender", "status")]
 
 # get the gender variable with $
 df$gender
+
+# add a column for smoking status
+df$smoking_status <- c("former", "none", "heavy", "none")
 ```
 
 Relational (e.g. `==`) and logical operators (e.g. `!`) can be used to interrogate specific variables in a dataframe. The resulting logical can also be used to subset the data frame.
@@ -376,19 +379,131 @@ df[!df$gender == "female", ]
 df[!df$gender == "male", ]
 ```
 
+### Beyond the basic object classes
+
+As we discussed, one of the major advantages of R is its enormous user base that are continuously developing and releasing packages. Implementing the additional functionality of these packages often requires **more complex data object classes to be created**, which are generally related in some way to one or more of the basic data structures in R that we have discussed.
+
+The general approach used to create these novel classes is referred to as *object-orientated programming (OOP)*. Although we will not go into any detail on OOP in this workshop, it is useful to know that several OOP methods are used to create classes in R.
+
+The [S4 OOP approach](http://adv-r.had.co.nz/S4.html) is perhaps the most relevant to this workshop, as it is heavily used by packages from the [Bioconductor project](http://bioconductor.org/), which we will be using on Day 3. S4 OOP provides a flexible approach to creating objects with multiple *slots*, each with defined names and object classes.
+
+An example of a package that has used an S4 OOP approach to create objects of novel classes is the Bioconductor package [*GenomicRanges*](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html), which provides representation and query of genomic region data in R through object classes such as `GRanges`.
+
+To efficiently represent genomic regions data, `GRanges` class objects, at least 3 key slots (each with their own associated class for that vector) will be needed:
+- a chromosome slot: with class `character` (e.g. chr1)
+- a start coordinate slot: with class `integer` (e.g. 338833)
+- an end coordinate slot: with class `integer` (e.g. 338987)
+
+Creating object classes in this way is desirable as it allows *accessor functions* to be created, which allow very simple interaction with the objects of this class. For example, simply using the `chr()` accessor function to easily extract all chromosome identities of the genomic regions in my object.
+
+An excellent tutorial describing S4 classes and their use in the [Bioconductor project](http://bioconductor.org/) is available [here](https://bioconductor.org/help/course-materials/2017/Zurich/S4-classes-and-methods.html). While this is not a topic you need understand in great detail, it is worth understanding the basic principles.
 
 
+## Functions
 
+Beyond the functions implemented in base R and packages that you install, R allows you to create user defined functions, which can perform any functionality that you can define.
 
+Defining your own functions can be useful when you want to perform a specific set of tasks repeatedly on some input(s) and return a defined output. Furthermore, once defined functions become part of your global environment and are therefore preserved for future use, minimizing the need for repetitive code.
 
+Functions are created using using `function()` with the assignment operator `<-`. The arguments you use in the `function()` command define the variables that those arguments will be assigned to when you call the function. The last line of the function defines what output is returned.
 
+Let's define a basic function as an example.
+```r
+# define the function
+myfun <- function(x){
+  y <- x + 1
+  return(y)
+}
 
+# call the function
+myfun(x = 10)
 
+# assign the output to a new variable
+var1 <- myfun(x = 10)
+var1
+```
 
+Functions can have as many arguments as you specify. The names of these arguments are only assigned as variables within the function, however it is good practice to avoid using arguments with the same name as variables already existing in your global environment.
 
-object classes and data structures/ classes introduced by packages
-s3 and as4..?
+For example, if I already have a variable named `x` in my environment, I should avoid using x to define the name of the arguments to my function.
+```r
+myfun2 <- function(num1, num2){
+  num3 <- num1 + num2
+  return(num3)
+}
 
+# call the function
+myfun2(num1 = 10, num2 = 11)
+```
+
+## Loops
+
+Loops are used to iterate over a piece of code multiple times, and can therefore be used to achieve specific tasks. The most often used type of loop in R is the `for()` loop, which will evaluate the contents of the loop for all of the values provided to the `for()` function.
+
+For example:
+```r
+x <- c(1,2,3,4,5,6,7,8,9)
+
+# define the loop, using [i] to define the elements of x used in each iteration
+for(i in 1:length(x)){
+  print(x[i] * 10)
+}
+```
+
+We may wish to save the output of each iteration of the loop to a new variable, which can be achieved using the following approach:
+```r
+x <- c(1,2,3,4,5,6,7,8,9)
+
+# create variable to save results to
+y <- c()
+
+# define and run the loop
+for(i in 1:length(x)){
+  y[i] <- x[i] * 10
+}
+
+return(y)
+```
+
+## Basic data visualization
+
+R is a very powerful tool for visualization and provides a large amount of user control over the plotting attributes. Basic visualization in R is achieved using the `plot()` function.
+
+```r
+# generate a set of random numbers to plot
+x <- rnorm(1000, mean = 10, sd = 2)
+y <- rnorm(1000, mean = 20, sd = 1)
+
+# plot x against y to produce a scatter plot
+plot(x, y)
+
+# add labels, title, and color
+plot(x, y,
+     main = "X vs. Y",
+     xlab = "X values",
+     ylab = "Y values",
+     col = "red")
+```
+
+R can also be easily used to generate histograms:
+```r
+# generate a simple histogram for x
+hist(x, col = "indianred")
+
+# the breaks argument can be used to change how the intervals are broken up
+hist(x, col = "indianred", breaks=10)
+hist(x, col = "indianred", breaks=50)
+hist(x, col = "indianred", breaks=100)
+```
+
+### Visualization specific packages
+
+There are a large number of packages designed for specifically for visualization and are very useful in bioinformatic analyses. We won't cover these here since they are covered extensively elsewhere, but some useful visualization packages to be aware of include:
+- [ggplot2]()
+- [ggpubr]()
+- [ploty]()
+
+Importantly, visualization implemented in these packages form the basis for some bioinformatics specific data visualization packages that we will explore later in the workshop.
 
 ## Import and export data
 
@@ -397,22 +512,7 @@ s3 and as4..?
 
 
 
-## Loops and functions
 
-
-for()
-
-
-
-
-## Basic data visulization
-
-
-
-there are a large number of specific packages designed for visualization. We won't cover these here since they are covered extensively elsewhere, but some useful visualixation packages to be aware of include:
-- [ggplot2]()
-- [ggpubr]()
-- [ploty]()
 
 ## Save data in R session
 

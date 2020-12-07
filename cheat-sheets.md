@@ -1,4 +1,4 @@
-# Cheat Sheets 
+# Cheat Sheets
 
 ### UNIX
 [Linux Command Line Cheat Sheet](./misc/cheat-sheets/Linux-Command-Line-Cheat-Sheet.pdf)  
@@ -13,8 +13,10 @@
 [Regular expressions](./misc/cheat-sheets/regex.pdf)  
 [Strings](./misc/cheat-sheets/strings.pdf)  
 
+[General R tutorial](https://www.cyclismo.org/tutorial/R/)
+
 ### RStudio
 [R Studio](./misc/cheat-sheets/rstudio-ide.pdf)  
 [R markdown](./misc/cheat-sheets/rmarkdown-2.0.pdf)  
 
-
+### Conda
