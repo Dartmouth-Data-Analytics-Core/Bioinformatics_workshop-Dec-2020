@@ -16,8 +16,6 @@ Although we won't go into the theory here, aligning reads to reference genomes i
 
 It is important when selecting an aligner to use for your dataset that it is appropriate for your experiment, as numerous aligners exist and make different assumptions and have different strengths/weaknesses. Importantly, some aligners are ***splice-aware*** while others are not. ***Splice-aware*** aligners can generate alignments to a reference genome that span the intronic regions and therefore account for splicing, e.g. `STAR` and `HISAT2`. If your dataset is prokaryotic (non-splicosomal) you would **not** want to use a splice-aware aligner, and instead using an aligner that is not designed to map across intronic regions such as `bwa-mem` or `bowtie2`.
 
-### Reference genomes 
-
 ### Concepts for read alignment
 
 **Read clipping**  
@@ -54,20 +52,32 @@ Optional:
 ### Basic concepts of a reference genome
 
 Reference genomes are a concept, not a reality. Reference genomes are a idealized representation of a standard genome from a particular organism.
-Reference genomes are created through organizing sequence reads through a process referred to as *genome assembly*.  
+Reference genomes are created through organizing sequence reads through a process referred to as [*genome assembly*](https://link.springer.com/referenceworkentry/10.1007%2F978-0-387-09766-4_402). 
 
 ### Sources of reference genomes
 
-[*RefSeq*](https://www.ncbi.nlm.nih.gov/refseq/)
-*UCSC*
-*Ensembl*
-*GENCODE*
+Most reference genomes are hosted on ftp sites where files can copied to a location of your choosing with the `rsync` command. 
+
+```bash
+
+# example rsync command with the UCSC ftp site
+# the -a option denotes archive mode, the -P option indicates you want to show the progress as files are downloaded 
+rsync -a -P rsync://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/ ./
+
+```
+ Here are some examples of commonly used sites where reference genomes are hosted.
+ 
+[*RefSeq*](https://ftp.ncbi.nlm.nih.gov/genomes/refseq/)
+[*JGI*](https://genome.jgi.doe.gov/portal/help/download.jsf)
+[*UCSC*](https://hgdownload.soe.ucsc.edu/downloads.html)
+[*Ensembl*]()
+[*GENCODE*]()
 
 #### Reference genome annotation
 
 **RefSeq:**
 NX_XXXX represents manually curated transcripts.
-XM_XXXX represents automattically* annotated transcripts
+XM_XXXX represents automatically* annotated transcripts
 
 **Ensembl/GENCODE:**
 ENST_XXXX represents manually curated transcripts.
