@@ -4,8 +4,6 @@
 
 ### Principles of read alignment for RNA-seq
 
-# short read mapping using read/reference indexing (bowtie, bwa-mem,)
-#
 The goal of aligning reads to a reference genome is to find the ***most likely location in that reference genome where the read originated from***.
 
 Although we won't go into the theory here, aligning reads to reference genomes involves ***mapping*** to identify the most likely position of the read in the reference genome, followed by the ***alignment***, which describes the base-by-base relationship between the read and the reference. Alignments are often imperfect, and are associated with quality scores (***MAPQ scores***) that describe the quality of the alignment.
@@ -14,10 +12,11 @@ Although we won't go into the theory here, aligning reads to reference genomes i
 - Mismatches introduced by **genetic variation** and **sequencing errors**
 - **Repeitive sequences** in genomes (e.g. start and end of chromosomes)
 - For Eukaryotic genomes the presence of **introns** in reference genomes, meaning aligners must be able to consider **splice-junctions**
--For Prokaryotic genomes the presence of **mobile genetic elements** or **recombination hotspots** in reference genomes
+- For Prokaryotic genomes the presence of **mobile genetic elements** or **recombination hotspots** in reference genomes
 
 It is important when selecting an aligner to use for your dataset that it is appropriate for your experiment, as numerous aligners exist and make different assumptions and have different strengths/weaknesses. Importantly, some aligners are ***splice-aware*** while others are not. ***Splice-aware*** aligners can generate alignments to a reference genome that span the intronic regions and therefore account for splicing, e.g. `STAR` and `HISAT2`. If your dataset is prokaryotic (non-splicosomal) you would **not** want to use a splice-aware aligner, and instead using an aligner that is not designed to map across intronic regions such as `bwa-mem` or `bowtie2`.
 
+### Reference genomes 
 
 ### Concepts for read alignment
 
