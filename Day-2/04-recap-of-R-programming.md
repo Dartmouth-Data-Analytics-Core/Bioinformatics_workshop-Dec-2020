@@ -1,4 +1,4 @@
-# Basic programming with R
+interrogate# Basic programming with R
 
 R is a free, open source programming language and statistical software environment that is used extensively in bioinformatics. In addition to the large collection of functions included in base distribution, there are an enormous number of packages designed to extend R's functionality for specific applications.
 
@@ -88,7 +88,7 @@ Elements within vectors can be subset or indexed based on their position in that
 # define a chacter string
 x <- c("a", "b", "c", "d")
 
-# get elements 1 and 3
+# get elements 1 and 3 using the ':' operator
 x[c(1,3)]
 
 # get elements 1 to 3
@@ -116,36 +116,274 @@ x.na
 class(x.na)
 ```
 
+### Operators
+
+We introduced two *operators* in the examples above, the assignment operator `<-` and the sequence operator `:`. Operators are essentially symbols that tell R how you would like to relate the *operands* on either side of the symbol. in R, operators can be broadly categorized into *assignment*, *arithmetic*, *relational*, and *logical*.
+
+The major assignment operators are `<-` and `=` which both tell R to assign a vector to a some value. It is generally safer to use `<-` (in my opinion).
+
+Below are the basic *arithmetic*, *relational*, and *logical* operators that are useful to know.
+
+**Arithmetic operators**
+
+Operator | Effect
+----- | -----
++ | addition
+-	| subtraction
+*	| multiplication
+/	| division
+^ |	exponentiation
+
+Some example usage of arithmetic operators:
+```r
+# addition
+1 + 2
+
+# multiplication
+2 * 3
+
+# exponentiation
+2^4
+```
+
+**Relational operators**
+
+Operator | Effect
+----- | -----
+<	| less than
+>	| greater than
+<= |	less than or equal to
+>=	| greater than or equal to
+== |	equal to
+== |	Note equal to
+
+Some example usage of relational operators:
+```r
+x <- c(1, 2, 3, 4)
+
+# which elements are less than 3
+x < 3
+
+# which elements are less than or equal to 3
+x <= 3
+
+# define a character string
+x <- c("a", "b", "c", "d", "a")
+
+# which elements are equal to a
+x == "a"
+```
+
+**Logical operators**
+
+Operator | Effect
+----- | -----
+!	| NOT
+&	| AND
+\|	| OR
+
+Some example usage of logical operators:
+```r
+x <- c(1, 2, 3, 4)
+
+# which elements are NOT equal to 4
+x != 4
+
+# which could also be achieved with
+!x == 4
+
+# which elements are less than 2 and equal to 4
+x < 2 | x ==4
+```
+
+Relational and logical operators can be used to subset a vector based on the values returned by the operator, and the brackets, as we did above for specific elements.
+```r
+x <- c(1, 2, 3, 4)
+
+# subset x for values less than 3
+x_sub <- x[x < 3]
+
+
+# define a character string
+x <- c("a", "b", "c", "d", "a")
+
+# subset x for elements equal to a
+x[x == "a"]
+```
+
+
 ### Factors
 
+Factors are a special instance of vectors where only predefined values, called *levels* can be included in the vector. Such vectors are useful when you know that elements of a vector should take on one of those predfined values.
 
+Categorical data is often stored in vectors, making them a very important object class when you start doing any statistical modeling in R. For example, you might store subject gender for all the subjects in your study as a factor, with the levels *male* and *female*.
 
+```r
+# make a character vector with only male or female as entries
+x <- c("female", "female", "male", "female", "male")
 
+# use factor() constructor function to generate the factor
+x <- factor(x, levels = c("female", "male"))
 
+# confirm the class and check the levels
+class(x)
+levels(x)
 
-
-Factors are very important when you start performing any statistical analyses in R. 
-
-
+# use table() to count up all the instances of each level
+table(x)
+```
 
 ### Lists
 
-subsetting lists
+Sometimes, it may be desirable to store multiple vectors, or even vectors of different object classes, into the same R overall object. Lists are a special object class that permits objects with these attributes, making them distinct from atomic vectors.
+
+In the same way that vectors and factors are constructed using `c()` and `factors()` respectively, lists are created using the `lists()` constructor function.
+
+```r
+x <- list(c(1.63, 2.25, 3.83, 4.99),
+          c(2.43, 8.31, 3.12, 7.25),
+          c(1.29, 3.23, 3.48, 0.23))
+
+# the structure function str() can be useful to examine the composition of a list
+str(x)
+
+# confirm the length
+length(x)
+
+# lists can be subset using brackets
+### subset for first element of list
+x[[1]]
+### subset for first element of first vector in list
+x[[1]][1]
+
+# lists elements can be given names using a character vector equal to list length
+names(x) <- c("gene_1", "gene_2", "gene_3")
+
+# names can also be used to subset a list
+x[["gene_1"]]
+
+# subsetting can also be achieved with the $ subsetting operator
+x$gene_1
+```
+
+In our example list, all three vectors stored in the list are numeric, however as mentioned above, lists can store vectors of different classes.
+
+
+```r
+x <- list(c(1.63, 2.25, 3.83, 4.99),
+          c(TRUE, FALSE, TRUE, TRUE),
+          c("a", "b", "c", "d"))
+
+# the structure function str() can be useful to examine the composition of a list
+str(x)
+```
 
 ### Matrices
 
+By extending the attributes of a vector to give them *dimensions*, i.e. the number of rows and columns we want the vector to be organized into, we can create *matrices*, a data structure that efficiently stores tabular data of a specific, single object class.
 
+```r
+mat <- matrix(c(1.63, 2.25, 3.83, 4.99),
+              c(2.43, 8.31, 3.12, 7.25),
+              c(1.29, 3.23, 3.48, 0.23),
+              nrow=3, ncol=4)
+# check the structure and dimensions with dim()
+str(mat)
+dim(mat)
 
+# specific elements can be obtained through subsetting
+### row 1
+mat1[1,]
+### column 2
+mat1[,2]
+### element 2 of row 3
+mat[3,2]
+
+# check class of the object and one row
+class(mat)
+class(mat[1,])
+```
+
+Since matrices have dimensions, `names()` cannot be used as we did for vectors. Instead, `names()` is generalized into `rownames()` and `colnames()`.
+
+```r
+rownames(mat1) <- c("gene_1", "gene_2", "gene_3")
+colnames(mat1) <- c("subject_1", "subject_2", "subject_3")
+```
+
+Matrices are a very important object class for mathematical and statistical applications in R, so it is certainly worth exploring more complex matrix operations if you will be doing any more complex statistical analysis in R.
 
 ### Data frames
 
-colnames and rownames
-subsetting matricies and dataframes
+Data frames are very efficient ways of storing tabular data in R. Like matrices, data frames have dimensionality and are organized into rows and columns, however data frames can store vectors of different object classes.
+
+Often you will construct a data frame by reading in a dataset from a file. While we will cover reading data into R below, we will construct a data frame using the `data.frame()` constructor function in R for this example.
+
+```r
+df <- data.frame(subject_id = c("s1", "s2", "s3", "s4"),
+                 age = c(45, 83, 38, 23),
+                 gender = c("female", "female", "male", "female"),
+                 status = c("case", "case", "control", "control"))
+
+str(df)
+```
+
+Note that the default behavior of `data.frame()` is to convert character strings to factors. If you want to prevent this behavior, you can set the `StringsAsFactors()` argument as `FALSE`.
+
+```r
+df <- data.frame(subject_id = c("s1", "s2", "s3", "s4"),
+                 age = c(45, 83, 38, 23),
+                 gender = c("female", "female", "male", "female"),
+                 status = c("case", "case", "control", "control"),
+                 stringsAsFactors=FALSE)
+
+str(df)
+```
+
+Data frames can be subset in similar ways to matrices using brackets or the `$` subsetting operator.
+ ```r
+# get first row
+df[1,]
+
+# get first column
+df[,1]
+
+# get gender variable/column
+df[, c("gender")]
+
+# # get gender and status
+df[, c("gender", "status")]
+
+# get the gender variable with $
+df$gender
+```
+
+Relational (e.g. `==`) and logical operators (e.g. `!`) can be used to interrogate specific variables in a dataframe. The resulting logical can also be used to subset the data frame.
+```r
+# obtain a logical indicating which subjects are female
+df$gender == "female"
+
+# use logical to subset the data frame for only female subjects (rows)
+df2 <- df[df$gender == "female", ]
+
+# check dimensions of the new data frame
+dim(df2)
+
+# use the LOGICAL NOT operator ! to obtain only male subjects  
+df[!df$gender == "female", ]
+
+# this could obviously also be achieved with..
+df[!df$gender == "male", ]
+```
 
 
 
 
-logical operators (!, &, |, ==)
+
+
+
+
+
 
 
 object classes and data structures/ classes introduced by packages
