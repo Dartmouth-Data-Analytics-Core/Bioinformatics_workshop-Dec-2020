@@ -8,9 +8,7 @@ For those of you that indicated that you did not have an account on *discovery* 
 
 ## Downloading the data ##
 
-For this workshop we will be using a dataset downloaded from the short read archive (SRA), a public repository of genomic data. This dataset comes from [this paper](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099625), and was collected from human airway smooth muscle cells to test gene pathways effected by exposure to Glucocorticoid drugs, which have been historically used for their anti-inflammatory effects to treat asthma. Four cell lines were treated with either a control vehicle (untreated), dexamethasone (dex), albuterol (alb), or both dexamethasone and albuterol (co-treated) for 18 hours before transcriptomes were extracted.
-
-The commands that you will be following can be found in markdown `(.md)` files where there is a brief description of the command and how it is applied to the data and what it does followed by an example command that you can copy and paste into the terminal window. The majority of day 1 will be using the terminal window on your local machine, with an open `ssh` connection to discovery7, as we will be running `bash` code. For day 2, you will be using RStudio on your local machine to run the R-markdown files (`.rmd`) located in this GitHub repo. 
+The commands that you will be following can be found in markdown `(.md)` files where there is a brief description of the command and how it is applied to the data and what it does followed by an example command that you can copy and paste into the terminal window. The majority of day 1 and 2 will be using the terminal window on your local machine, with an open `ssh` connection to discovery7, as we will be running `bash` code. For some of day 2 and most of day 3 you will be using RStudio on your local machine to run the commands in the  markdown files (`.md`) located in this GitHub repo. 
 
 In your terminal window navigate to where you want to download the files needed for this workshop onto your local machine. Then execute the following command:
 
@@ -40,7 +38,17 @@ Before you begin using conda environments on discovery you will need to ensure t
 source /optnfs/common/miniconda3/etc/profile.d/conda.sh
 ```
 
-We recommend that you add the above line of code to your `.bashrc` file in your home directory, otherwise you will need to run this command each time you start a new session on discovery. You can follow the [tutorial](https://services.dartmouth.edu/TDClient/1806/Portal/KB/ArticleDet?ID=72888) on the *Research Computing* teams website. 
+We recommend that you add the above line of code to your `.bashrc` file in your home directory, otherwise you will need to run this command each time you start a new session on discovery. To do this use the nano text editor on discovery to copy the line above into your `.bashrc` file.
+
+```bash
+#open the file with the text editor
+nano .bashrc
+
+#copy this line to the file : source /optnfs/common/miniconda3/etc/profile.d/conda.sh
+
+# use ctrl+x to exit the editor and save the changes you made
+```
+
 
 Next you will have to run the following command to create a .conda/ directory in your home drive to store all of your personal conda environments. You only have to run this command once to make this directory, so it does not need to be added to your .bashrc file.
 
@@ -52,16 +60,16 @@ mkdir -p .conda/pkgs/cache .conda/envs
 Now you will need to create the conda environment that we will be using for the course into your personal directory of accessible conda environments. This takes about 15 minutes to execute and you will see all of the packages that are loaded into this environment. The number of packages should indicate why conda environments are so useful, imagine having to load all of these packages individually it is much easier to load them with a single command in a conda environment.
 
 ```bash
-conda env create -f /dartfs-hpc/scratch/bioinfo-w/environment.yml
+conda env create -f /dartfs-hpc/scratch/fund_of_bioifo/environment.yml
 ```
 
-When you are ready activate the conda environment, which you will need for the work we are doing for day 1 of the workshop you can use the following command. 
+When you are ready activate the conda environment, which you will need for the work we are doing for days 1 and 2 of the workshop you can use the following command. 
 
 ```bash
-conda activate bioinfo-w/
+conda activate fund_of_bioinfo/
 ```
 
-You will see that the activate command has worked when it reads (bioinfo-w) rather than (base) to the left of the prompt. When you are finished using a conda environment it is good practice to deactivate your session with the following command.
+You will see that the activate command has worked when it reads (fund_of_bioinfo) rather than (base) to the left of the prompt. When you are finished using a conda environment it is good practice to deactivate your session with the following command.
 
 ```bash
 conda deactivate
@@ -165,5 +173,5 @@ library(ChIPseeker)
 sessionInfo()
 ```
 
-If you have issues with any part of the installation and setup, please reach out to us directly (contact details are in the workshop ReadMe page) or come to bioinformatics help hours (link included in your welcome email). 
+If you have issues with any part of the installation and setup, please reach out to us directly (contact details are in the workshop ReadMe page) or come to bioinformatics help hours **December 11, 2020 1-2PM** the link is in your welcome email. 
 

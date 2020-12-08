@@ -54,21 +54,9 @@ We will be using the RNA-seq dataset described in [Himes *et al*, 2014, *PloS On
 ### Raw data
 
 Raw sequence data was obtained from the [*Sequence Read Archive*](https://www.ncbi.nlm.nih.gov/sra)
-[SRA toolkit](https://github.com/ncbi/sra-tools) (SRA) under project accession [SRP033351](https://www.ncbi.nlm.nih.gov/sra?term=SRP033351). The raw FASTQ files are locted in `/dartfs-hpc/scratch/rnaseq1/`. Each sample is named according to their **SRR** identifier from the SRA. SRR (SRA run accession) identifiers are used to denote objects containing actual sequencing data from a sequencing run. Downloading data from the SRA is easist using the SRA toolkit, which can be installed using a conda environment.
+[SRA toolkit](https://github.com/ncbi/sra-tools) (SRA) under project accession [SRP033351](https://www.ncbi.nlm.nih.gov/sra?term=SRP033351). The raw FASTQ files are locted in `/dartfs-hpc/scratch/fund_of_bioinfo/raw_full_fastq/`. Each sample is named according to their **SRR** identifier from the SRA. SRR (SRA run accession) identifiers are used to denote objects containing actual sequencing data from a sequencing run. Downloading data from the SRA is easist using the SRA toolkit, which can be installed using a conda environment.
 
-
-
-
-HAVE THEM LOAD CONDA ENVIRONMENT FOR THE FIRST TIME HERE
-
-
-
-
-
-
-
-
-
+*This is an example of how you would download data from the SRA, do not run this*
 ```bash
 
 # Create conda environment with the sratoolkit and efetch tools installed
@@ -84,26 +72,29 @@ prefetch SRR*
 fastq-dump --outdir ./ --split-3 --gzip ~/ncbi/public/sra/SRR*.sra
 ```
 
-For this dataset it would take too long to have everyone download all of the fastq files from the SRA so that we can work with them, so the code above is just an example of how you would access FASTQ files from the SRA, given a list of SRA identifiers you were interested in. In practice today you are going to be using FASTQ files that we have already downloaded for you, and to save on space in your directories rather than copy the FASTQ files to your directory we are going to have you create symlinks to the data which we have already downloaded to `dartfs-hpc/scratch/fund_of_bioinfo/data/raw-fastq/`.
+For this dataset it would take too long to have everyone download all of the fastq files from the SRA so that we can work with them, the code above is just an example of how you would access FASTQ files from the SRA, given a list of SRA identifiers you were interested in. In practice today you are going to be using FASTQ files that we have already downloaded for you. To save on time we have subset the fastq files to only those reads that map to chromosome 20. 
 
 ```bash
 
-# lets have a look at the project directory containing the raw FASTQs
-ls -lah /dartfs-hpc/scratch/fund_of_bioinfo/data/raw-fastq/
+# lets have a look at the project directory containing the reduced raw FASTQs
+ls -lah /scratch/fund_of_bioinfo/raw_fastq/
+
+# lets have a look at the project directory containing the full raw FASTQs
+ls -lah /scratch/fund_of_bioinfo/raw_full_fastq/
 
 ```
 
-Since these are paired-end reads each sample has a file for read 1 (SRRXXX_1) and a file for read 2 (SRRXXX_2). All of the files are `gzipped` in order to reduce the disk space they require, which is important as you can see that they are all generally at least **1GB** (you need a lot of space to process RNA-seq, or other-NGS data). Since these files are so large each person copying them to their home directory would take up a lot of space, instead we are going to have you set up a symbolic link or symlink to the data in the scratch drive.
+Since these are paired-end reads each sample has a file for read 1 (SRRXXX_1) and a file for read 2 (SRRXXX_2). All of the files are `gzipped` in order to reduce the disk space they require, which is important as you can see that the full files are all generally at least **1GB** (you need a lot of space to process RNA-seq, or other-NGS data). Since these files are so large each person copying them to their home directory would take up a lot of space, instead we are going to have you set up a symbolic link or symlink to the data in the scratch drive.
 
 ```bash
 # Create a symlink to the data directory in the scratch drive
-ln -s /dartfs-hpc/scratch/fund_of_bioinfo/data/raw-fastq/*fastq.gz ./
+ln -s /scratch/fund_of_bioinfo/raw_fastq/*fastq.gz ./
 
 # Check that your command worked
-ls
+ls -lah
 
 ```
-Symlinked files are similar to an alias they are a file that points to a location. Any modifications made to the original files in `/dartfs-hpc/scratch/fund_of_bioinfo/data/raw-fastq/` will also be seen in the symlink files. Moving the original files or deleting the original files will cause the symlinks to malfunction. Remember because your symlinks are pointing to something in the scratch directory these files are slated to be deleted in 45 days (in this case in this case these files will be deleted 01/28/21) at which point your symlinks will still exist but no longer function properly.
+Symlinked files are similar to an alias they are a file that points to a location. Any modifications made to the original files in `/scratch/fund_of_bioinfo/raw_fastq/` will also be seen in the symlink files. Moving the original files or deleting the original files will cause the symlinks to malfunction. Remember because your symlinks are pointing to something in the scratch directory these files are slated to be deleted in 45 days at which point your symlinks will still exist but no longer function properly.
 
 ### Basic operations
 
@@ -272,7 +263,7 @@ Lets have a look at some example QC reports from the FastQC documentation:
 Lets run FASTQC on our data and move the results to a new directory.
 ```bash
 # specify the -t option for 4 threads to make it run faster
-fastqc -t 4 *.fastq.gz
+fastqc -t 1 *.fastq.gz
 
 # move results to a new folder
 mkdir fastqc_results
@@ -292,19 +283,18 @@ Lets run MultiQC on our FastQC files:
 multiqc .
 ```
 
-Copy to report to your LOCAL MACHINE in a new folder and open in a web-broswer:
+Copy to report to your **LOCAL MACHINE** in a new folder and open in a web-broswer:
 ```
 # make a directory and go into it (ON YOUR LOCAL MACHINE)
 mkdir fund_of_bioinfo/
 cd fund_of_bioinfo/
 
-# use secure copy (scp) to download the files to your local machine
+# use secure copy (scp) to download the files to your local machine - remember to change the netID before you paste this command into the terminal
 scp netID@discovery7.dartmouth.edu:/dartfs-hpc/rc/home/h/netID/fundamentals_of_bioinformatics/fastqc_results/multiqc_report.html .
 ```
 
-You can find the MultiQC report run on the complete dataset across all samples in the dataset in the github repository, under `QC-reports`. Lets open it and explore our QC data.
+You can find the MultiQC report run on the complete dataset across all samples in the dataset in the github repository, under `QC-reports`. Lets open it and explore our QC data. If the `scp` command did not work for you there is a copy of the multiqc report in the github repo you downloaded under Day-1/data/multiqc_report.html.
 
-**What do we think about the quality of our dataset?**
 
 ### Read pre-processing & trimming
 
@@ -345,49 +335,38 @@ cutadapt -a 'A{76}' -o out.trimmed.fastq.gz input.fastq.gz > cutadapt.logout;
 
 Since the polyA and adapter sequence contamination is relatively low for this dataset, we won't trim any specific sequences, although we will perform basic quality and length processing of the raw reads. Lets make a new directory and do this for do this for one sample.
 ```bash
-mkdir ../results/trim
+mkdir -p ../results/trim
 cd ../results/trim
 
 cutadapt \
    -o SRR1039508_1.trim.chr20.fastq.gz \
    -p SRR1039508_2.trim.chr20.fastq.gz \
-   ../../raw_data/SRR1039508_1.chr20.fastq.gz ../../raw_data/SRR1039508_2.chr20.fastq.gz \
-   -m 1 -q 20 -j 4 > SRR1039508.cutadapt.report
+   ../../SRR1039508_1.chr20.fastq.gz ../../SRR1039508_2.chr20.fastq.gz \
+   -m 1 -q 20 -j 1 > SRR1039508.cutadapt.report
 ```
 
 - `-m` removes reads that are samller than the minimum threshold
 - `-q` qulaity threshold for trimming bases
 - `-j` number of cores/threads to use
 
-Now lets run this on all of our samples:
+You should now have trimmed FASTQ files in this directory that can be used for an alignment. Lets look at the report that cutadapt generated.
 ```bash
-ls ../../raw_data/*.chr20.fastq.gz | while read x; do \
-
-   # save the file name
-   sample=`echo "$x"`
-   # get everything in file name after "/" and before "_" e.g. "SRR1039508"
-   sample=`echo "$sample" | cut -d"/" -f4 | cut -d"_" -f1`
-   echo processing "$sample"
-
-   # run cutadapt for each sample
-   cutadapt \
-      -o ${sample}_1.trim.chr20.fastq.gz \
-      -p ${sample}_2.trim.chr20.fastq.gz \
-      ../../raw_data/${sample}_1.chr20.fastq.gz ../../raw_data/${sample}_2.chr20.fastq.gz \
-      -m 1 -q 20 -j 4 > $sample.cutadapt.report
-done
-```
-
-You should now have trimmed FASTQ files in this directory that can be used for an alignment. You should also be able to see and print each of your reports from cutadapt.
-```bash
-ls *cutadapt.report | while read x; do
-   yes '' | sed 4q
-   echo Printing $x
-   yes '' | sed 1q
-   cat $x
-done
+cat SRR1039508.cutadapt.report 
 ```
 
 **Additional note:** For data generated at Dartmouth, since much of the data in the Genomics core is generated using an **Illumina NextSeq 500**, we also often use the `--nextseq-trim` option in cutadapt.
 
 This option works in a similar way to the qulaity threshold option `-q` BUT ignores Q-scores for streches of G bases, as some Illumina instruments, such as the NextSeq, generate strings of Gs when when the sequencer 'falls off' the end of a fragment and dark cycles occur, and therefore provides more appropriate quality trimming for data generated on these instrucments.
+
+### Break out exercises
+
+- Run through the commands above to generate a quality report and trim the reads 
+
+- What do we think about the quality of our dataset?
+
+- How would this affect the flags you might choose to use when preprocessing the data? 
+   - higher or lower qulaity threshold? 
+   - leave off the quality filter? 
+   - adjust the minimum read size threshold?
+   
+- Can you write a loop to trim a series of fastq files and save it to a bash script?

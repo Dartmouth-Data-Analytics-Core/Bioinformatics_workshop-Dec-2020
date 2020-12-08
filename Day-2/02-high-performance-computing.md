@@ -1,6 +1,3 @@
-]
-
-
 
 # High Performance Computing
 
@@ -10,6 +7,12 @@ Similar to your personal computer each node is made up of **cores**, **memory**,
 
 <p align="center">
   <img src="../figures/HPC_PC.png" title="xxxx" alt="context"
+	width="70%" height="70%" />
+ </p>
+ </p>
+ 
+ <p align="center">
+  <img src="../figures/discovery_photo_foroverview_20171026.jpg" title="xxxx" alt="context"
 	width="70%" height="70%" />
  </p>
  </p>
@@ -88,7 +91,7 @@ rsync -r netID@discovery7.dartmouth.edu:/dartfs-hpc/rc/home/h/netID/fundamentals
 
 ```
 
-You will notice that we used the `-r` option with this command this stands for recursive, when copying a directory this will enable you to copy that directory and all of its contents organized exactly as they are in the location you are copying from. You will also notice I used the `./` to indicate the destination, his is shorthand to mean the directory that I am currently in.
+You will notice that we used the `-r` option with this command this stands for recursive, when copying a directory this will enable you to copy that directory and all of its contents organized exactly as they are in the location you are copying from. 
 
 #### SFTP clients (FileZilla, CyberDuck, WinSCP)
 
@@ -121,7 +124,9 @@ usually installed by the system admin, so you cannot add or modify them yourself
 
 
 
-Each person who uses the HPCs at Dartmouth has a different set of tasks and data that they need to work on, and as such we do not need all the same software loaded to complete the tasks that you are interested. Instead discovery/polaris/andes have modules that contain pre-loaded software that you can load into your current environment so that they are available for you to use. In order to see the modules you currently have loaded in your environment use the command `modules list`. To see the breadth of software available for you to load use the command `module avail`.
+Each person who uses the HPCs at Dartmouth has a different set of tasks and data that they need to work on, and as such we do not need all the same software loaded to complete the tasks that you are interested. Instead discovery/polaris/andes have modules that contain pre-loaded software that you can load into your current environment so that they are available for you to use. Modules are used on HPC systems to make multiple versions of popular software availble to users. UNfortunately, modules are installed and maintained by the system administrators, so you cannot add modules or modify them yourself. 
+
+In order to see the modules you currently have loaded in your environment use the command `modules list`. To see the breadth of software available for you to load use the command `module avail`.
 
 <p align="center">
   <img src="../figures/modules_avail.png" title="xxxx" alt="context"
@@ -129,7 +134,7 @@ Each person who uses the HPCs at Dartmouth has a different set of tasks and data
  </p>
  </p>
 
-You can see that not only is there a lot of software available for you, there are multiple versions of the same software (java 1.6, 1.7, & 1.8) in case you need a newer or older version of a specific program. For exmaple, let's suppose we need to use an older version of R than the version loaded by default on discovery (3.6.0).
+You can see that not only is there a lot of software available for you, there are multiple versions of the same software (java 1.6, 1.7, & 1.8) in case you need a specific version as a dependency for another piece of software. For exmaple, let's suppose we need to use an older version of R than the version loaded by default on discovery (3.6.0).
 
 First, lets start running R interactively on discovery, and confirm the version currently loaded.
 ```bash
@@ -162,7 +167,7 @@ module rm R/3.3.1
 module list
 ```
 
-There are some pieces of software that you will want to make sure are loaded each time that you log onto the HPC. It would be annoying if you had to use the command `module load` with each piece of software you always want loaded every time you log in. Instead you can edit a hidden file that is located in each of your home directories called `.bash_profile`. This file has preferences for setting up your environment and is executed each time that you log into the HPC. To edit a file from your command line interface we will use the tool `nano`. First let's look at the current contents of your `.bash_profile`
+There are some pieces of software that you will want to make sure are loaded each time that you log onto the HPC. It would be annoying if you had to use the command `module load` with each piece of software you always want loaded every time you log in. You can edit your `.bash_profile` to load those modules each time you log in. First let's look at the current contents of your `.bash_profile`
 
 ```bash
 
@@ -171,53 +176,38 @@ cat .bash_profile
 
 ```
 
-You can see there is a location that says `# put your own module loads here` under this line is where we will add the commands for the modules that we would like to load. Use the `nano` command to add the latest R version to your environment each time you log in by adding the line `module load R/3.3.1` under the line `# put your own module loads here`. Then use **ctrl+X** to exit the `nano` program. You will be asked if you would like to save the changes you made, type `Y`, and if the changes should be saved to the file name .bash_profile hit return. Let's check that the changes we made have been saved.
+You can see there is a location that says `# put your own module loads here` under this line is where we will add the commands for the modules that we would like to load. Use the `nano` command to add the latest R version to your environment by adding the line `module load R/3.3.1` under the line `# put your own module loads here`. Let's check that the changes we made have been saved.
 
 ```bash
+#modify .bash_profile by adding the module load R/3.3.1 in the appropriace location
+nano .bash_profile
+
 # Look at the contents of your modified .bash_profile
 cat .bash_profile
 ```
 
 
 
-remove all of your modules using purge command
+You can also remove all of your loaded modules with the `module purge` command.
 ```bash
 module purge
 ```
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## R on the hpc
-submitting an R script
-loading R libraries
-running R interactively
-
-## Large jobs on the hpc
-building a command - reading the manual!!!   
-checking the traffic on discovery- pbsmons  
-submitting a job - mksub  
-checking the status of a submitted job- qstat, myjobs  
-
 ## Submitting a job to the cluster
 
-For many tasks that you will want to run the task will require lots of memory and perhaps even threading to spread parts of the job onto multiple cores to get the job completed more efficiently (think of a car being built in a factory it makes sense to build the headlights and doors in separate locations at the same time). We do this by submitting a job to the scheduler, in your submission you will tell the scheduler the name you want to give your job, the number and types of nodes you need, the time you think the job should take, where to send notification when the job begins/ends or runs into an error, and what directory the output files from the job should be placed in. It is possible to do this all in one command but often the best practice is to use a script with all of this information endcoded and submit that script to the scheduler. In this way you have a written record of the parameters you used to submit the job and if anything goes wrong you can easily modify the script and resubmit it rather than typing the whole command out again.
+For many tasks that you will want to run, the task will require lots of memory and perhaps even threading to spread parts of the job onto multiple cores such that the job  is executed efficiently (think of a car being built in a factory it makes sense to build the headlights and doors in separate locations at the same time). We do this by submitting a job to the scheduler, in your submission you will provide parameters for running your job to the scheduler and the scheduler will assign your job to a (or multiple) node as soon as one becomes available. It is possible to do this all in one line of code, but the best practice is to use a script with all of this information endcoded and submit that script to the scheduler. In this way you have a written record of the parameters you used to submit the job and if anything goes wrong you can easily modify the script and resubmit it rather than typing the whole command out again.
+
+Before submitting a job to the scheduler it is useful to check the traffic on discovery to get an idea of when a suitable node will become available. We can do this with the `pbsmon` command. 
+
+```bash
+
+# Check mode availability on discovery
+pbsmon
+```
+
+You can see that each node is color coded to show how many of the cores on that node are avaialble, there is a code at the bottom of the display that tells you what each color means. When the majority of nodes are red (100% of cores in use) your job will be qued waiting for a while, when the majority of nodes are blue your job should be submitted rather quickly. 
+
 
 Let's take a look at an example of a job submission script below:
 
@@ -257,3 +247,74 @@ The lines that start with `#PBS` are the lines that are denoting the settings we
 - `#PBS -M` tells the scheduler how to contact you with the information you requested in the `-m` argument
 - `cd $PBS_O_WORKDIR` tells the scheduler to put outfiles, log files and error files in the directory that you submitted your code from. Leaving this out will cause these files to be placed in your home directory.
 
+### Building a command
+
+Arguably the most important part to get right here is the *some command that I would like to submit* part of your script. We STRONGLY suggest that you read the manual for any tools that you are interested in using. Software executed through the command line has a plethora of options available, options that are often not available when using graphics user interfaces to execute the same software. It is important that you understand how these options change the way that the software will run on your data and which options are most appropriate for the data that you are using. Sometimes this comes down to knowing if your data are paired-end or single-end, but sometimes you need to know that the genome you are working with and the reference are not closely related and there could be options in the software that are more appropriate for that scenario. 
+
+There is a saying in computer programming "Garbage in, Garbage out" ultimately this means that the computer can only (at this point) follow your directions and it is important to do your due diligence and ensure that the commands you are executing are 1. most appropriate for the data you are using and 2. will ultimately answer the questions you have about your data.
+
+### Subnmitting a job to the scheduler
+
+Once you have your script written and are ready to submit you can submit your code to the scheduler using the `mksub` command. This will enter your job into the que of jobs submitted by other users. Job submission is loosely based on the order of the que but also affected by the walltime that a job will require, and the type and number of nodes/cores that a job will require. Smaller jobs with less walltime get through the que faster than larger ones. 
+
+```bash
+
+# Submit a job to the scheduler
+mksub my_script.pbs
+```
+
+### Checking your jobs progress
+
+Once you submit your job you will want to peridically check on the progress of your job. One way to do that is using the commands `qstat` and `myjobs`. `qstat` will show you when your job was submitted to the que, and what the status of your job is (Q = still waiting to submit, R = currently running, C = completed).
+`myjobs` will show the time the job was started, the status of your job (only running jobs are displayed), the time left based on the walltime you have requested,  and the HPC resources your job is using. 
+
+```bash
+#check the status of qued jobs
+qstat
+#check the status of running jobs
+myjobs
+
+```
+
+A more detailed way of checking the progress of your job are the stdout and stderr reports that are automatically generated in the directory that the script was submitted from as soon as your job gets assigned a node. These files are named using the name that you declared for your job in the `#PBS -N` field, followed by the job number that was assigned when you submitted your job (this can be seen in the `qstat` and `myjobs` commands. So a job named *STAR_alignment* that was given the job number *2101976* would have a stdout file named *STAR_alignment.o2101976* and an error file named *STAR_alignment.e2101976*. The stdout file contains a header with an outline of the parameters that were used to call the job, followed by any output from the code that would normally be written to stdout if the job was run interactively. The stderr file writes any errors that are flagged as the job is running, including errors that result in termination of the job before the code has completed running. These errors are not always straightforward and sometimes require some research on the users part to trouble shoot what went wrong before resubmission. 
+
+**Example stdout file**
+<p align="center">
+  <img src="../figures/stdout.png" title="xxxx" alt="context"
+	width="100%" height="100%" />
+ </p>
+ </p>
+ 
+**Example stderr file**
+<p align="center">
+  <img src="../figures/stderr.png" title="xxxx" alt="context"
+	width="50%" height="50%" />
+ </p>
+ </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+# R on the hpc
+submitting an R script
+loading R libraries
+running R interactively
+
+## Break out room exercises
+
+- Build a pbs script that uses the counting GC script that you created yesterday
+
+- Run this script on the raw fastq files
+
+- Run this script on the trimmed fastq files
+
+- Does the GC content change?
