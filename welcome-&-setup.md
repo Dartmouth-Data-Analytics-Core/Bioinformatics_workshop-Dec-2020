@@ -16,7 +16,7 @@ Operating system| Terminal emulators
 ---|---
 Mac| Terminal (comes pre-installed)
 Windows| [MobaXterm](https://mobaxterm.mobatek.net/download.html) <br> [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
-Linux| 
+Linux| Konsole, Terminal, etc. (should be pre-installed but depends on the desktop environment you are running)
 
 
 In your terminal window navigate to where you want to download the files needed for this workshop onto your local machine. Then execute the following command:
