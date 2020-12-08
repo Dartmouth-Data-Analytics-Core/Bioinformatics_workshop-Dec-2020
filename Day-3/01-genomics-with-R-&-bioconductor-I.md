@@ -1,10 +1,6 @@
 
 
-- PERHAPS CHANGE THIS SECTION TO INTRODUCE RSUBREAD FIRST, FOR WORKING WITH FASTWQ DATA BRIEFLY AND COUNTING READS TO GENERATE A COUNT MATRIX THAT COULD BE ANALYZED IN A NUMBER OF WAYS
-
-- ACTUALLY MAYBE NEED A SECTION ON PEAK CALLING BEFORE QUANTIFICATION, BECASE YOU NEED TH PEAKS FOR CHIP Quantification
-
-- SO MAYBE A SECTION ON PEAK CALLING AND QUANTIFICATION WHICH PERHAPS INCLUDES SOME OF MY DESCRIPTIONS OF RUN LENGTH ENDOCING, BIGWIGS AND BED FILES FROM BIOCONDUCTOR PART 1
+- PERHAPS CHANGE THIS SECTION TO INTRODUCE RSUBREAD FIRST,
 
 
 
@@ -31,7 +27,7 @@ By far the largest advantage to using R to perform specific stages of genomic da
 
 
 
-Note on what we won't cover: Data type specific analysis packages like DESeq2, as we cant go into data type soecific nuascens and statistical considerations in this course without the prereqs etc. We will focus on generalized tasks that are be appropriate to a range of data and analysis types, e.g. how to leverage bioconductor packages, working with genomic region data, and obtaining & applying annotation data. 
+Note on what we won't cover: Data type specific analysis packages like DESeq2, as we cant go into data type soecific nuascens and statistical considerations in this course without the prereqs etc. We will focus on generalized tasks that are be appropriate to a range of data and analysis types, e.g. how to leverage bioconductor packages, working with genomic region data, and obtaining & applying annotation data.
 
 
 
