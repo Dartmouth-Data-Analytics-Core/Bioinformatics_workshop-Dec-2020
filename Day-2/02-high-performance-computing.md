@@ -288,7 +288,7 @@ A more detailed way of checking the progress of your job are the stdout and stde
 **Example stderr file**
 <p align="center">
   <img src="../figures/stderr.png" title="xxxx" alt="context"
-	width="100%" height="100%" />
+	width="50%" height="50%" />
  </p>
  </p>
 
@@ -309,3 +309,12 @@ submitting an R script
 loading R libraries
 running R interactively
 
+## Break out room exercises
+
+- Build a pbs script that uses the counting GC script that you created yesterday
+
+- Run this script on the raw fastq files
+
+- Run this script on the trimmed fastq files
+
+- Does the GC content change?
