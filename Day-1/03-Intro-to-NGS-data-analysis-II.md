@@ -44,18 +44,28 @@ Optional:
 
 
 
-**We will pause here and run this code so that it runs while we finish the lecture and you can work with the resulting SAM files during the break out room**
+For this dataset we are using STAR because the reads were generated from eukaryotic data and thus a splice aware aligner is most appropriate for this dataset.
+
 ```bash
+# create a directory to store aligned files
+mkdir ../aligned/
+
+# enter that directory
+cd ../aligned
+
 #run splice aware alignment 
-STAR --genomeDir /dartfs-hpc/scratch/fund_of_bioinfo/ref/hg38_chr20_index \
+STAR --genomeDir /scratch/fund_of_bioinfo/ref/hg38_chr20_index \
   --readFilesIn ../trim/SRR1039508_1.trim.chr20.fastq.gz ../trim/SRR1039508_2.trim.chr20.fastq.gz \
   --readFilesCommand zcat \
-  --sjdbGTFfile /dartfs-hpc/scratch/fund_of_bioinfo/ref/Homo_sapiens.GRCh38.97.chr20.gtf \
-  --runThreadN 4 \
+  --sjdbGTFfile /scratch/fund_of_bioinfo/ref/Homo_sapiens.GRCh38.97.chr20.gtf \
+  --runThreadN 1 \
   --outSAMtype SAM \
   --outFilterType BySJout \
   --outFileNamePrefix SRR1039508.
   ```
+
+
+
 Option details:
 
 --genomeDir: the path to the directory with genome indices
@@ -185,8 +195,8 @@ All header lines will start with the **@** symbol. The mandatory flag **@HD** wi
 To view a SAM/BAM/CRAM file you can use the **samtools view** tool with the **-H** flag:
 
 ```bash
-
-samtool view -H sample.bam
+samtools view -H sample.sam
+samtools view -H sample.bam
 ```
 
 ![example SAM header](../figures/sam_header_example.png)
@@ -231,7 +241,7 @@ You can learn more about the SAM file format [here](https://samtools.github.io/h
 
 ## Break out room exercises
 
-- Look at the SAM file that you created.
+- Look at the SAM file that you created
 
 - Convert the SAM file to a BAM file
 
