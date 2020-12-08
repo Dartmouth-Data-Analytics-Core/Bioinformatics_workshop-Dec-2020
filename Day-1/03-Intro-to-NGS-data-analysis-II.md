@@ -59,13 +59,20 @@ STAR --genomeDir /dartfs-hpc/scratch/fund_of_bioinfo/ref/hg38_chr20_index \
 Option details:
 
 --genomeDir: the path to the directory with genome indices
+
 --readFilesIn: read files to map to reference alignment
+
 --readFilesCommand: uncompression command to apply to read files
---sjdbGTFfile: the path to the annotation file that includes cooordinates of splice-junctions
+
+--sjdbGTFfile: the path to the annotation file that includes cooordinates of splice-junctions 
+
 --runThreadN: number of threads to use in the run
---outSAMtype: (SAM/BAM unsorted/ BAM SortedByCoordinate)
---outFilterType: how mapped reads will be filtered (normal/BySJout)
---outFileNamePrefix: prefix for outfiles generated in the run
+
+--outSAMtype: (SAM/BAM unsorted/ BAM SortedByCoordinate) 
+
+--outFilterType: how mapped reads will be filtered (normal/BySJout) 
+
+--outFileNamePrefix: prefix for outfiles generated in the run 
 
 
 
@@ -88,11 +95,15 @@ rsync -a -P rsync://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDi
 ```
  Here are some examples of commonly used sites where reference genomes are hosted.
  
-[*RefSeq*](https://ftp.ncbi.nlm.nih.gov/genomes/refseq/)
-[*JGI*](https://genome.jgi.doe.gov/portal/help/download.jsf)
-[*UCSC*](https://hgdownload.soe.ucsc.edu/downloads.html)
-[*Ensembl*](http://ftp.ensembl.org/pub/)
-[*GENCODE*](http://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/)
+- [*RefSeq*](https://ftp.ncbi.nlm.nih.gov/genomes/refseq/)
+
+- [*JGI*](https://genome.jgi.doe.gov/portal/help/download.jsf)
+
+- [*UCSC*](https://hgdownload.soe.ucsc.edu/downloads.html)
+
+- [*Ensembl*](http://ftp.ensembl.org/pub/)
+
+- [*GENCODE*](http://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/)
 
 # Reference genome annotation
 
