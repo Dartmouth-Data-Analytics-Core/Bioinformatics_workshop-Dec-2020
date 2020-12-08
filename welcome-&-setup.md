@@ -15,7 +15,7 @@ To start make sure that you are able to use a terminal emulator, select one of t
 Operating system| Terminal emulators
 ---|---
 Mac| Terminal (comes pre-installed)
-Windows| [MobaXterm] (https://mobaxterm.mobatek.net/download.html) <br> [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
+Windows| [MobaXterm](https://mobaxterm.mobatek.net/download.html) <br> [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
 Linux| 
 
 
