@@ -51,7 +51,7 @@ While there are times when it is preferable to run R in one way over another, us
 - facilities for version control & project management
 
 
-<img src="../figures/r-studio-example.png" height="500" width="800"/>
+<img src="../figures/r-studio-example.png" height="670" width="1000"/>
 
 When using RStudio, you will generally want to generate your code using the scripting window first, and then use the options available to submit this code, or segments of it, directly to the console using the buttons at the top of the scripting window (or keyboard shortcuts!).
 
