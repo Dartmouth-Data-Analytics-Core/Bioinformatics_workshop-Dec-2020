@@ -271,9 +271,12 @@ Once you submit your job you will want to peridically check on the progress of y
 ```bash
 #check the status of qued jobs
 qstat
+
 #check the status of running jobs
 myjobs
 
+# check overall usage on the system 
+qshow
 ```
 
 A more detailed way of checking the progress of your job are the stdout and stderr reports that are automatically generated in the directory that the script was submitted from as soon as your job gets assigned a node. These files are named using the name that you declared for your job in the `#PBS -N` field, followed by the job number that was assigned when you submitted your job (this can be seen in the `qstat` and `myjobs` commands. So a job named *STAR_alignment* that was given the job number *2101976* would have a stdout file named *STAR_alignment.o2101976* and an error file named *STAR_alignment.e2101976*. The stdout file contains a header with an outline of the parameters that were used to call the job, followed by any output from the code that would normally be written to stdout if the job was run interactively. The stderr file writes any errors that are flagged as the job is running, including errors that result in termination of the job before the code has completed running. These errors are not always straightforward and sometimes require some research on the users part to trouble shoot what went wrong before resubmission. 
