@@ -389,4 +389,15 @@ Many commands like `ls` will also accept wildcards, which are special character 
 ls *.txt
 ```
 
+### Customizing your environment
+
+You will notice the prompt in your terminal when you are logged onto discovery starts with the term `(base)` what this is indicating is that the environments loaded in your .bash_profile are the tools that are available for you to use. For this workshop (and for most NGS data processing) you will need to extend the software packages that are available to you. We will do this now by loading a new environment with the tool `conda`. We have pre-built this `conda` environment for you such that all of the tools you will need have been loaded into this environment. Tomorrow we will talk more about how to create your own custom `conda` environemnt. 
+
+```bash
+
+# Load conda environment
+conda activate fund_of_bioinfo
+```
+This should change the word at the beginning of your prompt from `(base)` to the name of the conda environment that you just loaded. 
+
 > As we move through the subsequent lessons, we will introduce more complex bash commands in order to manipulate common bioinformatics file types. If you are ever confused about what a command does, remeber you can always use `man` to check out the manual page (or google it). It you are confused about how commands are used in conjuction with each other, it can also be helpful to break them down and run parts individually, in order to understand what the constituent parts do.
