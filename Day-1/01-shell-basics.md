@@ -15,24 +15,6 @@ Shell can be challenging to learn, however is an absolutely key skill in bioinfo
 
 Some bioinformatics softwares provide GUIs that enable execute tasks with programs that you would otherwise execute using the Shell. Whuile such softwares can be powerful in the right context, they can also make it very easy to perform tasks in bioinformatics incorrectly, therefore they should be treated with caution.
 
-## Log on to discovery cluster 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## The Bash shell
 
@@ -108,20 +90,74 @@ We can use the redirect command (>) to redirect the output of commands like echo
 ```bash
 echo 'bla bla bla' > mynotes.txt
 ```
+## Log on to discovery cluster 
+
+Many of the higher level commands for working with NGS data will require a lot of memory and computing power, more than most laptops can handle efficiently. 
+The discovery cluster is a resource hosted by Dartmouth's Research Computing team. This cluster enables you to execute high level commands wihtout using the memory and computing power on your local machine (more about this tomorrow). Let's log onto the discovery cluster now. We will use a secure shell command `ssh` to log onto the discovery cluster.
+
+```bash
+
+# Establish the secure shell connection
+ssh netID@discovery7.dartmouth.edu
+
+# Enter your password at the prompt (when you type no characters will show up to preserve privacy)
+netID@discovery7.dartmouth.edu's password:
+
+# You're in!
+(base) [netID@discovery7 ~]$
+
+```
+All of the commands that you just executed locally in your terminal window work the same way when you are logged into discovery. It is always useful to orient yourself when you're working on an HPC so that you know where the output of all of the commands you run will end up. Lets run our first command to get your location.
+
+```bash
+
+# Check your location on the cluster
+pwd
+
+```
+
+You should see something like `/dartfs-hpc/rc/home/h/netID` displayed in response to your command. Initially when you log on you will always be directed to your home directory (the address or path listed above). Your home directory by default will have 50GB of storage space to begin with, if you are running something that requires more storage space it is possible to extend that limit temporarily with the `/scratch/ drive`. This is where we have stored all of the files you will be working with today. Directories and files hosted on the `/scratch/` drive will only be maintained for 45 days, you will receive a notification from research computing before the data is deleted, but it will be maintained longer than 45 days. 
+
+It is a good idea when working on projects on an HPC to stay organized so lets start by making a folder, or directory to store all of the work you do today we will call it `fundamentals_of_bioinformatics`. You will notice that I chose a title that has no spaces in it, this is because the space is a special character, special characters need to be *escaped* with the `\` and so `funadmentals_of_bioinformatics` would look like `fundamentals\ of\ bioinformatics` with the escape characters. You can see that file names with spaces become unweildy to type out so most programmers will replace spaces with `_`, `.`, or `-` in their filenames to keep everything neat.
+
+```bash
+
+# Create a directory
+mkdir fundamentals_of_bioinformatics
+
+# enter the directory
+cd fundamentals_of_bioinformatics
+
+# check your location on the cluster
+pwd
+
+# list the contents of your directory
+ls
+
+```
+As expected the new directory that you created is empty there are no files. Lets copy a file from the `/scratch/` directory we created for this workshop to the directory you just created. This file (`all_counts.txt`) provides raw read counts for an RNA-seq experiment, with genes in rows and samples in columns.
+
+```bash
+
+# copy the file from the scratch drive to the fundamentals_of_bioinformatics directory you just created
+cp /scratch/fund_of_bioinfo/all_counts.txt ./
+
+```
+
 
 ### Viewing the contents of files
 
-The shell provides us with a number of commands to view the contents of files in define ways. The `cat` command for example (standing for concatenate) will print the entire contents of a file to the terminal. This can be useful for smaller files, like our important notes file we made above.
+The shell provides us with a number of commands to view the contents of files in define ways. The `cat` command for example (standing for concatenate) will print the entire contents of a file to the terminal. This can be useful for smaller files, but as you will see with larger files can be an unweildy way to look at the contents of a file.
 ```bash
-cat mynotes.txt
+cat all_conunts.txt
 ```
 
-However, when working with larger files, which we are usually doing in bioinformatics, you may not wish to print the whole file as it would overrun your terminal. Other commans exist that allows you to explore file contents with more control.
+When working with larger files, which we are usually doing in bioinformatics, you may not wish to print the whole file as it would overrun your terminal. Other commands exist that allow you to explore file contents with more control.
 - `more` shows you as much of the file as can be shown in the size of the terminal screen you have open, and you can continue to "scroll" through the rest of the file by using the space bar  
 - `head` will print the first 10 lines by default, but this number can be controlled with the `-n` option
-- `tail` will print the final lines of a file, and can also be controlled with the `n` option
+- `tail` will print the final lines of a file, and can also be controlled with the `-n` option
 
-We will use a larger text file to show the utility of these commands, as well as other commands in the subsequent parts of this lesson. This file (`all_counts.txt`) provides raw read counts for an RNA-seq experiment, with genes in rows and samples in columns.
+We will use a larger text file to show the utility of these commands, as well as other commands in the subsequent parts of this lesson. 
 ```bash
 # Show the first 20 lines of the all_counts.txt file
 head -n 20 all_counts.txt
@@ -133,9 +169,9 @@ tail -n 50 all_counts.txt
 wc -l all_counts.txt
 ```
 
-### Copying, renaming, and removing files
+### Renaming and removing files
 
-Sometimes you will need to copy a file, or move one into another directory, which can be achieved wuith the `cp` and `mv` commands, respectively. Let's copy the all_counts.txt file from the fundamentals_of_bioinformatics directory to your home directory.
+Sometimes you will need to reorganize your directories or rename a file, which can be achieved wuith the `mv` command. Let's start by copying the all_counts.txt file from the fundamentals_of_bioinformatics directory to your home directory.
 
 ```bash
 # Copy the all_counts.txt file to your home directory
@@ -146,7 +182,7 @@ Now let's rename the copy of the all_counts.txt file that we just created.
 # Rename the copied all_counts.txt file
 mv ~/all_counts.txt ~/all_counts.copy.txt
 ```
-You can also use the `mv` command to move a file to a new location. Let's move the alll_counts.copy.txt from your home directory into your fundamentals_of_bioinformatics directory.
+You can also use the `mv` command to move a file to a new location. Let's move the all_counts.copy.txt from your home directory into your fundamentals_of_bioinformatics directory.
 ```bash
 # Move the all_counts.copy.txt into your fundamentals_of_bioinformatics directory
 mv ~/all_counts.copy.txt fundamentals_of_bioinformatics/
