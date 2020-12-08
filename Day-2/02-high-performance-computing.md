@@ -26,66 +26,11 @@ Dartmouth's HPC is maintained by [Research Computing](https://rc.dartmouth.edu)(
 
 ## Discovery
 
-Discovery is a linux cluster with 2016 cores, 14.5TB of memory, and 1.8PB of disk space. The compute nodes are managed by a [job scheduler](https://rc.dartmouth.edu/index.php/using-discovery/scheduling-jobs/scheduler-policy/) when you log onto discovery you are automatically directed to the head node where data processing should **not be executed**. Let's log onto the discovery cluster now. We will use a secure shell command `ssh` to log onto the discovery cluster.
+Discovery is a linux cluster with 2016 cores, 14.5TB of memory, and 1.8PB of disk space. The compute nodes are managed by a [job scheduler](https://rc.dartmouth.edu/index.php/using-discovery/scheduling-jobs/scheduler-policy/) when you log onto discovery you are automatically directed to the head node where data processing should **not be executed**. Discovery is mainly used to submit large multi-threaded jobs that will run for many hours or days.
 
-```bash
+Interactive processing on discovery should only be performed on the *test node x01*. This is mostly for determining how long your discovery job will take once submitted. Once you are satisfied that the commands you're testing work as you expect they can be submitted to the scheduler using a PBS script. To use the test node simply log onto the test node interactively and execute the commands that you want to test.
 
-# Establish the secure shell connection
-ssh netID@discovery7.dartmouth.edu
-
-# Enter your password at the prompt (when you type no characters will show up to preserve privacy)
-netID@discovery7.dartmouth.edu's password:
-
-# You're in!
-(base) [netID@discovery7 ~]$
-
-```
-It is always useful to orient yourself when you're working on an HPC so that you know where the output of all of the commands you run will end up. Lets run our first command to get your location.
-
-```bash
-
-# Check your location on the cluster
-pwd
-
-```
-
-You should see something like `/dartfs-hpc/rc/home/h/netID` displayed in response to your command. Initially when you log on you will always be directed to your home directory (the address or path listed above). It is a good idea when working on projects on an HPC to stay organized so lets start by making a folder, or directory to store all of the work you do today we will call it `fundamentals_of_bioinformatics`. You will notice that I chose a title that has no spaces in it, this is because the space is a special character, special characters need to be *escaped* with the `\` and so `funadmentals_of_bioinformatics` would look like `fundamentals\ of\ bioinformatics` with the escape characters. You can see that file names with spaces become unweildy to type out so most programmers will replace spaces with `_`, `.`, or `-` in their filenames to keep everything neat.
-
-```bash
-
-# Create a directory
-mkdir fundamentals_of_bioinformatics
-
-# enter the directory
-cd fundamentals_of_bioinformatics
-
-# check your location on the cluster
-pwd
-
-# list the contents of your directory
-ls
-
-```
-You can see that you have now created a directroy and entered it such that your path has an extended to include your new directory as part of your location on the cluster. You can also see that the new directory that you created is empty there are no files. Lets quickly navigate back to our home directory and check the contents of the home directory.
-
-```bash
-
-# navigate to the home directory
-cd ~
-
-# Check the contents of the home directory
-ls
-
-```
-
-The `~` stands for the path you saw when we typed `pwd` in your home directory and you can navigate to the home directory quickly from anywhere else on the cluster using that command. Another way we could have navigated to the home directory would be to go up one level with the command `cd ../` since the home directory was only one level up in our path from the `fundamentals_of_bioinformatics` directory where we were.
-
-Especially if you type quickly typos and long filenames can trip you up, a good tip to remember is that you can use the `tab` key to autofinish a filename as long as it is unique. If we had two directories one calles `fundamentals_of_bioinformatics` and one called `fundamentals_of_chess` after you typed `fund` and used the tab key you would see `fundamentals_of_` with the prompt asking you to type more so that the correct directory can be entered. If you then typed `fundamentals_of_b` and hit the tab the rest of the name would finish for you. This seems like a little thing but it can be a real time saver if you have many hundreds of similarly named files with long complicated names.
-
-## Working interactively
-
-Interactive processing on discovery should only be performed on the *test node x01*. Once you are satisfied that the commands you're testing work as you expect they can be submitted to the scheduler using a PBS script. To use the test node simply log onto the test node interactively and execute the commands that you want to test.
-
+*This is an example command and shouldn't be executed*
 ```bash
 
 # Log onto to the test node x01 interactively (the -I flag) for up to 3 hours, the -l flags indicate the details of the submission that you are asking for
@@ -94,12 +39,9 @@ mksub -I -l nodes=x01 -l walltime=3:00:00
 ```
 #### Andes/Polaris
 
-Alternatively you can work interactively on Andes/Polaris clusters. Lets take a minute to log onto Polaris.
+If you would like to work interactively you should do so on Andes/Polaris clusters. Lets take a minute to log onto Polaris.
 
 ```bash
-
-# Exit discovery
-exit
 
 # Ssh onto Polaris, notice the command is the same except that the location that you are logging into has changed from discovery7 to polaris
 ssh netID@polaris.dartmouth.edu
@@ -110,7 +52,7 @@ netID@polaris.dartmouth.edu's password:
 # You're in!
 (base) [netID@polaris ~]$
 
-#check your location on polaris
+# Check your location on polaris
 pwd
 
 ```
@@ -122,16 +64,16 @@ You will also notice there is a lot more memory on polaris than andes, jobs that
 
 ## Moving files between computers
 
-Sometimes you will want to move files from your account on the cluster to your local computer, or visa versa. You can do this is with the commands `scp` and `rsync`. The `scp` and `rsync` command have a similar syntax, for simplicity let's focus on the scp command. The `scp` command takes two arguments each will be a path to copy from/to and the order does not matter (though in `rsync` the source comes first and the destination comes second - so lest stick with that syntax here).
+Sometimes you will want to move files from your account on the cluster to your local computer, or visa versa. You can do this is with the commands `scp` and `rsync`. The `scp` and `rsync` command have a similar syntax, for simplicity let's focus on the `rsync` command. The `rsync` command takes two arguments each will be a path to copy from/to, the source comes first and the destination comes second.
 
-`scp source_path destination_path`
+`rsync source_path destination_path`
 
 Let's use these commands to move the file `all_counts.txt` which should be in the Day1 directory you copied from the github repository, into your `fundamentals_of_bioinformatics` directory on discovery. To start open a new terminal window, this window should default to your local home directory (you can check this with `pwd`), navigate to the location you copied the github repo to so that you can see the `all_counts.txt` file when you use the `ls` command. From this new terminal window enter the following command:
 
 ```bash
 
 # Move the file from the cluster to your local machine
-scp all_conuts.txt netID@discovery7.dartmouth.edu:/dartfs-hpc/rc/home/h/netID/fundamentals_of_bioinformatics/
+rsync all_conuts.txt netID@discovery7.dartmouth.edu:/dartfs-hpc/rc/home/h/netID/fundamentals_of_bioinformatics/
 
 ```
 
@@ -142,7 +84,7 @@ Now lets copy the `fundamentals_of_bioinformatics` directory to your local direc
 ```bash
 
 # Move the file from the cluster to your local machine
-scp -r netID@discovery7.dartmouth.edu:/dartfs-hpc/rc/home/h/netID/fundamentals_of_bioinformatics/ ./
+rsync -r netID@discovery7.dartmouth.edu:/dartfs-hpc/rc/home/h/netID/fundamentals_of_bioinformatics/ ./
 
 ```
 
@@ -169,17 +111,11 @@ To establish a connection to a new site you would click on the **Site Manager** 
  </p>
 
 
-## Recovering files on discovery
-
-If you do accidentally remove a file that you realize you need later discovery uses snapshots to take yearly, monthly, and weekly records of the files in your directory and you can go into the `.snapshot/` directory to recover the file. If you only recently signed up for a discovery account you will not have much in your `.snapshot/` directory, but it's something that might come in useful to you someday.
-
-
-
 
 ## Environment Modules
 
 
-ised on HPC systems to make software versions available
+Used on HPC systems to make software versions available
 usually installed by the system admin, so you cannot add or modify them yourself
 
 
@@ -203,7 +139,7 @@ R
 # (from within R) check the version
 R.version
 
-# quite running R interactively to return to the bash terminal
+# quit running R interactively to return to the bash terminal
 q()
 ```
 
@@ -321,10 +257,3 @@ The lines that start with `#PBS` are the lines that are denoting the settings we
 - `#PBS -M` tells the scheduler how to contact you with the information you requested in the `-m` argument
 - `cd $PBS_O_WORKDIR` tells the scheduler to put outfiles, log files and error files in the directory that you submitted your code from. Leaving this out will cause these files to be placed in your home directory.
 
-
-
-## Error mitigation  
-errors with job submission - exit status what does this tell you about what happened, look in your error/output file - does it look like you would expect?
-stack exchange - what is it and how do yuo use it?  
-Error messages, where can I find them and how do I know what they mean?  
-Problem set  
