@@ -1,6 +1,6 @@
 # Introduction to R
 
-R is a free, open source programming language and statistical software environment that is used extensively in bioinformatics. In addition to the large collection of basic functionality included in the standard distribution of R, an enormous number of packages designed to extend R's functionality for specific applications an exist, representing one of R's core strengths.
+R is a free, open source programming language and statistical software environment that is used extensively in bioinformatics. Beyond the basic functionality included in R's standard distribution, an enormous number of packages designed to extend R's functionality for specific applications an exist, representing one of R's core strengths.
 
 R is also a very powerful way to create high quality graphics, using both functionality in base R as well as graphics specific packages, such as [ggplot2](https://ggplot2.tidyverse.org/). These packages provide a high level of user control, meaning almost all plotting features can be controlled. Importantly, numerous R packages provide functionality for generating bioinformatics specific visualizations.
 
@@ -10,10 +10,11 @@ Visit the *R-Project* homepage [here](https://www.r-project.org/).
 
 > **Note:** This is not a comprehensive introduction to R-programming, but rather a review of the basics to help get you started. In addition to the materials provided to you before the workshop, there are some links to more comprehensive tutorials for R in the 'Useful_links.md' in the parent directory of the workshop repository.
 
-R is generally considered a *functional programming language*. Without going into detail, this essentially means that the way in which R performs tasks and solves problems is centered around *functions*.
+R is generally considered a *functional programming language*. Without going into detail, this essentially means that the way in which R performs tasks and solves problems is centered around **functions**.
 
-*Functions* are specific pieces of code that take a defined input, perform an operation or series of operations on the input, and return an output, again in a defined format. In R, the basic syntax of a function is as follows:
+**Functions** are specific pieces of code that take a defined input, perform an operation or series of operations on the input, and return an output, again in a defined format.
 
+In R, the basic syntax of a function is as follows:
 `name.of.function(argument.1 = value, argument.2 = value, ...)`
 
 For example, the `print()` function will print the argument(s) provided to it as input to the R console as outputs. In the below code chunk, the inputs 1,2,3 are being provided to the `print()` function as inputs via its first 3 arguments.
@@ -43,15 +44,14 @@ While there are times when it is preferable to run R in one way over another, us
 
 <img src="../figures/r-studio-logo.png" height="130" width="300"/>
 
-Basic features of the RStudio IDE include:  
+**Basic features of the RStudio IDE include:**  
 - console for submitting code to
 - syntax-highlighting editor used for writing R-scripts
 - windows for environment management, data visualization, and debugging
 - facilities for version control & project management
 
-Example RStudio window:
 
-<img src="../figures/r-studio-example.png" height="450" width="700"/>
+<img src="../figures/r-studio-example.png" height="500" width="800"/>
 
 When using RStudio, you will generally want to generate your code using the scripting window first, and then use the options available to submit this code, or segments of it, directly to the console using the buttons at the top of the scripting window (or keyboard shortcuts!).
 
@@ -68,7 +68,7 @@ Programming in R is achieved by assigning values to *objects*. Objects are speci
 
 Vectors can only hold one type of data (a property referred to as being *atomic*).In R, five basic object classes exist:  
 - numeric - real numbers (e.g. 1.342)
-- integer - whole numbers (e.g. 1.0)
+- integer - whole numbers (e.g. 1.0)Â
 - character - strings of characters (e.g. letters, words, sentences)
 - logical - `TRUE` or `FALSE`
 - complex - numbers with 'imaginary' parts (not commonly used)
@@ -165,9 +165,9 @@ Below are the basic *arithmetic*, *relational*, and *logical* operators that are
 
 Operator | Effect
 ----- | -----
-+ | addition
--	| subtraction
-*	| multiplication
+\+ | addition
+\-	| subtraction
+\*	| multiplication
 /	| division
 ^ |	exponentiation
 
@@ -188,9 +188,9 @@ Some example usage of arithmetic operators:
 Operator | Effect
 ----- | -----
 <	| less than
->	| greater than
+\>	| greater than
 <= |	less than or equal to
->=	| greater than or equal to
+\>=	| greater than or equal to
 == |	equal to
 == |	Note equal to
 
@@ -602,11 +602,11 @@ It is possible to save R objects to a file that maintains all of their attribute
 `save()` accepts the names of the R objects you wish to write to a file (which will have extension `.Rdata`) as the first arguments, and the file path where you wish to write this file under the *file* argument. For example:
 ```r
 # create some R objects
-
 x <- c(1.63, 2.25, 3.83, 4.99)
 y <- c(TRUE, FALSE, TRUE, TRUE)
 z <- c("a", "b", "c", "d")
 
+# save all 3 objects to one file 
 save(x, y, z, file = "~/my_r_objects.rdata")
 ```
 
