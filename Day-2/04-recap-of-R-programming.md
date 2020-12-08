@@ -66,7 +66,7 @@ Programming in R is achieved by assigning values to *objects*. Objects are speci
 
 ### Vectors
 
-Vectors can only hold one type of data (a property referred to as being *atomic*).In R, five basic object types exist:  
+Vectors can only hold one type of data (a property referred to as being *atomic*).In R, five basic object classes exist:  
 - numeric - real numbers (e.g. 1.342)
 - integer - whole numbers (e.g. 1.0)Â
 - character - strings of characters (e.g. letters, words, sentences)
