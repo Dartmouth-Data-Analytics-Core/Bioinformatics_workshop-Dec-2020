@@ -1,35 +1,72 @@
-# Basic programming with R
+# Introduction to R
 
-R is a free, open source programming language and statistical software environment that is used extensively in bioinformatics. In addition to the large collection of functions included in base distribution, there are an enormous number of packages designed to extend R's functionality for specific applications.
+R is a free, open source programming language and statistical software environment that is used extensively in bioinformatics. In addition to the large collection of basic functionality included in the standard distribution of R, an enormous number of packages designed to extend R's functionality for specific applications an exist, representing one of R's core strengths.
 
-R is also a very powerful way to create high quality graphics, using both functionality in base R as well as graphics specific packages such as [ggplot2](https://ggplot2.tidyverse.org/). These packages provide a high level of user control, meaning almost all plotting features can be controlled. Importantly, numerous R packages provide functionality for generating bioinformatics specific visualizations.
+R is also a very powerful way to create high quality graphics, using both functionality in base R as well as graphics specific packages, such as [ggplot2](https://ggplot2.tidyverse.org/). These packages provide a high level of user control, meaning almost all plotting features can be controlled. Importantly, numerous R packages provide functionality for generating bioinformatics specific visualizations.
 
-Visit the *R-Project* homepage [here](https://www.r-project.org/)
+Visit the *R-Project* homepage [here](https://www.r-project.org/).
 
 <img src="../figures/r-logo.png" height="110" width="150"/>
 
-> **Note:** This is not a comprehensive introduction to R-programming, but rather a review of the basics to help get you started. In addition to the materials provided to you before the workshop, there are some links to more comprhensive tutorials for R in the 'Useful_links.md' in the parent directory of the workshop repository.
+> **Note:** This is not a comprehensive introduction to R-programming, but rather a review of the basics to help get you started. In addition to the materials provided to you before the workshop, there are some links to more comprehensive tutorials for R in the 'Useful_links.md' in the parent directory of the workshop repository.
 
-## RStudio
+R is generally considered a *functional programming language*. Without going into detail, this essentially means that the way in which R performs tasks and solves problems is centered around *functions*.
 
-RStudio is an IDE ()
+*Functions* are specific pieces of code that take a defined input, perform an operation or series of operations on the input, and return an output, again in a defined format. In R, the basic syntax of a function is as follows:
+
+`name.of.function(argument.1 = value, argument.2 = value, ...)`
+
+For example, the `print()` function will print the argument(s) provided to it as input to the R console as outputs. In the below code chunk, the inputs 1,2,3 are being provided to the `print()` function as inputs via its first 3 arguments.
+
+```r
+print(1, 2, 3)
+```
+
+Manual/help pages for a specific function can be obtained using `?`. To bring up the manual page for the `print()` function:
+```r
+?print()
+```
+
+## How do we use R?
+
+There are several ways we can interface with R, including:
+
+- the basic user interface
+- running directly from a terminal-type application
+- using a graphical user interface (GUI) or Integrated Development Environment (IDE)
+
+While there are times when it is preferable to run R in one way over another, using a GUI or IDE is perhaps the most popular what to interface with R, with the most popular IDE being *RStudio*.
+
+### RStudio
+
+[RStudio](https://rstudio.com/) is an IDE (Integrated Development Environment). An IDE is software built to consolidate different aspects of writing, executing, and evaluating computer code. Without an IDE, these aspects of programming would need to be performed in different applications, potentially reducing productivity.  
 
 <img src="../figures/r-studio-logo.png" height="130" width="300"/>
 
+Basic features of the RStudio IDE include:  
+- console for submitting code to
+- syntax-highlighting editor used for writing R-scripts
+- windows for environment management, data visualization, and debugging
+- facilities for version control & project management
 
+Example RStudio window:
 
+<img src="../figures/r-studio-example.png" height="450" width="700"/>
 
+When using RStudio, you will generally want to generate your code using the scripting window first, and then use the options available to submit this code, or segments of it, directly to the console using the buttons at the top of the scripting window (or keyboard shortcuts!).
+
+We will be using RStudio throughout the workshop, although will point out how and when you may wish to run R interactively (such as on an HPC).
+
+---
 
 
 ## Basic data structures in R
 
-Functional programming in R is achieved by assigning values to objects. Objects are specific data structures that take on a particular form defined by that objects *class*.
+Programming in R is achieved by assigning values to *objects*. Objects are specific data structures that take on a particular form defined by that objects *class*. The most fundamental and basic object class in R are *vectors*.
 
 ### Vectors
 
-The most basic object class in R are vectors, and can generally only hold one type of data (a property referred to as being *atomic*).
-
-In R, five basic object classes exist:
+Vectors can only hold one type of data (a property referred to as being *atomic*).In R, five basic object classes exist:  
 - numeric - real numbers (e.g. 1.342)
 - integer - whole numbers (e.g. 1.0)
 - character - strings of characters (e.g. letters, words, sentences)
@@ -496,6 +533,8 @@ hist(x, col = "indianred", breaks=50)
 hist(x, col = "indianred", breaks=100)
 ```
 
+> This is an *extremely* brief introduction to data visualization in R, however there are many excellent online resources for learning more about how to perform effective data visualization in R.
+
 ### Visualization specific packages
 
 There are a large number of packages designed for specifically for visualization and are very useful in bioinformatic analyses. We won't cover these here since they are covered extensively elsewhere, but some useful visualization packages to be aware of include:
@@ -505,23 +544,85 @@ There are a large number of packages designed for specifically for visualization
 
 Importantly, visualization implemented in these packages form the basis for some bioinformatics specific data visualization packages that we will explore later in the workshop.
 
-## Import and export data
+## Import and export tabular data
 
+Tabular data are often stored a text files where the individual fields containing data points are separated by punctuation points. Three functions exist in base R to facilitate reading in tabular data stored as text files.
 
+- `read.table()` - general function for reading in tabular data with various delimiters
+- `read.csv()` - used to read in comma separated values files, where commas are the delimiter
+- `read.delim()` - used to read in files in which the delimiters are tabs
 
+Use `read.table()` to read in the *all_counts.txt*  that we used on day 1. Since `read.table()` is a general function for loading in tabular data, we need to specify the correct separator/delimiter value using the `sep` argument. Tab delimited data is specified using `\t` in the sep argument.
+```r
+# using read.table
+counts <- read.table(file = "~/all_counts.txt",
+                     sep = "\t", header = TRUE, stringsAsFactors = FALSE)
+### Note 1: header accepts logical value indicating if the first row are column names (default FALSE)
+### Note 2: we use stringsAsFactors
 
+# check class, dimensions and structure
+class(counts); dim(counts); str(counts)
+```
 
+Now use `read.delim()`. An important difference between `read.delim()` and `read.table()` are the default setting for the *sep* and *header* arguments. By deault in `read.delim()`, *sep* is set to `\t` and the header argument is set to `TRUE`, so we do not need to explicity call those arguments.
+```r
+# using read.delim
+counts <- read.table(file = "~/all_counts.txt", stringsAsFactors=FALSE)
 
+# check class, dimensions and structure
+class(counts); dim(counts); str(counts)
+```
 
+`read.csv()` is used in exactly the same way `read.delim()`, however the `file` specified must contain data separated by commas and have the extension `.csv`.
 
-## Save data in R session
+When datasets get very large, these base R functions can be quite slow. Although we do not have time to cover them here, the [*readr*](https://readr.tidyverse.org/) and [*data.table*](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html) packages contain functions that introduce extremely fast ways of reading data into an R environment.
 
-write.table()
-write.csv()
+### Exporting tabular data
 
-save()
-load()
+The major functions in base R that exist for writing tabular data to file are `write.table()` and `write.csv()`. Similarly to the read functions, `write.table()` provides a more generalized solution to writing data that requires you to specify the separator value.
 
+In both functions, the first argyument specifies the object in your global environment that you wish to write to file. The second argument defines the absolute or relative path to the location you wish to save this file.
+```r
+# subset counts for first 5 columns and first 2000 genes
+counts_sub <- counts[1:2000, 1:5]
 
-saveRDS()
-readRDS()
+# write to tab delimited file using write.table
+write.table(counts_sub, file = "~/all_counts_sub.txt", sep = "\t")
+```
+
+In contrast, `read.csv()` does not require you to set the delimitor value, and by default writes data to comma separated value files (.csv).
+```r
+write.csv(counts_sub, file = "~/all_counts_sub.csv")
+```
+
+## Save R objects to file
+
+It is possible to save R objects to a file that maintains all of their attributes so that they can be easily loaded back into a new R session. This functionality is achieved using the `save()` and `load()` functions.
+
+`save()` accepts the names of the R objects you wish to write to a file (which will have extension `.Rdata`) as the first arguments, and the file path where you wish to write this file under the *file* argument. For example:
+```r
+# create some R objects
+
+x <- c(1.63, 2.25, 3.83, 4.99)
+y <- c(TRUE, FALSE, TRUE, TRUE)
+z <- c("a", "b", "c", "d")
+
+save(x, y, z, file = "~/my_r_objects.rdata")
+```
+
+These objects can then be loaded back into your global environment using the `load()` function with the absolute or relative file path. The objects will appear in your new environment with exactly the same names as in your previous environment.
+```r
+load(file = "~/my_r_objects.rdata")
+```
+
+Single R objects can be saved and restored in a similar way using the `saveRDS()` and `readRDS()` functions. Files saved using RDS must take on the `.RDS` extension.
+```r
+# save a single object to a specific file path
+saveRDS(x, file = "~/my_r_object.rds")
+
+# use the assignment operator to assign object to any variable you want
+x <- readRDS(file = "~/my_r_object.rds")
+
+# I changed my mind, I want the object to be assigned to variable `a` in my new env
+a <- readRDS(file = "~/my_r_object.rds")
+```
