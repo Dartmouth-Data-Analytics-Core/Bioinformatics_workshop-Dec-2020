@@ -8,7 +8,7 @@ Visit the *R-Project* homepage [here](https://www.r-project.org/).
 
 <img src="../figures/r-logo.png" height="110" width="150"/>
 
-> **Note:** This is not a comprehensive introduction to R-programming, but rather a review of the basics to help get you started. In addition to the materials provided to you before the workshop, there are some links to more comprehensive tutorials for R in the 'Useful_links.md' in the parent directory of the workshop repository.
+> **Note:** This is not a comprehensive introduction to R-programming, but rather a review of the basics to help get you started. In addition to the materials provided to you before the workshop, there are some links to more comprehensive tutorials for R in the 'cheat-sheets.md' in the parent directory of the workshop repository.
 
 R is generally considered a *functional programming language*. Without going into detail, this essentially means that the way in which R performs tasks and solves problems is centered around **functions**.
 
@@ -66,7 +66,7 @@ Programming in R is achieved by assigning values to *objects*. Objects are speci
 
 ### Vectors
 
-Vectors can only hold one type of data (a property referred to as being *atomic*).In R, five basic object classes exist:  
+Vectors can only hold one type of data (a property referred to as being *atomic*).In R, five basic object types exist:  
 - numeric - real numbers (e.g. 1.342)
 - integer - whole numbers (e.g. 1.0)Â
 - character - strings of characters (e.g. letters, words, sentences)
@@ -102,8 +102,9 @@ Vectors can be combined or nested to create a single vector, or evaluated agains
 ```r
 # combine a vector and a nested vector
 x <- c(1, 2, 3, 4, c(1, 2, 3, 4))
+x
 
-# multiple two integer vector
+# multiply two integer vectors
 y <- c(2, 2, 2, 2)
 x * y
 ```
@@ -125,10 +126,10 @@ Elements within vectors can be subset or indexed based on their position in that
 # define a chacter string
 x <- c("a", "b", "c", "d")
 
-# get elements 1 and 3 using the ':' operator
+# get elements 1 and 3 
 x[c(1,3)]
 
-# get elements 1 to 3
+# get elements 1 to 3 using the ':' operator
 x[c(1:3)]
 
 # define a numeric vector
@@ -138,7 +139,7 @@ x <- c(1.63, 2.25, 3.83, 4.99)
 names(x) <- c("gene 1", "gene 2", "gene 3", "gene 4")
 
 # index for specific element
-x[]"gene 1"]
+x["gene 1"]
 ```
 
 Vectors can contain missing values, defined by `NA` and `NaN`. These elements can be identified with the functions `is.na()` or `is.nan()`:
@@ -192,7 +193,7 @@ Operator | Effect
 <= |	less than or equal to
 \>=	| greater than or equal to
 == |	equal to
-== |	Note equal to
+!= |	Not equal to
 
 Some example usage of relational operators:
 ```r
@@ -229,8 +230,11 @@ x != 4
 # which could also be achieved with
 !x == 4
 
-# which elements are less than 2 and equal to 4
+# which elements are less than 2 or equal to 4
 x < 2 | x ==4
+
+# which elements are less than 2 AND equal to 4
+x < 2 & x ==4
 ```
 
 Relational and logical operators can be used to subset a vector based on the values returned by the operator, and the brackets, as we did above for specific elements.
@@ -239,7 +243,7 @@ x <- c(1, 2, 3, 4)
 
 # subset x for values less than 3
 x_sub <- x[x < 3]
-
+x_sub
 
 # define a character string
 x <- c("a", "b", "c", "d", "a")
@@ -251,7 +255,7 @@ x[x == "a"]
 
 ### Factors
 
-Factors are a special instance of vectors where only predefined values, called *levels* can be included in the vector. Such vectors are useful when you know that elements of a vector should take on one of those predfined values.
+Factors are a special instance of vectors where only predefined values, called *levels* can be included in the vector. Such vectors are useful when you know that elements of a vector should take on one of those predefined values.
 
 Categorical data is often stored in vectors, making them a very important object class when you start doing any statistical modeling in R. For example, you might store subject gender for all the subjects in your study as a factor, with the levels *male* and *female*.
 
@@ -272,9 +276,9 @@ table(x)
 
 ### Lists
 
-Sometimes, it may be desirable to store multiple vectors, or even vectors of different object classes, into the same R overall object. Lists are a special object class that permits objects with these attributes, making them distinct from atomic vectors.
+Sometimes, it may be desirable to store multiple vectors, or even vectors of different object classes, in the same R overall object. Lists are a special object class that permits objects with these attributes, making them distinct from atomic vectors.
 
-In the same way that vectors and factors are constructed using `c()` and `factors()` respectively, lists are created using the `lists()` constructor function.
+In the same way that vectors and factors are constructed using `c()` and `factors()` respectively, lists are created using the `list()` constructor function.
 
 ```r
 x <- list(c(1.63, 2.25, 3.83, 4.99),
@@ -311,7 +315,7 @@ x <- list(c(1.63, 2.25, 3.83, 4.99),
           c(TRUE, FALSE, TRUE, TRUE),
           c("a", "b", "c", "d"))
 
-# the structure function str() can be useful to examine the composition of a list
+# use the structure function str()to examine the composition of the list
 str(x)
 ```
 
@@ -413,7 +417,7 @@ dim(df2)
 df[!df$gender == "female", ]
 
 # this could obviously also be achieved with..
-df[!df$gender == "male", ]
+df[df$gender == "male", ]
 ```
 
 ### Beyond the basic object classes
@@ -431,7 +435,7 @@ To efficiently represent genomic regions data, `GRanges` class objects, at least
 - a start coordinate slot: with class `integer` (e.g. 338833)
 - an end coordinate slot: with class `integer` (e.g. 338987)
 
-Creating object classes in this way is desirable as it allows *accessor functions* to be created, which allow very simple interaction with the objects of this class. For example, simply using the `chr()` accessor function to easily extract all chromosome identities of the genomic regions in my object.
+Creating object classes in this way is desirable as it allows *accessor functions* to be created, which allow very simple interaction with the objects of this class. For example, simply using the `chr()` accessor function to easily extract all chromosome identities of the genomic regions in my GRanges object.
 
 An excellent tutorial describing S4 classes and their use in the [Bioconductor project](http://bioconductor.org/) is available [here](https://bioconductor.org/help/course-materials/2017/Zurich/S4-classes-and-methods.html). While this is not a topic you need understand in great detail, it is worth understanding the basic principles.
 
@@ -440,13 +444,13 @@ An excellent tutorial describing S4 classes and their use in the [Bioconductor p
 
 Beyond the functions implemented in base R and packages that you install, R allows you to create user defined functions, which can perform any functionality that you can define.
 
-Defining your own functions can be useful when you want to perform a specific set of tasks repeatedly on some input(s) and return a defined output. Furthermore, once defined functions become part of your global environment and are therefore preserved for future use, minimizing the need for repetitive code.
+Defining your own functions can be useful when you want to perform a specific set of tasks repeatedly on some input(s) and return a defined output. Furthermore, once defined functions become part of your global environment and are therefore preserved for future use they minimize the need for repetitive code.
 
 Functions are created using using `function()` with the assignment operator `<-`. The arguments you use in the `function()` command define the variables that those arguments will be assigned to when you call the function. The last line of the function defines what output is returned.
 
 Let's define a basic function as an example.
 ```r
-# define the function
+# define the function that takes a single argument and returns a single argument
 myfun <- function(x){
   y <- x + 1
   return(y)
@@ -538,9 +542,9 @@ hist(x, col = "indianred", breaks=100)
 ### Visualization specific packages
 
 There are a large number of packages designed for specifically for visualization and are very useful in bioinformatic analyses. We won't cover these here since they are covered extensively elsewhere, but some useful visualization packages to be aware of include:
-- [ggplot2]()
-- [ggpubr]()
-- [ploty]()
+- [ggplot2](https://ggplot2.tidyverse.org/reference/ggplot.html)
+- [ggpubr](http://www.sthda.com/english/articles/24-ggpubr-publication-ready-plots/)
+- [ploty](https://plotly.com/python/)
 
 Importantly, visualization implemented in these packages form the basis for some bioinformatics specific data visualization packages that we will explore later in the workshop.
 
