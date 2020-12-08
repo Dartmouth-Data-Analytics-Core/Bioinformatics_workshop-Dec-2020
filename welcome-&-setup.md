@@ -10,7 +10,22 @@ For those of you that indicated that you did not have an account on *discovery* 
 
 The commands that you will be following can be found in markdown `(.md)` files where there is a brief description of the command and how it is applied to the data and what it does followed by an example command that you can copy and paste into the terminal window. The majority of day 1 and 2 will be using the terminal window on your local machine, with an open `ssh` connection to discovery7, as we will be running `bash` code. For some of day 2 and most of day 3 you will be using RStudio on your local machine to run the commands in the  markdown files (`.md`) located in this GitHub repo. 
 
+To start make sure that you are able to use a terminal emulator, select one of the following based on your operating system, download it and open it up. 
+
+Operating system| Terminal emulators
+---|---
+Mac| Terminal (comes pre-installed)
+Windows| [MobaXterm] (https://mobaxterm.mobatek.net/download.html) <br> [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
+Linux| 
+
+
 In your terminal window navigate to where you want to download the files needed for this workshop onto your local machine. Then execute the following command:
+
+```bash
+git clone https://github.com/Dartmouth-Data-Analytics-Core/Bioinformatics_workshop_setup/
+```
+
+**On Monday** before you log onto the first zoom session we will make the workshop materials public and you should download those to your local machine (prefereably in the same location as you downloaded the setup materials) with the folloing command: 
 
 ```bash
 git clone https://github.com/Dartmouth-Data-Analytics-Core/Bioinformatics_workshop/
@@ -41,10 +56,10 @@ source /optnfs/common/miniconda3/etc/profile.d/conda.sh
 We recommend that you add the above line of code to your `.bashrc` file in your home directory, otherwise you will need to run this command each time you start a new session on discovery. To do this use the nano text editor on discovery to copy the line above into your `.bashrc` file.
 
 ```bash
-#open the file with the text editor
+# open the file with the text editor
 nano .bashrc
 
-#copy this line to the file : source /optnfs/common/miniconda3/etc/profile.d/conda.sh
+# copy this line to the file : source /optnfs/common/miniconda3/etc/profile.d/conda.sh
 
 # use ctrl+x to exit the editor and save the changes you made
 ```
@@ -60,13 +75,13 @@ mkdir -p .conda/pkgs/cache .conda/envs
 Now you will need to create the conda environment that we will be using for the course into your personal directory of accessible conda environments. This takes about 15 minutes to execute and you will see all of the packages that are loaded into this environment. The number of packages should indicate why conda environments are so useful, imagine having to load all of these packages individually it is much easier to load them with a single command in a conda environment.
 
 ```bash
-conda env create -f /dartfs-hpc/scratch/fund_of_bioifo/environment.yml
+conda env create -f /scratch/fund_of_bioifo/environment.yml
 ```
 
 When you are ready activate the conda environment, which you will need for the work we are doing for days 1 and 2 of the workshop you can use the following command. 
 
 ```bash
-conda activate fund_of_bioinfo/
+conda activate bioinfo/
 ```
 
 You will see that the activate command has worked when it reads (fund_of_bioinfo) rather than (base) to the left of the prompt. When you are finished using a conda environment it is good practice to deactivate your session with the following command.
@@ -76,7 +91,11 @@ conda deactivate
 ```
 
 ---
+## Installing an SFTP client ##
 
+This is optional but for those of you that are new to the command line this might be an easier way to move files between the HPC environment and your local machine. An SFTP client stands for secure file transfer protocol and will enable you to drag and drop files as you might in a finder window between your local machine and a remote location. I use FileZilla, which I believe works on Mac, Windows, and linux operating systems. You can download [FileZilla](https://filezilla-project.org/download.php?show_all=1) by following the link and selecting the version that is correct for your OS, then open the program to ensure that you have downloaded it successfully. 
+
+---
 
 ## Setting up an R project ##
 
