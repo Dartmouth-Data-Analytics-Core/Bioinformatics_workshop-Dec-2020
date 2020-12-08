@@ -4,7 +4,7 @@
 
 ### Principles of read alignment for RNA-seq
 
-The goal of aligning reads to a reference genome is to find the ***most likely location in that reference genome where the read originated from***.
+The goal of aligning reads to a reference genome is to find the ***most likely location in that reference genome where the read originated from***. This is generally determined by reducing the information in the reference and query (read to be mapped) into smaller strings and looking for the position in the reference with the highest number of matching smaler strings. This process is also used in de novo genome assembly, local alignments (BLAST or BLAT), and global alignments. 
 
 Although we won't go into the theory here, aligning reads to reference genomes involves ***mapping*** to identify the most likely position of the read in the reference genome, followed by the ***alignment***, which describes the base-by-base relationship between the read and the reference. Alignments are often imperfect, and are associated with quality scores (***MAPQ scores***) that describe the quality of the alignment.
 
@@ -30,7 +30,7 @@ Such clipping is commonly used by aligners to get rid of sequence contamination,
 Clipping can be very advantageous, but also can potentially cause some issues, read more [here](https://sequencing.qcfail.com/articles/soft-clipping-of-reads-may-add-potentially-unwanted-alignments-to-repetitive-regions/).
 
 **Splicing**  
-As discussed above, numerous aligners exist, consisting of both ***splie-aware*** and ***splice-unaware*** aligners. Splice-aware aligners, such as `STAR` and `HISAT2` will produce alignments spanning splice junctions, which is obviously an important characteristic of RNA-seq data that the aligner needs to be able to account for. Furthermore, if you provide coordinates of splice-junctions to aligners like `STAR`, it can improve the mapping over spliced regions and improve detection of novel splice-functions.
+As discussed above, numerous aligners exist, consisting of both ***splice-aware*** and ***splice-unaware*** aligners. Splice-aware aligners, such as `STAR` and `HISAT2` will produce alignments spanning splice junctions, which is obviously an important characteristic of RNA-seq data that the aligner needs to be able to account for. Furthermore, if you provide coordinates of splice-junctions to aligners like `STAR`, it can improve the mapping over spliced regions and improve detection of novel splice-functions.
 
 **What input do I need for an alignment?**  
 At miniumum:  
@@ -44,8 +44,28 @@ Optional:
 
 
 
+**We will pause here and run this code so that it runs while we finish the lecture and you can work with the resulting SAM files during the break out room**
+```bash
+#run splice aware alignment 
+STAR --genomeDir /dartfs-hpc/scratch/fund_of_bioinfo/ref/hg38_chr20_index \
+  --readFilesIn ../trim/SRR1039508_1.trim.chr20.fastq.gz ../trim/SRR1039508_2.trim.chr20.fastq.gz \
+  --readFilesCommand zcat \
+  --sjdbGTFfile /dartfs-hpc/scratch/fund_of_bioinfo/ref/Homo_sapiens.GRCh38.97.chr20.gtf \
+  --runThreadN 4 \
+  --outSAMtype SAM \
+  --outFilterType BySJout \
+  --outFileNamePrefix SRR1039508.
+  ```
+Option details:
 
-
+--genomeDir: the path to the directory with genome indices
+--readFilesIn: read files to map to reference alignment
+--readFilesCommand: uncompression command to apply to read files
+--sjdbGTFfile: the path to the annotation file that includes cooordinates of splice-junctions
+--runThreadN: number of threads to use in the run
+--outSAMtype: (SAM/BAM unsorted/ BAM SortedByCoordinate)
+--outFilterType: how mapped reads will be filtered (normal/BySJout)
+--outFileNamePrefix: prefix for outfiles generated in the run
 
 
 
@@ -58,6 +78,7 @@ Reference genomes are created through organizing sequence reads through a proces
 
 Most reference genomes are hosted on ftp sites where files can copied to a location of your choosing with the `rsync` command. 
 
+*Do not run this command - this is only an example*
 ```bash
 
 # example rsync command with the UCSC ftp site
@@ -70,10 +91,10 @@ rsync -a -P rsync://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDi
 [*RefSeq*](https://ftp.ncbi.nlm.nih.gov/genomes/refseq/)
 [*JGI*](https://genome.jgi.doe.gov/portal/help/download.jsf)
 [*UCSC*](https://hgdownload.soe.ucsc.edu/downloads.html)
-[*Ensembl*]()
-[*GENCODE*]()
+[*Ensembl*](http://ftp.ensembl.org/pub/)
+[*GENCODE*](http://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/)
 
-#### Reference genome annotation
+# Reference genome annotation
 
 **RefSeq:**
 NX_XXXX represents manually curated transcripts.
@@ -85,18 +106,11 @@ ENST_XXXX represents manually curated transcripts.
 
 
 #### Limitations of reference genomes
-genetic variation etc.
-including [suggestions that we fundamentally change how we use reference genomes](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1774-4).
+By definition a constant property of genomes is genetic variation between individuals, this feature holds true for both single celled organisms where variation is introduced through mutation and recombination and multicellular sexual organisms where mutation and sexual recombination constantly stir the gene pool to introduce variation. It is therefore impossible to define a reference genome for a given species that encompasses all of the variation within that species. 
 
+However, Current reference genomes work as the foundation for all genomic data and databases. They provide a scaffold for genome assembly, variant calling, RNA or other sequencing read alignment, gene annotation, and functional analysis. Genes are referred to by their loci, with their base positions defined by reference genome coordinates. Variants and alleles are labeled as such when compared to the reference (i.e., reference (REF) versus alternative (ALT)). Related (strains, diploid, or personal) genomes are assembled using the reference as a scaffold, and RNA-seq reads are typically mapped to the reference genome.
 
-
-
-
-
-
-
-
-
+At this point we need a baseline for all of the genomics tools that we use, however many scientists are considering [solutions that could fundamentally change how we think of and build reference genomes](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1774-4).
 
 
 ## SAM/BAM/CRAM file format
@@ -204,7 +218,16 @@ samtool view -H sample.bam
 
 You can learn more about the SAM file format [here](https://samtools.github.io/hts-specs/SAMv1.pdf).
 
-# Add coding exercises for building an alignment with a couple of different programs
+## Break out room exercises
 
+- Look at the SAM file that you created.
+
+- Convert the SAM file to a BAM file
+
+- Convert the SAM file to a CRAM file
+
+- How much space does each file take up?
+
+- What is the best way to store the aligned file to minimize the space constraints?
 
 
