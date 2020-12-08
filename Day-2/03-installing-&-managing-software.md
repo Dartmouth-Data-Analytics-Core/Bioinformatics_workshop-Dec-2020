@@ -13,7 +13,7 @@ Depending on the software to be installed, it may be available in one of the fol
  - Virtual machine images (eg. Docker, Singularity)
 
 <p align="center">
-  <img src="../figures/software.png" height="160" width="300"/>
+  <img src="../figures/software.png" height="230" width="450"/>
 </p>
 
 In this lesson, we will introduce the major ways bioinformatics packages can be installed and managed through a command line interface.
@@ -91,7 +91,9 @@ conda install -c bioconda samtools
 
 The easiest way to identify the install details for a specific package is to search for it on the conda website. The image below shows an example of the page for the bioconda distribution of samtools (available [here](https://anaconda.org/bioconda/samtools)).
 
-<img src="../figures/conda-samtools.png" height="450" width="510"/>
+<p align="center">
+  <img src="../figures/conda-samtools.png" height="570" width="700"/>
+</p>
 
 When you are finished with your environment, or if you wish to switch to a different environment, you can simply run `conda deactivate` and you will be returned to your original software environment.
 ```bash
