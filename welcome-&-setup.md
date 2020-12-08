@@ -8,8 +8,6 @@ For those of you that indicated that you did not have an account on *discovery* 
 
 ## Downloading the data ##
 
-For this workshop we will be using a dataset downloaded from the short read archive (SRA), a public repository of genomic data. This dataset comes from [this paper](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099625), and was collected from human airway smooth muscle cells to test gene pathways effected by exposure to Glucocorticoid drugs, which have been historically used for their anti-inflammatory effects to treat asthma. Four cell lines were treated with either a control vehicle (untreated), dexamethasone (dex), albuterol (alb), or both dexamethasone and albuterol (co-treated) for 18 hours before transcriptomes were extracted.
-
 The commands that you will be following can be found in markdown `(.md)` files where there is a brief description of the command and how it is applied to the data and what it does followed by an example command that you can copy and paste into the terminal window. The majority of day 1 and 2 will be using the terminal window on your local machine, with an open `ssh` connection to discovery7, as we will be running `bash` code. For some of day 2 and most of day 3 you will be using RStudio on your local machine to run the commands in the  markdown files (`.md`) located in this GitHub repo. 
 
 In your terminal window navigate to where you want to download the files needed for this workshop onto your local machine. Then execute the following command:
