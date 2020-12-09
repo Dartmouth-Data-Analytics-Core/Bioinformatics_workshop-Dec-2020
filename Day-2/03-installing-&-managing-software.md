@@ -107,11 +107,19 @@ Conda is an excellent way to install and manage software for bioinformatics, sin
 ---
 
 ## Pre-compiled binary executable
-Some developers will pre-compile releases of their software for several operating systems and make them available for download. If a pre-compiled executable is available for the Linux system we are using (for Discovery, this is CentOS 7), this can be a painless way to install software. It only requires downloading the executable to a directory and running it.
-
-Programs written in Java are frequently distributed as JAR files, which are similar to pre-compiled binaries, in that only a single file is required to download and install the software. The JAR file is then run using the `java -jar` command.
+Some developers will pre-compile releases of their software for several operating systems and make them available for download. If a pre-compiled executable is available for the Linux system we are using (for Discovery, this is CentOS 7), this can be a painless way to install software. It only requires downloading the executable to a directory and running it.  For example, the following will download a binary, precompiled for Linux, of the bowtie2 aligner.
 ```shell
-java -jar some_software.jar
+wget https://github.com/BenLangmead/bowtie2/releases/download/v2.4.2/bowtie2-2.4.2-linux-x86_64.zip
+unzip bowtie2-2.4.2-linux-x86_64.zip
+cd bowtie2-2.4.2-linux-x86_64/
+ls
+./bowtie2 --help
+```
+
+Programs written in Java are frequently distributed as JAR files, which are similar to pre-compiled binaries, in that only a single file is required to download and install the software. The JAR file is then run using the `java -jar` command.  For example, the following will download the "picard" set of genomics tools written in Java, and run it to output the help string.
+```shell
+wget https://github.com/broadinstitute/picard/releases/download/2.23.9/picard.jar
+java -jar picard.jar -h
 ```
 
 ---
