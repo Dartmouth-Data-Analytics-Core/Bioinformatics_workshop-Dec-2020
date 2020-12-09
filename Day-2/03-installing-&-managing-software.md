@@ -7,11 +7,11 @@ Bioinformatics software can be installed and managed in a number of ways. It is 
 Depending on the software to be installed, it may be available in one of the following formats:  
  - Pre-installed on your system (eg. modules on Discovery)
  - Language-specific package managers (eg. R/Bioconductor, Python/pip)
- - Full package and environment management tools (eg. Conda)
  - Pre-compiled binary executable
  - Source code to be compiled
  - Virtual machine images (eg. Docker, Singularity)
-
+ - Full package and environment management tools (eg. Conda)
+ 
 <p align="center">
   <img src="../figures/software.png" height="230" width="450"/>
 </p>
@@ -48,12 +48,11 @@ install.packages("BiocManager")
 BiocManager::install("DESeq2")
 ```
 
-In Python, packages are available in PyPI. To install Python packages from PyPI (from within thebash shell):
+In Python, packages are available in PyPI. To install Python packages from PyPI (from within the bash shell):
 ```shell
 # Install matplotlib from PyPI
 pip install matplotlib
 ```
-
 ---
 
 ## Conda - Full package and environment management
@@ -141,6 +140,30 @@ With package managers becoming more widespread, you should only rarely need to i
 ## Virtual machine images (eg. Docker, Singularity)
 Virtual machine images allow software to be distributed along with an entire linux environment. This ensures that anyone running the software will be able to, regardless of software installed or environment variables, and make software management seamless.
 
-However, containers can raise security issues when working with high performance computing clusters such as discovery. Docker cannot currently be used on discovery, and singularity images that can be currently used is somewhat limited.
+However, containers can raise security issues when working with high performance computing clusters such as discovery. Docker cannot currently be used on discovery, and singularity images that can be currently used are somewhat limited.
 
 <img src="../figures/containers.png" height="150" width="350"/>
+
+---
+
+### Breakout room exercises
+
+You might find [this site](https://docs.conda.io/projects/conda/en/4.6.0/_downloads/52a95608c49671267e40c689e0bc00ca/conda-cheatsheet.pdf) helpful for completing the following exercises 
+
+- Deactivate the conda environment you are currently in 
+
+- Create a new conda environment named test_env load the software package `bwa`
+
+- Activate the conda environment that you just created and list the software in your new environment
+ - Do you see more than just bwa? Why might that be?
+ 
+- Load the latest version of `R` into your new environment 
+
+- Deactivate your environment
+
+- List the conda environments you have available 
+
+- Remove the test_env conda environment
+
+- Download the pre-compiled bowtie2 file
+ - Look at the options available for running bowtie2 with the `--help` flag
