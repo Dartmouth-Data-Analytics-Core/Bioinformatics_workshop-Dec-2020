@@ -1,6 +1,6 @@
 # Introduction to R
 
-R is a free, open source programming language and statistical software environment that is used extensively in bioinformatics. Beyond the basic functionality included in R's standard distribution, an enormous number of packages designed to extend R's functionality for specific applications an exist, representing one of R's core strengths.
+R is a free, open source programming language and statistical software environment that is used extensively in bioinformatics. Beyond the basic functionality included in R's standard distribution, an enormous number of packages designed to extend R's functionality for specific applications exist, representing one of R's core strengths.
 
 R is also a very powerful way to create high quality graphics, using both functionality in base R as well as graphics specific packages, such as [ggplot2](https://ggplot2.tidyverse.org/). These packages provide a high level of user control, meaning almost all plotting features can be controlled. Importantly, numerous R packages provide functionality for generating bioinformatics specific visualizations.
 
@@ -68,7 +68,7 @@ Programming in R is achieved by assigning values to *objects*. Objects are speci
 
 Vectors can only hold one type of data (a property referred to as being *atomic*).In R, five basic object classes exist:  
 - numeric - real numbers (e.g. 1.342)
-- integer - whole numbers (e.g. 1.0)Â
+- integer - whole numbers and their negative counterparts (e.g. 1)
 - character - strings of characters (e.g. letters, words, sentences)
 - logical - `TRUE` or `FALSE`
 - complex - numbers with 'imaginary' parts (not commonly used)
@@ -324,9 +324,9 @@ str(x)
 By extending the attributes of a vector to give them *dimensions*, i.e. the number of rows and columns we want the vector to be organized into, we can create *matrices*, a data structure that efficiently stores tabular data of a specific, single object class.
 
 ```r
-mat <- matrix(c(1.63, 2.25, 3.83, 4.99),
-              c(2.43, 8.31, 3.12, 7.25),
-              c(1.29, 3.23, 3.48, 0.23),
+mat <- matrix(c(1.63, 2.25, 3.83, 4.99,
+              2.43, 8.31, 3.12, 7.25,
+              1.29, 3.23, 3.48, 0.23),
               nrow=3, ncol=4)
 # check the structure and dimensions with dim()
 str(mat)
@@ -334,9 +334,9 @@ dim(mat)
 
 # specific elements can be obtained through subsetting
 ### row 1
-mat1[1,]
+mat[1,]
 ### column 2
-mat1[,2]
+mat[,2]
 ### element 2 of row 3
 mat[3,2]
 
@@ -348,8 +348,8 @@ class(mat[1,])
 Since matrices have dimensions, `names()` cannot be used as we did for vectors. Instead, `names()` is generalized into `rownames()` and `colnames()`.
 
 ```r
-rownames(mat1) <- c("gene_1", "gene_2", "gene_3")
-colnames(mat1) <- c("subject_1", "subject_2", "subject_3")
+rownames(mat) <- c("gene_1", "gene_2", "gene_3")
+colnames(mat) <- c("subject_1", "subject_2", "subject_3", "subject_4")
 ```
 
 Matrices are a very important object class for mathematical and statistical applications in R, so it is certainly worth exploring more complex matrix operations if you will be doing any more complex statistical analysis in R.
@@ -571,7 +571,7 @@ class(counts); dim(counts); str(counts)
 Now use `read.delim()`. An important difference between `read.delim()` and `read.table()` are the default setting for the *sep* and *header* arguments. By deault in `read.delim()`, *sep* is set to `\t` and the header argument is set to `TRUE`, so we do not need to explicity call those arguments.
 ```r
 # using read.delim
-counts <- read.table(file = "~/all_counts.txt", stringsAsFactors=FALSE)
+counts <- read.delim(file = "~/all_counts.txt", stringsAsFactors=FALSE)
 
 # check class, dimensions and structure
 class(counts); dim(counts); str(counts)
@@ -594,7 +594,7 @@ counts_sub <- counts[1:2000, 1:5]
 write.table(counts_sub, file = "~/all_counts_sub.txt", sep = "\t")
 ```
 
-In contrast, `read.csv()` does not require you to set the delimitor value, and by default writes data to comma separated value files (.csv).
+In contrast, `read.csv()` does not require you to set the delimiter value, and by default writes data to comma separated value files (.csv).
 ```r
 write.csv(counts_sub, file = "~/all_counts_sub.csv")
 ```
