@@ -7,10 +7,10 @@ Bioinformatics software can be installed and managed in a number of ways. It is 
 Depending on the software to be installed, it may be available in one of the following formats:  
  - Pre-installed on your system (eg. modules on Discovery)
  - Language-specific package managers (eg. R/Bioconductor, Python/pip)
+ - Full package and environment management tools (eg. Conda)
  - Pre-compiled binary executable
  - Source code to be compiled
  - Virtual machine images (eg. Docker, Singularity)
- - Full package and environment management tools (eg. Conda)
  
 <p align="center">
   <img src="../figures/software.png" height="230" width="450"/>
