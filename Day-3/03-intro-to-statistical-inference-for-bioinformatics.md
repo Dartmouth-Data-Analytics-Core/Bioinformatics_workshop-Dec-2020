@@ -1,4 +1,4 @@
-
+hierarchical
 # Introduction to Statistical Learning & Inference in bioinformatics
 
 As we discussed on day 1, bioinformatics draws on knowledge from multiple disciplines. To effectively solve most bioinformatic problems, knowledge from each of these disciplines must be applied to address the overall problem. Developing a **working knowledge of statistics** is critical for anyone hoping to solve bioinformatic problems, particularly in genomics.
@@ -54,7 +54,7 @@ By fitting statistical models to the data (the *learning* part), we aim to learn
 
 **Unsupervised methods**
 
-There are times when observations are not associated with a predictor (the *dependent variable*) and we simply wish to explore the relationships that exist in our data in a way that is *not supervised* by any such variable. This is often true in *exploratory data analysis* when we want to explore how samples are related to each other without assiging samples to a specific group for modeling purposes. For example, we may wish to confirm samples in an RNA-seq experiment fo not cluster by batch.
+There are times when observations are not associated with a predictor (the *dependent variable*) and we simply wish to the relationships that exist in our data in a way that is *not supervised* by any such variable. This is often true in *exploratory data analysis*, where we want to explore how samples are related to each other without assigning samples to a specific group for modeling purposes.
 
 Alternatively, we may not have a dependent variable that can be used to model our observations. For example, in analysis of single cell sequencing data, we are often interested in studying subpopulations of cells that come from the same sample, and therefore require some way assessing similarities and differences between the cells so that wse can identify potential subpopulations of interest.  
 
@@ -63,7 +63,7 @@ Alternatively, we may not have a dependent variable that can be used to model ou
 - Clustering methods (e.g. hierachical, K-means)
 - Hidden markov modeling
 
-Below, we provide more speicifc introductions to both supervised and unsupercised learnings, using basic linear modeling as an example for supervised approaches, while exploring PCA and hierachical clustering for unsupervised analysis.
+Below, we provide more specific introductions to both supervised and unsupervised learnings, using basic linear modeling as an example for supervised approaches, while exploring PCA and hierachical clustering for unsupervised analysis.
 
 > A more comprehensive introduction to statistical learning can be found in the book: [An Introduction to Statistical Learning](http://faculty.marshall.usc.edu/gareth-james/ISL/).
 
@@ -319,7 +319,7 @@ Again, the coefficient tells us about the relationship between the predictor and
 Since a 'unit increase' in `subject_group` simply means controls vs diseased subjects, we can interpret this as the difference in expression between controls and cases. This is analgous to how we would calculate a fold-change value in an RNA-seq analysis.
 
 ---
-**Multiple regression**
+#### Multiple regression
 
 We could have simply addressed the above analysis using a more simple statistical test such as a *t-test*. However, we commonly want to include additional variables in our linear models, and approaches such as the t-test cannot handle this scenario.
 
@@ -352,27 +352,116 @@ While GLMs are beyond the scope of this workshop, and we simply do not have the 
 
 ### Unsupervised learning - Dimension reduction & clustering
 
-As mentioned above, two commonly used types of unsupervised learning are *dimension reduction* and *clustering-based* methods. Both encompass a number of distinct methodologies that have various strengths and weaknes
+As mentioned above, two commonly used types of unsupervised learning are *dimension reduction* and *clustering-based* methods. Both encompass a number of distinct methodologies that have various strengths and weaknesses.
+
+#### Hierachical clustering
 
 
-# use CB book to help get an example function to use
+
+
+To gain an appreciation for how these methods are used and presented in bioinformatic and genomic data analyses, we will explore the fundamental aspects of *principal components analysis (PCA)* as an example of dimension reduction, and *hierachical clustering* as an example of clustering-based analyses.
+
+
+
+
+Hierarchical clustering is another complimentary approach to explore the relationships between your samples. While supervised clustering approaches exist, we will perform an unsupervised analysis so that we do not impose any restrictions on the clustering of the samples.
+
+Hierachical clustering is often associated with heatmaps, as it is a useful way to explore the results of hierachical clustering. Here we represent genes are rows, and individual samples as columns. The denrograms on the rows and the columns represent the ‘distances’ calculated between each of the genes/samples. Presenting the data in this way is useful as it allows us to identify samples whose gene expression programs are similar to each other, but also modules of genes that change similarly across our samples, and may share some common function of interest.
+
+The first step in a hierachical clustering analaysis is to scale your data. This means that expression levels are all transformed onto the same scale before clustering. This is important to do as we can only visualize so many colors at once, and a very highly expressed gene would mean that all the other genes would essentially invisible on this scale. Scaling for clustering in this way is typically performed by calculating Z-scores, where the mean for each gene across all the samples is subtracted from each of the individual expression values for each gene, which centers the values around 0. We then divide these values by the standard deviation to make sure the data is more tightly grouped, which helps us represent lots of genes in the same scale.
+
+
+
+
 ```r
 pheatmap()
 ```
 
 
-As mentioned above, two commonly used types of unsupervised learning are *dimension reduction* and *clustering-based* methods. Both encompass a number of distinct methodologies that have various strengths and weaknesses.
 
-To gain an appreciation for how these methods are used and presented in bioinformatic and genomic data analyses, we will explore the fundamental aspects of *principal components analysis (PCA)* as an example of dimension reduction, and *hierachical clustering* as an example of clustering-based analyses.
 
-#### Principal components analysis
 
+
+
+#### Principal components analysis (PCA)
+
+For high dimensional datasets (most genomics datasets), where we have measured many thousands of features over multiple samples, it is often desirable to reduce the complexity of the dataset so that it can be viewed in fewer dimensions (e.g. 2D). This process is called *dimensionality reduction* .
+
+> We will not discuss the mathematical procedures used to perform PCA here, however this is discussed exhaustively elsewhere, with one excellent resource the StatQuest video linked [here](https://www.youtube.com/watch?v=_UVHneBUBW0&ab_channel=StatQuestwithJoshStarmer).
+
+PCA is a very popular approach to perform dimensionality reduction. In the context of bioinformatics, PCA accepts a matrix of measurements made across a set of samples in any kind of genomics experiment (e.g. gene expression, ChIP-seq, ATAC-seq), and returns a set of numerical vectors that represent the axes of greatest variation in the dataset.
+
+These vectors are referred to as the principal components (PCs), and explain distinct sources of variation in the data. Individual samples can be placed along the PCs, allowing us to explore their relation to each other.
+
+<p align="center">
+  <img src="../figures/pca-example.png" height="400" width="600"/>
+</p>
+
+Similar to unsupervised hierachical clustering, PCA is useful to answer questions like:
+- How similar are my samples based on genome-wide profiles?
+- Are any samples in the dataset clear outliers?
+- Do any variables systematically affect genome-wide profiles (e.g. batch)?
+
+
+
+FIND A GOOD EXAMPLE DATASET TO DO PCA ON THAT INVOLVES TREATMENT GROUPS - also needs to work for clustering example
+
+
+
+
+```r
+
+
+
+rv <- rowVars(assay(rld))
+select <- order(rv, decreasing = TRUE)[seq_len(min(var_feature_n, length(rv)))]
+pca <- prcomp(t(assay(rld)[select, ]))
+
+# extract the varioance explained by each PC
+percentVar <- pca$sdev^2/sum(pca$sdev^2)
+names(percentVar)[1:5] <- c("PC1", "PC2", "PC3", "PC4", "PC5")
+percentVar <- percentVar[1:5]
+
+# plot variance for top 10 PCs
+barplot(percentVar[1:5], col = "indianred", las = 1, ylab = "% Variance", cex.lab = 1.2)
+
+
+# construct data frame w/ PC loadings and add sample labels
+pca_df <- as.data.frame(pca$x)
+pca_df$group <- dds@colData$group
+pca_df$sample_ids <- colnames(dds)
+
+# add colors for plotting to df
+pca_df$col <- NA
+for(i in 1:length(levels(pca_df$group))){
+  ind1 <- which(pca_df$group == levels(pca_df$group)[i])
+  pca_df$col[ind1] <- i
+}
+
+# plot PC1 vs PC2
+plot(pca_df[, 1], pca_df[, 2],
+     xlab = paste0("PC1 (", (round(percentVar[1], digits=3)*100), "% variance)"),
+     ylab = paste0("PC2 (", (round(percentVar[2], digits=3)*100), "% variance)"),
+     main=paste0("PC1 vs PC2 for ", var_feature_n, " most variable genes"),
+     pch=16, cex=1.35, cex.lab=1.3, cex.axis = 1.15, las=1,
+     panel.first = grid(),
+     col=pca_df$col)
+text((pca_df[, 2])~(pca_df[, 1]), labels = pca_df$group, cex=0.6, font=2, pos=4)
+
+
+
+
+
+
+```
 
 
 t-SNE and UMAP
 
 
 
-```r
-prcomp()
-```
+
+
+
+
+perhaos split this lesson into 2 markdowns?
