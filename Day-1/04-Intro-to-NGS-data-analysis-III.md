@@ -65,6 +65,8 @@ tail -n 12 SRR1039508.htseq-counts
 This process can be repeated for each sample in your dataset, and the resulting files compiled to generate a matrix of raw read counts that serve as input to downstream analysis (e.g. differential expression or binding analysis).
 
 
+---
+
 ## Peak calling
 
 In contrast to RNA-seq experiments, we are sometimes more concerned with identification of genomic regions that are enriched with aligned reads, rather than quantifying read numbers overlapping genomic features like exons. This is the case in ChIP-seq experiments, where we have used an antibody to enrich our sample for DNA bound to a specific protein, then perform sequencing to determine the location of these bound sites at a genome-wide level.
