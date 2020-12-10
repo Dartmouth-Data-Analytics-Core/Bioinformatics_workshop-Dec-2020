@@ -308,7 +308,7 @@ lm_2 <- lm(dat3$exp_geneX ~ dat3$subject_group)
 summary(lm_2)
 
 # add regression line to the plot
-abline(lm1, lty=2)
+abline(lm_2, lty=2)
 ```
 <img src="../figures/lm_example-3.png" height="500" width="550"/>
 
@@ -326,6 +326,8 @@ We could have simply addressed the above analysis using a more simple statistica
 For example, we might want to control for factors that could confound gene expression differences between the control and diseased groups. For example, we could control for age and sex of the subjects, or perhaps the batch the samples were collected in.
 
 In this scenario, we can use linear models to control for the additional variables by adding them into the statsitical model e.g.
+
+*Just an example do not run this code*
 ```r
 lm(dat3$exp_geneX ~ dat3$subject_group + dat3$age + dat3$gender + dat3$batch)
 ```
@@ -393,8 +395,8 @@ To help get you started, you have been provided with a matrix of FPKM counts (*f
 
 ```r
 # read in data
-fpkm <- read.table("~/fpkm_sub.txt", stringsAsFactors = FALSE, header=TRUE)
-meta <- read.delim("~/metadata_sub.tsv", stringsAsFactors = FALSE, header = TRUE)
+fpkm <- read.table("fpkm_sub.txt", stringsAsFactors = FALSE, header=TRUE)
+meta <- read.delim("metadata_sub.tsv", stringsAsFactors = FALSE, header = TRUE)
 
 # have a quick look at top of files
 head(fpkm[,1:6])
