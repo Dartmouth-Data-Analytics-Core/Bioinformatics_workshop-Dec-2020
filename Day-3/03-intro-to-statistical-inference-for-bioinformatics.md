@@ -143,7 +143,7 @@ Before reviewing out the statistical notation for a simple linear model, it can 
 
 - **The *response*** is the dependent variable we wish to model based on some set of predictors  
 
-- **The *predictor(s)*** is the independent variable, or variables, that we wish to model as a linear combination of the response (this is usually what we are interested in for statiatical inference and hypothesis testing)  
+- **The *predictor(s)*** is the independent variable, or variables, that we wish to model as a linear combination of the response (this is usually what we are interested in for statistical inference and hypothesis testing)  
 
 - **The *error*** component represents the information not explained by the model, and exists since we know that no set of predictors will perfectly explain the response variable. These are often referred to as the *residuals* of the model.  
 
@@ -151,13 +151,13 @@ Using the statistical notation for a simple linear regression model:
 
 Y = &beta;<sub>0</sub> +  &beta;<sub>i</sub> X<sub>i</sub> + &epsilon;
 
-- Y is a continuous response variable that we assume in normally distributed
+- Y is a continuous response variable that we assume is normally distributed
 - &beta;<sub>i</sub> are the coefficients to be estimated (&beta;<sub>i</sub>-value)
 - X<sub>i</sub> are the predictors
 - &beta;<sub>0</sub> refers to the model intercept
 - &epsilon; refers to the error term (residuals) and are assumed to follow a normal distribution
 
-There can be any (reasonable) number of predictors (X) in a model, and can be either *continuous* (e.g. age) or categorical (e.g. treatment group, batch).
+There can be any (reasonable) number of predictors (X) in a model, and predictors can be either *continuous* (e.g. age) or categorical (e.g. treatment group, batch).
 
 Each predictor is associated with a coefficient that describes the relationship of that predictor to the response variable. In the context of linear regression, the coefficient is also referred to as the *slope*.
 
@@ -184,7 +184,7 @@ lm1
 ```
 <img src="../figures/lm_example-0.png" height="500" width="550"/>
 
-The coefficient for the independent/predictor variable, Hba1c, describes its relation to the response variable, expression of gene X. Here, the coefficient in telling us that *for every 1 unit increase in gene expression measured, Hba1c levels increase by ~0.96 units*.
+The coefficient for the independent/predictor variable, Hba1c, describes its relation to the response variable, expression of gene X. Here, the coefficient is telling us that *for every 1 unit increase in gene expression measured, Hba1c levels increase by ~0.96 units*.
 
 This is basic *statistical inference*, as we have used this procedure to model the relationship between two variables, and *infer* something about how those variables are related.
 
@@ -210,7 +210,7 @@ segments(dat$hba1c, dat$gene_exp, dat$hba1c, pre,
 ```
 <img src="../figures/lm_example.png" height="500" width="550"/>
 
-The regression line (shown in black) illustrates the clear linear relationship between exprerssion of gene X and Hba1c levels.
+The regression line (shown in black) illustrates the clear linear relationship between expression of gene X and Hba1c levels.
 
 The residuals (blue lines) describe how far away each observation (the gene expression values) are from the predicted values from the linear model. All observations are close to the regression line, suggesting the model is a good fit for the data.
 
@@ -218,7 +218,7 @@ The residuals (blue lines) describe how far away each observation (the gene expr
 
 One way to evaluate how much meaning we should attribute to the coefficient, is to calculate a *P*-value for it through hypothesis testing, which we will explore below.
 
-> **Note:** Although standard models for modeling gene expression data would include expression values as the response variable, these models usually take on a more complicated form (see note on *Generalized linear models* below), however we have set up a more simple model for teaching purposes.
+> **Note:** Although standard models for modeling gene expression data would include expression values as the response variable, these models usually take on a more complicated form (see note on *Generalized linear models* below), however we have set up a simple model for teaching purposes.
 
 #### Hypothesis testing with linear models
 
@@ -245,7 +245,7 @@ coef(sum_lm1)[2,4]
 
 The *P*-value is very small, so we can reject the null, and conclude that Hba1c levels are associated with expression of gene X, and interpret the coefficient as a meaningful quantity.
 
-If the *P*-value does not pass the *a priori*significance threshold for your analysis, the coefficient should be ignored as that predcitor is **not associated** with the response variable.
+If the *P*-value does not pass the *a priori* significance threshold for your analysis, the coefficient should be ignored as that predcitor is **not associated** with the response variable.
 
 You can always confirm by looking at the slope in a simple linear model. To demonstrate this, explore the example below for Gene Y and its relation to Hba1c levels.
 ```r
@@ -284,7 +284,7 @@ In genomics, we commonly have categorial predictor variables, in contrast to the
 - Vehicle vs treatment
 - Control vs diseased
 
-Importantly, linear models are capable of incorportaing categorical variables as predictors. Lets consider another example, where we have gene expression levels for gene X measured in 20 healthy tissues, and 20 diseased tissues, and we wish to use a linear model to explore the relation between gene expression and disease status.
+Importantly, linear models are capable of incorportaing categorical variables as predictors. Lets consider another example, where we have gene expression levels for gene X measured in 20 healthy tissues, and 20 diseased tissues, and we wish to use a linear model to explore the relationship between gene expression and disease status.
 
 ```r
 # read in the example data
@@ -323,11 +323,11 @@ Since a 'unit increase' in `subject_group` simply means controls vs diseased sub
 
 We could have simply addressed the above analysis using a more simple statistical test such as a *t-test*. However, we commonly want to include additional variables in our linear models, and approaches such as the t-test cannot handle this scenario.
 
-For example, we might want to control for factors that might confound gene expression differences between the control and diseased groups. For example, we could control for age and sex of the subjects, or perhaps the batch the samples were collected in.
+For example, we might want to control for factors that could confound gene expression differences between the control and diseased groups. For example, we could control for age and sex of the subjects, or perhaps the batch the samples were collected in.
 
 In this scenario, we can use linear models to control for the additional variables by adding them into the statsitical model e.g.
 ```r
-lm(dat3$exp_geneX ~ dat3$subject_group + dat3$age + dat3$age + dat3$age)
+lm(dat3$exp_geneX ~ dat3$subject_group + dat3$age + dat3$gender + dat3$batch)
 ```
 
 This approach is referred to as **multiple regression**. If you will be doing any sort of complex bioinformatics data analysis involving linear models, I strongly encourage you to use this primer as a starting point to learn more about multiple regression and more complex linear modeling scenarios.  
@@ -338,7 +338,7 @@ This approach is referred to as **multiple regression**. If you will be doing an
 
 Commonly in bioinformatics, we find ourselves needing a model that can assume a different statistical distribution than the normal. The rationale behind this is that many bioinformatics and genomic data types exhibit specific distributions that are different from the normal.
 
-We fit the data using a **generalized linear model (GLM)**. GLM's are a family of statistical models that generalize standard linear regression in two ways:  
+In these cases we fit the data using a **generalized linear model (GLM)**. GLM's are a family of statistical models that generalize standard linear regression in two ways:  
 - use of probability distributions other than the normal distribution
 - the use of a *link-function* that links the expression values in the linear model to the experimental groups, in a way that these other distributions can be used.
 
@@ -346,7 +346,7 @@ We fit the data using a **generalized linear model (GLM)**. GLM's are a family o
 
 For example, bulk RNA-seq data typically exhibit a distribution referred to as the *negative-binomial* and therefore require a GLM of the *negative-binomial family* in order to appropriately model RNA-seq counts and test them for differential expression.
 
-While GLMs are beyond the scope of this workshop, and we simply do not have the time to cover them in this short course, we do cover the fundamentals of how GLMs are used in the context of RNA-seq data analysis in our RNA workshop!
+While GLMs are beyond the scope of this workshop, and we simply do not have the time to cover them in this short course, we do cover the fundamentals of how GLMs are used in the context of RNA-seq data analysis in our RNA-seq workshop!
 
 
 
@@ -363,7 +363,7 @@ Unsupervised learning methods are very powerful tools to conduct exploratory dat
 
 - ***clustering-based methods***: involves calculation of the similarity/dissimilarity between samples, resulting in organization of these samples into *'clusters'* defined by their relatedness to one-another
 
-We will explore an example of each approach below, using *principal components analysis (PCA)* and an example of dimensionality reduction, and *unsupervised hierachical clustering* as an example of a clustering-based method.
+We will explore an example of each approach below, using *principal components analysis (PCA)* as an example of dimensionality reduction, and *unsupervised hierachical clustering* as an example of a clustering-based method.
 
 #### Principal components analysis (PCA)
 
@@ -474,7 +474,7 @@ Viewing the dataset using this lower dimensional representation provides us with
 
 #### Unsupervised hierarchical clustering
 
-Generally, clustering analysis describes a collection of methods used to groups samples into groups called *clusters* which define their relation to one-another. These relationships are defined by the *distance metric* used, which is simply a measure of how similar/dissimilar samples or features in a dataset are to each other. Several distance metrics exist, such as *manhattan* or *euclidean* distance, and are calculated differently (and affect the clustering).
+Generally, clustering analysis describes a collection of methods used to group samples into groups called *clusters* which define their relation to one-another. These relationships are defined by the *distance metric* used, which is simply a measure of how similar/dissimilar samples or features in a dataset are to each other. Several distance metrics exist, such as *manhattan* or *euclidean* distance, and are calculated differently (and affect the clustering).
 
 Unsupervised hierarchical clustering describes a specific approach to performing clustering analysis, in which a tree-like structure is generated to describe the relatedness of samples and features. The results of this procedure are commonly represented using heatmaps, with samples defining columns and features (e.g. genes) defining the rows. Visualization using heatmaps is valuable as it allows us to identify *'modules'* of similar/dissimilar features across samples, making approaches like hierarchical clustering complimentary to dimensionality-reductions methods like PCA.
 
@@ -482,7 +482,7 @@ Unsupervised hierarchical clustering describes a specific approach to performing
   <img src="../figures/heatmap-exp.png" height="300" width="600"/>
 </p>
 
-To demonstrate how would could perform an unsupervised hoierachical clustering analysis in R, we will use the same RNA-seq dataset from [He *et al*](https://www.nature.com/articles/s41586-020-2536-x), describing transcriptomic changes in the developing mouse embryo.
+To demonstrate how one could perform an unsupervised hierachical clustering analysis in R, we will use the same RNA-seq dataset from [He *et al*](https://www.nature.com/articles/s41586-020-2536-x), describing transcriptomic changes in the developing mouse embryo.
 
 Clustering can be quite computationally intensive, therefore we will first generate a subset of the gene expression data containing five specific tissues, rather than all 17.
 ```r
@@ -497,7 +497,7 @@ meta_ord <- meta[meta$Biosample.term.name=="forebrain" |
 log_fpkm_sub <- log_fpkm[, c(colnames(log_fpkm) %in%  meta_ord$File.accession)]
 ```
 
-Since we took a subset of the original dataset, we need to reclaculate the variance of each gene across the samples in this subset, so that we can assess how many features will be informative for the clustering procedure.
+Since we took a subset of the original dataset, we need to recalculate the variance of each gene across the samples in this subset, so that we can assess how many features will be informative for the clustering procedure.
 ```r
 # calculate variance of each gene across samples for new subset of data
 vars <- apply(log_fpkm_sub, 1, var)
