@@ -173,7 +173,7 @@ Instead, *GenomicRanges* leverages functionaility inrtoduced by *IRanges* to com
 
 **RLE** is an especially efficient way of storing genomics data since there are often streches of repeated values in the final data representation, and often long streches of sequences are not considered in an experiment (e.g. non-coding regions in RNA-seq) so we shouldn't waste space storing information on those positions.
 
-**RLE** is emplyed in the **BIGWIG** file format to allow efficient storage and access to signal track data against a reference genome. Consider the below example in the context of a ChIP-seq experiment.
+RLE-style encoding is employed in the **BIGWIG** file format to allow efficient storage and access to signal track data against a reference genome. Consider the below example in the context of a ChIP-seq experiment.
 
 
 ![](../figures/chip-rle-example.png)
