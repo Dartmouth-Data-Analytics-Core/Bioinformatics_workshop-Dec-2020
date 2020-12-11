@@ -260,7 +260,7 @@ As an example, we will again use data from the ENCDOE project, where mouse foreb
 
 Read in the BED file as a *GRanges* object using *rtracklayer* function `import()` as we have done previously. We can then use the `getSeq()` function to return sequences from our previously assigned BSGenome object (UCSC - mm10, assigned to the variable *genome*) that cover the regions specified in the GRanges object.
 ```r
-# set extracols for reading in extended data
+# we need to establish a vector describing what the extra extended BED columns are
 extraCols_narrowPeak <- c(signalValue = "numeric", pValue = "numeric",
                           qValue = "numeric", peak = "integer")
 
@@ -312,7 +312,7 @@ Now we are ready to export these sequences in FASTA file format, which is used a
 names(ctcf_seqs) <- paste0(seqnames(bed), ":", start(bed), "-", end(bed))
 
 # export peaks to FASTA file
-writeXStringSet(ctcf_seqs, file="~/CTCF-peaks-resized.fa")
+writeXStringSet(ctcf_seqs, file="CTCF-peaks-resized.fa")
 ```
 
 After you write the file, go to your the UNIX command line and have a look at your FASTA file to confirm it looks correct.
