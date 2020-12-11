@@ -143,7 +143,7 @@ q()
 ```
 <p align="center">
   <img src="../figures/R_interactive.png" title="xxxx" alt="context"
-	width="70%" height="70%" />
+	width="50%" height="50%" />
  </p>
  </p>
  
