@@ -142,8 +142,8 @@ R.version
 q()
 ```
 <p align="center">
-  <img src="../figures/R-interactive.png" title="xxxx" alt="context"
-	width="100%" height="100%" />
+  <img src="../figures/R_interactive.png" title="xxxx" alt="context"
+	width="70%" height="70%" />
  </p>
  </p>
  
@@ -295,21 +295,6 @@ A more detailed way of checking the progress of your job are the stdout and stde
  </p>
 
 
-
-
-
-
-
-
-
-
-
-
-
-# R on the hpc
-submitting an R script
-loading R libraries
-running R interactively
 
 ## Break out room exercises
 
