@@ -1,52 +1,32 @@
 
+# Working with genomics data in R/Bioconductor - Part I
 
-- PERHAPS CHANGE THIS SECTION TO INTRODUCE RSUBREAD FIRST,
+After performing initial analyses of NGS data using tools predominantly implemented through the UNIX shell, we often want to perform a set of downstream analytical tasks that add context to our experiment and help address our hypothesis. The R statistical programming environment, as well as the R-packages available through the  [Bioconductor project](https://www.bioconductor.org/), provide a wide-range of functionality to perform these downstream analyses.
 
-
-
-
-
-
-
-
-# Part 1 -  Working with genomics data in R/Bioconductor
-
-In a typical analysis of an NGS dataset, like that depicted in the figure below, once we have performed most of the pre-processing and quality control steps we are usually left with some reduced representation of the data. For example:  
-* Raw counts matrix in RNA-seq  
-* Peak regions in ChIP-seq or ATAC-seq  
-* SNP/INDEL coordinates from variant calling  
-
-#### TO DO: UPDATE THIS FIGURE TO BE NON RNASEQ SPECIFIC and more appropriate to match the text
-![](../figures/typical-ngs-scenario.png)
-
-At this point in the analysis, we often want to perform various tasks on the reduced representation of the data, such as query overlapping peak regions between different sample groups, annotate regions based on their
-genomic or transcriptional context, or perform complex statistical analysis. The **R statistical programming environment**, and more specifically **Bioconductor** provides one avenue through which to perform these downstream analysis.
-
-By far the largest advantage to using R to perform specific stages of genomic data analysis are the large number of packages available that facilitate efficient analysis of high-throughput data. [**Bioconductor**](https://www.bioconductor.org/) represents a specific collection of R-packages maintained as part of an open source project, that provides a wide-range of data analysis software packages for biological data analysis, and particularly genomics. These **Bioconductor** introduce several particuarly useful object classes and methods that provide effecient storage of, access to, and maniuplation of various forms of genomics and high throughput sequencing data.
+Examples of downstream analyses that can be performed through the R/Bioconductor framework:
+- compare, query, and visualize genomic region data (e.g. peak calls)
+- retrieve and apply data from numerous genome annotation databases
+- obtain and efficiently analyze sequences from common reference genomes
+- explore NGS data using a collection of bioinformatics-specific visualization packages
+- perform advanced statistical modeling, such differential expression analysis
 
 
+### What is Bioconductor?
 
+Bioconductor is a large collection of R-packages developed specifically for performing diverse analytical tasks on biological data. These packages are all free and open source, with new packages being added regularly. Bioconductor packages are especially noteworthy for their high level of integration with each other, providing a number of usage advantages as well as facilitating a streamlined development process.  
 
-Note on what we won't cover: Data type specific analysis packages like DESeq2, as we cant go into data type soecific nuascens and statistical considerations in this course without the prereqs etc. We will focus on generalized tasks that are be appropriate to a range of data and analysis types, e.g. how to leverage bioconductor packages, working with genomic region data, and obtaining & applying annotation data.
+Importantly, many Bioconductor packages exist for NGS and genomics-specific applications. Visit the [Bioconductor website](https://www.bioconductor.org/) to get an idea for the range of software available.
 
+<p align="center">
+<img src="../figures/bioconductor.png" title="xxxx" alt="context"
+	width="90%" height="90%" />
+</p>
 
+The table below provides examples of some important BioConductor packages organized by their application/utility, and some more specific examples designed for analysis of specific data-types.
 
+**Important Bioconductor packages by application**
 
-
-
-
-
-
-** Visit the Bioconductor website and explore the available packages and how they are organized. **
-![](../figures/bioconductor.png)
-
-**Bioconductor** packages are especially noteworthy for their high level of integration and use of common object classes, making cross-compatibility of many Bioconductor packages very easy, as well as allowing previous packages to be utilized by subsequently developed packages. Applications of **Bioconductor** packages range from simple data representation utilities to full implementations of complex statistical methodologies developed for the analysis of specfic types of genomics data.
-
-Explore available package on the [**Bioconductor website**](https://www.bioconductor.org/) and browse their Vigenettes to get an idea for the range of software available. The table below provides examples of some important BioConductor packages organized by their application/utility, as well as some more specific examples designed for analysis of specific data-types.
-
-**Important Bioconductor packages by analytical utility**
-
-**Applications/utility** | **Packages**
+**Applications** | **Packages**
 -------|-------
 Data representation | IRanges, GenomicRanges, GenomicFeatures, BioStrings, BSGenome, SummarizedExperiment
 File handling & manipulation | *rtracklayer*, *BioStrings*, *ShortRead*, *Rsamtools*
@@ -60,7 +40,18 @@ Genomic visualiuzation | *rtracklayer*, *ggbio*, *Gviz*, *clusterProfiler*, *gen
 Genomic annotation | *GenomeInfoDB*, *TxDb*, *AnnotationHub*, *org.X.db*, *BioMart*
 Gene ontology analysis | *GO.db*, *DO.db*, *rGREAT*, *fGSEA*, *clusterProfiler*, *GSVA*
 
-#### Installing & loading Bioconductor packages
+### Learning objectives:
+
+In these lessons, we will focus on introducing you to the core set of Bioconductor packages, and how they can be used to perform common tasks in bioinformatics.
+
+The primary topics we will cover include:
+- analyzing genomic region data with bioconductor
+- retrieve and apply data from genome annotation databases
+- biological sequence analysis and reference genomes in R
+
+> We will *not* be discussing R/Bioconductor packages developed to perform complex statistical analysis of specific genomics data types, for example using *DESeq2* for differential expression analysis of RNA-seq, or *DiffBind* for differential binding analysis in ChIP-seq. Performing downstream statistical analysis of genomics data with packages such as *DESeq2* and *DiffBind* requires a working understanding of R/Bioconductor as well as some fundamental statistical knowledge, which are unfortunately beyond the scope of this workshop.
+
+### Installing & loading Bioconductor packages
 
 The `Biocmanager` package, and specifically its function `BiocManager::install()` is used to install Bioconductor packages, essentially replacing `install.packages` which is used for installing *CRAN* packages.
 ```{r}
@@ -70,26 +61,33 @@ BiocManager::install()
 
 Bioconductor packages can then be loaded like regular R-packages:
 ```r
-library(IRanges); library(GenomicRanges)
+library(IRanges)
 ```
 
-#### Handling genomic regions with Bioconductor
 
 
-![](../figures/iranges-basics.png)
+
+
+
+
+
+### Working with genomic region data
 
 [GenomicRanges](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html) is an extremely useful package from the BioConductor project for working with genomic regions and coordinates in R, and lies at the core of numerous other BioConductor packages such as [BSgenome](https://bioconductor.org/packages/release/bioc/html/BSgenome.html), [rtracklayer](https://bioconductor.org/packages/release/bioc/html/rtracklayer.html) and [VariantAnnotation](https://bioconductor.org/packages/release/bioc/html/VariantAnnotation.html).
 
-![](../figures/granges-vs-iranges.png)
-
-
-#### Using coverage & signal track data with Bioconductor  
-
-##### The IRanges package
-
 As discussed above, various types NGS assays may result in a specific set of regions of interest for further downstream analysis. For example, coding regions in RNA-seq, transcription-factor signal peaks in ChIP-seq, or accessible chromatin in ATAC-seq. Being able to store, query, and manipulate genomic regions in critical in facilitating downstream analysis of these regions.
 
+
+
+
+
+
 The *IRanges* package provides an efficient way to achieve these tasks on basic sets of integer ranges. The *GenomicsRanges* package then builds upon the IRanges functionaility to enable storage and manipulation of genomic regions on annotated sequences (chromosomes). in the below example, you can see an example set of regions on chromosome 1 of the human genome. These regions could be anything of interest, e.g. and NGS read, exon coordinates, TF peaks.
+
+<p align="center">
+<img src="../figures/iranges-basics.png" title="xxxx" alt="context"
+	width="90%" height="90%" />
+</p>
 
 For the purposes of IRanges however, simply consider them as a set of integer regions. In the figure, we can see how these would be specified in R if we used the `IRanges()` constructor function to generate an `IRanges` class object of the integer regions shown in orange. Each object shows that each region has a `start`, `end` and `width`.
 
@@ -127,6 +125,11 @@ ir
 ##### The GenomicRanges package
 
 The *GenomicRanges* package extends the functionality introduced by IRanges to allow for analysis of genomic regions within the Bioconductor framework, and severs as a foundation for accessing and manipulating genomic regions for other BioConductor packages, some of which we will discuss (e.g. [*rtracklayer*](https://bioconductor.org/packages/release/bioc/html/rtracklayer.html), [*BSGenome*](https://bioconductor.org/packages/release/bioc/html/BSgenome.html), [*GenomicAlignments*](https://bioconductor.org/packages/release/bioc/html/GenomicAlignments.html)).
+
+<p align="center">
+<img src="../figures/granges-vs-iranges.png" title="xxxx" alt="context"
+	width="90%" height="90%" />
+</p>
 
 At the core of the package is the *GRanges* class, which is analogous to the IRanges class but specifies genomic ranges denoted by a start, and end on a specific sequence (e.g. a chromosome). Lets construct a `GRanges` object for the ranges shown in the figure.
 ```r
@@ -169,14 +172,20 @@ Expecting a regular numerical vector...? That might be OK in our small toy examp
 
 Instead, *GenomicRanges* leverages functionaility inrtoduced by *IRanges* to compress this sort of data through a process called **Run-length encoding (RLE)**. RLE is an efficient form of data compression for instances where we have long vectors with *runs* of numbers that might be the same. Consider the example below:
 
-![](../figures/rle.png)
+<p align="center">
+<img src="../figures/rle.png" title="xxxx" alt="context"
+	width="90%" height="90%" />
+</p>
 
 **RLE** is an especially efficient way of storing genomics data since there are often streches of repeated values in the final data representation, and often long streches of sequences are not considered in an experiment (e.g. non-coding regions in RNA-seq) so we shouldn't waste space storing information on those positions.
 
 RLE-style encoding is employed in the **BIGWIG** file format to allow efficient storage and access to signal track data against a reference genome. Consider the below example in the context of a ChIP-seq experiment.
 
 
-![](../figures/chip-rle-example.png)
+<p align="center">
+<img src="../figures/chip-rle-example.png" title="xxxx" alt="context"
+	width="90%" height="90%" />
+</p>
 
 ##### Manipulating GRanges objects
 
@@ -196,7 +205,11 @@ head(gr[score(gr)>4], n=5)
 
 There are also numerous range-based operations can be performed on *GRanges* objects using functionality implemented through *IRanges*, and can be used to manipulate the original regions in almost ay way you desire.
 
-![](../figures/range-operations.png)
+<p align="center">
+<img src="../figures/range-operations.png" title="xxxx" alt="context"
+	width="80%" height="80%" />
+</p>
+
 **Image source:** [GRanges tutorial](https://www.bioconductor.org/help/course-materials/2015/SeattleApr2015/B_GenomicRanges.html)
 
 Lets try a few out on our GRanges object:
@@ -220,7 +233,11 @@ In this study, the autors generate an atlas of the dynamic chromatin landscape a
 We will use a small subset of this data to demonstrate how the **GenomicRanges** package can be used to explore this type of data, as well as compare and contrast between samples. **Figure 1A** from the [Gorkin *et al*](https://www.nature.com/articles/s41586-020-2093-3) manuscript is included below, and decribes the data collected during this project.
 
 **Figure 1A-B from Gorkin *et al*, 2020, Nature**.
-![](../figures/mouse-atlas-fig1a.png)
+
+<p align="center">
+<img src="../figures/mouse-atlas-fig1a.png" title="xxxx" alt="context"
+	width="100%" height="100%" />
+</p>
 
 In particular, we will use **ChIP-seq data** generated in immunoprecipation experiments for **several histone modifications**, whose presence and absence can be used to infer the functional state of chromatin at specific loci (e.g. active transcription, enhancers, heterochromatin). These data have been downloaded and made available in this github repo, in: `Bioinformatics_workshop/Day-2/data/gorkin-et-al/`.
 
@@ -228,7 +245,12 @@ Namely, we will start by contrasting the locations of ChIP-seq peaks for two chr
 - **H3K27ac** - acetylation at the 27th lysine residue of histone H3
 - **H3K9ac** - acetylation at the 9th lysine residue of histone H3
 
-![Image source: ENCODE project](../figures/nucleosomes.png)
+<p align="center">
+<img src="../figures/nucleosomes.png" title="xxxx" alt="context"
+	width="90%" height="90%" />
+</p>
+
+Image source: ENCODE project.
 
 Both *H3K27ac* and *H3K9ac* are known to be found at regions of active chromatin and particularly enhancers, therefore by comparing their distribution across forebrain and heart tissues at a specific stage of development (we will use **E15.5**), we can gain insight into which regions of the mouse genome are important for tissue-specific development.
 
@@ -376,9 +398,10 @@ gtrack <- GenomeAxisTrack()
 plotTracks(list(gtrack, fr_h3k27ac_track, hr_h3k9ac_track), from = 9e6, to = 10e6)
 ```
 
-![](../figures/h3k27ac_chr11-region-1.png)
-
-Clearly the peaks are distributed differently over this region of chromosome 17, supporting the notion that the regions of functional chromatin differ between forebrain and heart tissue in the developing mouse embryo at E15.5. However, this plot isn't really that useful to us if we don't have any genome annotation to go with it. For example, which genes are the peaks near? Are the peaks mostly located within gene bodies, or are they intergenic?
+<p align="center">
+<img src="../figures/h3k27ac_chr11-region-1.png" title="xxxx" alt="context"
+	width="80%" height="80%" />
+</p>
 
 In order to address these questions, we need to pull in some annotation data for the mouse genome. Fortunately, Bioconductor has very extensive functionality in the form of various packages specifcally devoted to genome annotation, and interface with public databases like *UCSC*, *Ensembl*, and *NCBI* to obtain the most up to date reference data available. **This will be the focus of our next lesson**.
 
@@ -387,7 +410,10 @@ In order to address these questions, we need to pull in some annotation data for
 ### Additional considerations:  
 - There are numerous ways to perform the sorts of tasks that we did in this lesson, both within and outside of R. For example, [**BEDTools**](https://bedtools.readthedocs.io/en/latest/), described as "the swiss-army knife for genomic-arithmetic" allows you to intersect, subset, merge, count, and manipulate genomic regions directly from the UNIX command line for several file formats (BED, GFF/GTF, VCF). Alternatively, [**Biopython**](https://biopython.org/) provides similar functionality from within python.  
 
-<img src="../figures/bedtools-biopython.png" height="250" width="562.5"/>
+<p align="center">
+<img src="../figures/bedtools-biopython.png" title="xxxx" alt="context"
+	width="50%" height="50%" />
+</p>
 
 - Whether you use *BEDTools*, *BioPython* or Bioconductor packages within R is dependent on what you are doing and what you need to do next. For example, if you will be needing functionality from other Bioconductor packages after analysing the overlap between sets of genomic regions, you may choose to use R/Bioconductor. If you simply need to intersect two BED files to make a third that reflects the intersection for inout into another UNIX-based software, you could use BEDTools.   
 

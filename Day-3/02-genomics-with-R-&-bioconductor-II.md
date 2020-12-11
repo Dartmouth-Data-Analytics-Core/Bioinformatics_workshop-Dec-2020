@@ -1,4 +1,6 @@
-# Part 2 - Genome annotation in R/Bioconductor
+# Working with genomics data in R/Bioconductor - Part II
+
+## Genome annotation
 
 As discussed at the end of part 1, there are many instances in genomic data analysis where we will want to utilize publicly available genome annotation data. This is typically done toward the end of an analysis when you wish to learn more about the most significant results. Bioconductor provides an extensive set of annotation resources that provide access with a number of popular annotation databases (NCBI, Ensembl, GenBank, UniProt) as well as functionality that allows interaction with these data using common Bioconductor data structures (e.g. GRanges).
 
@@ -395,8 +397,10 @@ gtrack <- GenomeAxisTrack()
 plotTracks(list(gtrack, txTr, track1), main="CD97B variants")
 ```
 
-<img src="../figures/cd97b-variants.png" height="550" width="750"/>
-
+<p align="center">
+<img src="../figures/cd97b-variants.png" title="xxxx" alt="context"
+	width="80%" height="80%" />
+</p>
 
 ### Example application 1: Peak annotation
 
@@ -476,17 +480,21 @@ annolist$Forebrain_H3K27ac
 ```
 
 One way to explore the annotations and compare them across peak sets is to use the `plotAnnoBar()` function from *ChIPseeker*, which plots the proportion of peaks falling into each of the annotation categories.
-```
+```r
 plotAnnoBar(annolist)
 ```
 
-<img src="../figures/chip-anno-example.png" height="550" width="750"/>
+<p align="center">
+<img src="../figures/chip-anno-example.png" title="xxxx" alt="context"
+	width="80%" height="80%" />
+</p>
 
 While the proprotion of H3K27ac peaks distributed across the various annotation groups seem relatively stable between the forebrain and heart peak sets, there seems to be a substantially larger proportion of promoter-associated peaks in the H3K9ac peak set from heart tissue compared to that of the forebrain. Perhaps this suggests more transcriptional activity in the heart tissue.
 
 If we were interested in specifically exploring the promoter-associated peaks further on their own, we could subset them.
-```
-extract annotation data for heart h3k9ac
+
+```r
+#extract annotation data for heart h3k9ac
 ht_h3K9ac_anno <- annolist$Heart_H3K9ac@anno
 
 # subset for promoter-associated peaks

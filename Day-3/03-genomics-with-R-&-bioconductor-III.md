@@ -1,5 +1,7 @@
 
-### Genome reference sequences in Bioconductor
+# Working with genomics data in R/Bioconductor - Part III
+
+## Sequence analysis & references genomes
 
 Beyond providing access to extensive annotation data in R, Bioconductor also provides functionality to obtain and maniuplate the complete reference sequences for commonly used genomes. Specifically, the [BSgenome](https://bioconductor.org/packages/release/bioc/html/BSgenome.html) family of Bioconductor packages provides an efficient way to obtain, query, and maniuplate genomic sequence data from reference genomes. You can return a vector of the currently available genomes to your console by printing `available.genomes()` after loading the `BSgenome` package.
 
@@ -250,7 +252,10 @@ Beyond the basic *BioStrings* based methods, there is one very important method 
 
 Once peak regions have been identified to describe the potential binding locations of a particular transcription factor (TF), a common task in the analysis of ChIP-seq data is to scan the sequences immediately surrounding these peaks in order to identify sequences enriched over these peak regions that may represent the binding motif for that TF. In order to achieve this, we need to obtain the sequences for these peaks from the reference genome that the samples were aligned to (mm10). The cartoon below depicts this overall workflow.
 
-<img src="../figures/motif-example.png" height="550" width="900"/>
+<p align="center">
+<img src="../figures/motif-example.png" title="xxxx" alt="context"
+	width="90%" height="90%" />
+</p>
 
 As an example, we will continue our mouse forebrain theme, using ChIP-seq data from the developing mouse forebrain that was performed using an antibody specific for the CTCF transcription factor (TF), a critical TF for diverse cellular processes that performs a plethora of transcriptional activation/repression functions at a genome-wide level. Called CTCF peaks for this experiment were downloaded from the ENCODE website [here](https://www.encodeproject.org/experiments/ENCSR677HXC/).
 
@@ -314,7 +319,10 @@ If you did have direct access to the reference genome locally and other function
 
 It is also worth noting that *BioStrings* can be used independently from *BSGenome* with any set of sequences you are able to define in your R environment as an *XString* or *XStringSet* class object. For example, perhaps you are studying the *Amphimedon queenslandica*, a marine sponge organism native to the Great Barrier Reef, and want to explore some basic features of its coding sequences.
 
-<img src="../figures/Amphimedon_queenslandica_adult.png" height="450" width="650"/>
+<p align="center">
+<img src="../figures/Amphimedon_queenslandica_adult.png" title="xxxx" alt="context"
+	width="70%" height="70%" />
+</p>
 
 Image source: [Wikipedia](https://en.wikipedia.org/wiki/Amphimedon_queenslandica)
 

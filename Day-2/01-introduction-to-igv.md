@@ -22,7 +22,7 @@ IGV supports a wide-range of genomic file formats that contain data ranging from
 * .GTF/GFF - genomic features  
 * .VCF - variant call format  
 * .BED - genmoic regions   
-* .BIGWIG - signal tracks  
+* .BIGWIG - signal tracks
 
 The range of file formats supported by IGV means it is able to facilitate exploration and visualization of virtually all types of genomics data generated from diverse experimental procedures, for example:
 * Gene expression data (RNA-seq)  
