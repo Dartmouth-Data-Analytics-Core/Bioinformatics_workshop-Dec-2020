@@ -303,7 +303,7 @@ length(fr_h3k27ac_ov1)/length(fr_h3k27ac)*100
 length(ht_h3k27ac_ov1)/length(ht_h3k27ac)*100
 
 # we could directly subset for the overlapping peaks using subsetByOverlaps()
-subsetByOverlaps(fr_h3k27ac, heart_h3k27ac)
+subsetByOverlaps(fr_h3k27ac, ht_h3k27ac)
 
 # alternatively, we could get the H3K27ac peaks that are unique to each tissue  
 #### forebrain
@@ -388,14 +388,14 @@ fr_h3k27ac_track <- AnnotationTrack(fr$h3K27ac, chromosome = "chr17", start = 9e
                          name = "Forebrain - H3K27ac", stacking = "dense", col = "indianred")
 
 # do the same for heart H3K27ac
-hr_h3k27ac_track <- AnnotationTrack(he$h3K27ac, chromosome = "chr17", start = 9e6, end = 10e6,
+hr_h3k27ac_track <- AnnotationTrack(ht$h3K27ac, chromosome = "chr17", start = 9e6, end = 10e6,
                          name = "Heart - H3K27ac", stacking = "dense", col = "cornflowblue")
 
 # create a genomic axis object to add to plot
 gtrack <- GenomeAxisTrack()
 
 # plot the tracks for this region
-plotTracks(list(gtrack, fr_h3k27ac_track, hr_h3k9ac_track), from = 9e6, to = 10e6)
+plotTracks(list(gtrack, fr_h3k27ac_track, hr_h3k27ac_track), from = 9e6, to = 10e6)
 ```
 
 <p align="center">
