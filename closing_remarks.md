@@ -44,7 +44,7 @@
 
 ### Some final take-aways from the workshop:
 - Spend the time (and money) to plan, consult, and practice bioinformatics to generate high quality data that will provide robust inferences 
-- If you are going to do a lot of Bioinformatics, you should get **really** good at the command-line (Bash), otherwise, pre-processing will be slow & painful (the first several times it will be slow and painful - it was for all of us and will be for you too)
+- If you are going to do a lot of Bioinformatics, you should get **really** good at the command-line (Bash), otherwise, pre-processing will be slow & painful (the first several times it will be slow and painful)
 - Independently Seek out the appropriate level of statistical training for the analyses you want to conduct
 
 
