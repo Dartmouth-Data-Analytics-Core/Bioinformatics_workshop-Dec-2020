@@ -403,7 +403,7 @@ plotTracks(list(gtrack, txTr, track1), main="CD97B variants")
 	width="80%" height="80%" />
 </p>
 
-### Example application 1: Peak annotation
+### Example application 2: Peak annotation
 
 Another example usage of how you might use a TxDb object is in the annotation of peak regions from a ChIP-seq experiment. To demonstrate how we could approach this task, we will return to the ChIP-seq data from [Gorkin *et al*, *Nature*, 2020](https://www.nature.com/articles/s41586-020-2093-3) used in the previous lesson, which describes the dynamic chromatin landscape of the developing mouse.
 
