@@ -11,7 +11,7 @@ Depending on the software to be installed, it may be available in one of the fol
  - Pre-compiled binary executable
  - Source code to be compiled
  - Virtual machine images (eg. Docker, Singularity)
- 
+
 <p align="center">
   <img src="../figures/software.png" height="230" width="450"/>
 </p>
@@ -54,6 +54,48 @@ In Python, packages are available in PyPI. To install Python packages from PyPI 
 pip install matplotlib
 ```
 ---
+
+## Pre-compiled binary executable
+Some developers will pre-compile releases of their software for several operating systems and make them available for download. If a pre-compiled executable is available for the Linux system we are using (for Discovery, this is CentOS 7), this can be a painless way to install software. It only requires downloading the executable to a directory and running it.  For example, the following will download a binary, precompiled for Linux, of the bowtie2 aligner.
+```shell
+wget https://github.com/BenLangmead/bowtie2/releases/download/v2.4.2/bowtie2-2.4.2-linux-x86_64.zip
+unzip bowtie2-2.4.2-linux-x86_64.zip
+cd bowtie2-2.4.2-linux-x86_64/
+ls
+./bowtie2 --help
+```
+
+Programs written in Java are frequently distributed as JAR files, which are similar to pre-compiled binaries, in that only a single file is required to download and install the software. The JAR file is then run using the `java -jar` command.  For example, the following will download the "picard" set of genomics tools written in Java, and run it to output the help string.
+```shell
+wget https://github.com/broadinstitute/picard/releases/download/2.23.9/picard.jar
+java -jar picard.jar -h
+```
+
+---
+
+## Source code to be compiled
+If software is not available via a package manager, or via a pre-compiled executable, it must be compiled from source code.  For Bioinformatics software, this will usually be C or C++ code, and will be distributed with a "makefile", which can be compiled with the following commands.  
+
+The `--prefix="/path/to/install"` defines the directory where the software will be installed.
+```shell
+./configure --prefix="/path/to/install"
+make
+make install
+```
+
+With package managers becoming more widespread, you should only rarely need to install software by compiling source code.
+
+---
+
+## Virtual machine images (eg. Docker, Singularity)
+Virtual machine images allow software to be distributed along with an entire linux environment. This ensures that anyone running the software will be able to, regardless of software installed or environment variables, and make software management seamless.
+
+However, containers can raise security issues when working with high performance computing clusters such as discovery. Docker cannot currently be used on discovery, and singularity images that can be currently used are somewhat limited.
+
+<img src="../figures/containers.png" height="150" width="350"/>
+
+---
+
 
 ## Conda - Full package and environment management
 
@@ -105,63 +147,22 @@ Conda is an excellent way to install and manage software for bioinformatics, sin
 
 ---
 
-## Pre-compiled binary executable
-Some developers will pre-compile releases of their software for several operating systems and make them available for download. If a pre-compiled executable is available for the Linux system we are using (for Discovery, this is CentOS 7), this can be a painless way to install software. It only requires downloading the executable to a directory and running it.  For example, the following will download a binary, precompiled for Linux, of the bowtie2 aligner.
-```shell
-wget https://github.com/BenLangmead/bowtie2/releases/download/v2.4.2/bowtie2-2.4.2-linux-x86_64.zip
-unzip bowtie2-2.4.2-linux-x86_64.zip
-cd bowtie2-2.4.2-linux-x86_64/
-ls
-./bowtie2 --help
-```
-
-Programs written in Java are frequently distributed as JAR files, which are similar to pre-compiled binaries, in that only a single file is required to download and install the software. The JAR file is then run using the `java -jar` command.  For example, the following will download the "picard" set of genomics tools written in Java, and run it to output the help string.
-```shell
-wget https://github.com/broadinstitute/picard/releases/download/2.23.9/picard.jar
-java -jar picard.jar -h
-```
-
----
-
-## Source code to be compiled
-If software is not available via a package manager, or via a pre-compiled executable, it must be compiled from source code.  For Bioinformatics software, this will usually be C or C++ code, and will be distributed with a "makefile", which can be compiled with the following commands.  
-
-The `--prefix="/path/to/install"` defines the directory where the software will be installed.
-```shell
-./configure --prefix="/path/to/install"
-make
-make install
-```
-
-With package managers becoming more widespread, you should only rarely need to install software by compiling source code.
-
----
-
-## Virtual machine images (eg. Docker, Singularity)
-Virtual machine images allow software to be distributed along with an entire linux environment. This ensures that anyone running the software will be able to, regardless of software installed or environment variables, and make software management seamless.
-
-However, containers can raise security issues when working with high performance computing clusters such as discovery. Docker cannot currently be used on discovery, and singularity images that can be currently used are somewhat limited.
-
-<img src="../figures/containers.png" height="150" width="350"/>
-
----
-
 ### Breakout room exercises
 
-You might find [this site](https://docs.conda.io/projects/conda/en/4.6.0/_downloads/52a95608c49671267e40c689e0bc00ca/conda-cheatsheet.pdf) helpful for completing the following exercises 
+You might find [this site](https://docs.conda.io/projects/conda/en/4.6.0/_downloads/52a95608c49671267e40c689e0bc00ca/conda-cheatsheet.pdf) helpful for completing the following exercises
 
-- Deactivate the conda environment you are currently in 
+- Deactivate the conda environment you are currently in
 
 - Create a new conda environment named test_env load the software package `bwa`
 
 - Activate the conda environment that you just created and list the software in your new environment
  - Do you see more than just bwa? Why might that be?
- 
-- Load the latest version of `R` into your new environment 
+
+- Load the latest version of `R` into your new environment
 
 - Deactivate your environment
 
-- List the conda environments you have available 
+- List the conda environments you have available
 
 - Remove the test_env conda environment
 

@@ -315,6 +315,7 @@ If you did have direct access to the reference genome locally and other function
 
 ---
 
+#### OPTIONAL SECTION:
 #### Using *BioStrings* without *BSGenome*
 
 It is also worth noting that *BioStrings* can be used independently from *BSGenome* with any set of sequences you are able to define in your R environment as an *XString* or *XStringSet* class object. For example, perhaps you are studying the *Amphimedon queenslandica*, a marine sponge organism native to the Great Barrier Reef, and want to explore some basic features of its coding sequences.
