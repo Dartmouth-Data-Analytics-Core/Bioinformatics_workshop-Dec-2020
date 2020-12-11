@@ -6,7 +6,7 @@
 - Learn the major file-types used in bioinformatic data analysis and how to manipulate them   
 - Learn how to install standard bioinformatic software using Conda   
 - Understand the concepts of reference genomes and genome annotations and where to find them  
-Learn how to leverage the Integrative Genomics Viewer (IGV) for exploring genomics data    
+- Learn how to leverage the Integrative Genomics Viewer (IGV) for exploring genomics data    
 - Gain a working knowledge of basic programming in R and how it can be used for Bioinformatics  
 - Understand the basic principles for statistical learning and inference as they apply to bioinformatics  
 - Learn how to leverage high performance computing systems (HPCs) to perform Bioinformatic data-analysis  
@@ -56,10 +56,10 @@ Learn how to leverage the Integrative Genomics Viewer (IGV) for exploring genomi
 - Read manuals for the tools that we used today and try to understand the flags that we choose not to show you as well as the flags that we did explain
 - When you get an error (and you will) google it and see what you can find, we learn a lot through community forums, mysterious errors are part of coding
 - Seek out additional resources for learning to use tools that are of interest to you
- - [Software carpentry](https://software-carpentry.org/lessons/)
- - [edX](https://www.edx.org)
- - [LinkedIn Learning](https://services.dartmouth.edu/TDClient/1806/Portal/KB/ArticleDet?ID=64717)
- - R vignettes
+  - [Software carpentry](https://software-carpentry.org/lessons/)
+  - [edX](https://www.edx.org)
+  - [LinkedIn Learning](https://services.dartmouth.edu/TDClient/1806/Portal/KB/ArticleDet?ID=64717)
+  - R vignettes
 
 
 
@@ -71,7 +71,7 @@ Learn how to leverage the Integrative Genomics Viewer (IGV) for exploring genomi
 
 We ask that you all complete the survey that has been sent out over email so that we can gauge what worked well and what we need to improve for our next workshop. If you have additional thoughts that were not addressed in the survey, please feel free to contact any one of us, or reach out to the DAC email directly (*DataAnalyticsCore@groups.dartmouth.edu*). 
 
-<img src="figures/logo.jpg" width="250" height="140" >
+<img src="figures/logo (1).jpg" width="250" height="140" >
 
 We plan to offer this workshop again, in addition to two RNA-seq specific workshops:
 - Data pre-processing & quality control for RNA-seq 
