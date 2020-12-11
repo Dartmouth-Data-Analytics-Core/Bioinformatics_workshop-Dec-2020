@@ -87,6 +87,13 @@ ls -lah /scratch/fund_of_bioinfo/raw_full_fastq/
 Since these are paired-end reads each sample has a file for read 1 (SRRXXX_1) and a file for read 2 (SRRXXX_2). All of the files are `gzipped` in order to reduce the disk space they require, which is important as you can see that the full files are all generally at least **1GB** (you need a lot of space to process RNA-seq, or other-NGS data). Since these files are so large each person copying them to their home directory would take up a lot of space, instead we are going to have you set up a symbolic link or symlink to the data in the scratch drive.
 
 ```bash
+# move into your fundamentals_of_bioinformatics directory
+cd fundamentals_of_bioinformatics
+
+# lets keep our data organized and make a folder for these raw fastq files
+mkdir raw_fastq
+cd raw_fastq
+
 # Create a symlink to the data directory in the scratch drive
 ln -s /scratch/fund_of_bioinfo/raw_fastq/*fastq.gz ./
 
@@ -336,13 +343,13 @@ cutadapt -a 'A{76}' -o out.trimmed.fastq.gz input.fastq.gz > cutadapt.logout;
 
 Since the polyA and adapter sequence contamination is relatively low for this dataset, we won't trim any specific sequences, although we will perform basic quality and length processing of the raw reads. Lets make a new directory and do this for do this for one sample.
 ```bash
-mkdir -p ../results/trim
-cd ../results/trim
+mkdir -p ../trim
+cd ../trim
 
 cutadapt \
    -o SRR1039508_1.trim.chr20.fastq.gz \
    -p SRR1039508_2.trim.chr20.fastq.gz \
-   ../../SRR1039508_1.chr20.fastq.gz ../../SRR1039508_2.chr20.fastq.gz \
+   ../raw_fastq/SRR1039508_1.chr20.fastq.gz ../raw_fastq/SRR1039508_2.chr20.fastq.gz \
    -m 1 -q 20 -j 1 > SRR1039508.cutadapt.report
 ```
 
