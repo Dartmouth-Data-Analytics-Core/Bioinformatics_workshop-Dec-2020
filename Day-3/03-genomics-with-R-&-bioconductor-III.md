@@ -93,7 +93,7 @@ IUPAC_CODE_MAP
 For now, we will use use the standard, unambiguous DNA bases (A, G, C, T) for some examples.
 ```{r}
 # randomly sample from specific characters in DNA_ALPHABET to create a longer sequence
-seq = sample(DNA_ALPHABET[c(1:4, 16)], size=100, replace=TRUE)
+seq = sample(DNA_ALPHABET[c(1:4)], size=100, replace=TRUE)
 seq
 
 # use the paste command to collapse the characters into a single string
@@ -260,9 +260,15 @@ As an example, we will again use data from the ENCDOE project, where mouse foreb
 
 Read in the BED file as a *GRanges* object using *rtracklayer* function `import()` as we have done previously. We can then use the `getSeq()` function to return sequences from our previously assigned BSGenome object (UCSC - mm10, assigned to the variable *genome*) that cover the regions specified in the GRanges object.
 ```r
+# set extracols for reading in extended data
+extraCols_narrowPeak <- c(signalValue = "numeric", pValue = "numeric",
+                          qValue = "numeric", peak = "integer")
+
 # read in peaks
-bed <- import("data/CTCF-mouse-forebrain-mm10.bed", format="BED")
-bed
+bed <- import("data/CTCF-forebrain-mm10.bed",
+							format="BED",
+							extraCols = extraCols_narrowPeak,
+							genome = "mm10")
 
 # extract sequences for peak regions and print to console
 ctcf_seqs <- getSeq(genome, bed)
@@ -302,13 +308,16 @@ ctcf_seqs_cent
 
 Now we are ready to export these sequences in FASTA file format, which is used as the default format as input to many motif discovery algorithms. As mentioned above, we can do this for DNAStringSet objects with the function `writeXStringSet()`.
 ```r
+# add names to peaks in ctcf_seqs so that FASTA entries have names
+names(ctcf_seqs) <- paste0(seqnames(bed), ":", start(bed), "-", end(bed))
+
 # export peaks to FASTA file
-writeXStringSet(ctcf_seqs, file=paste0(peak_dir, "CTCF-peaks-resized.fa"))
+writeXStringSet(ctcf_seqs, file="~/CTCF-peaks-resized.fa")
 ```
 
 After you write the file, go to your the UNIX command line and have a look at your FASTA file to confirm it looks correct.
 
-**Note:** There are  other ways you could have performed this task outside of the functionality implemented by BioStrings and BSGenome. The major advantage of performing this analysis in R/Bioconductor is that you can leverage the methods and object classes implemneted in BioStrings, BSGenome, GRanges, and other Bioconductor packages for your analysis.  
+**Note:** There are other ways you could have performed this task outside of the functionality implemented by BioStrings and BSGenome. The major advantage of performing this analysis in R/Bioconductor is that you can leverage the methods and object classes implemneted in BioStrings, BSGenome, GRanges, and other Bioconductor packages for your analysis.  
 
 If you did not require R/Bioconductor functionality for further analysis, you could perform a similar analysis on the UNIX command line with [*bedtools*](https://bedtools.readthedocs.io/en/latest/) and its `getfasta` tool, which allows you to extract sequences from a BED/GTF/VCF file and export them to a FASTA file. Ofcourse, this do mean you would need to have a copy of the reference genome available to you.
 

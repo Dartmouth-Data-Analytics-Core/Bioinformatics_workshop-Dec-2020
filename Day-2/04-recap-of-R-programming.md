@@ -73,16 +73,16 @@ Vectors can only hold one type of data (a property referred to as being *atomic*
 - logical - `TRUE` or `FALSE`
 - complex - numbers with 'imaginary' parts (not commonly used)
 
-Vectors can be created using the `c()` function, which will combine its arguments together, and the assignment operator `<-` which tells R you want to assign that vector to a specific value.
+Vectors can be created using the `c()` function (standing for *combine*), which concatenates its arguments together into a single vector. c() can be used in conjucntion with the assignment operator `<-` which tells R you want to assign that vector to a specific value.
 ```r
 # numeric
 x <- c(1.63, 2.25, 3.83, 4.99)
 
 # integer
-x <- c(1, 2, 3, 4)
+x <- as.integer(c(1, 2, 3, 4))
 
 # characters
-x <- c("a", "b", "c", "d")
+x <- as.character(c("a", "b", "c", "d"))
 
 # logical
 x <- c(TRUE, FALSE, TRUE, TRUE)
@@ -126,7 +126,7 @@ Elements within vectors can be subset or indexed based on their position in that
 # define a chacter string
 x <- c("a", "b", "c", "d")
 
-# get elements 1 and 3 
+# get elements 1 and 3
 x[c(1,3)]
 
 # get elements 1 to 3 using the ':' operator
@@ -234,8 +234,9 @@ x != 4
 x < 2 | x ==4
 
 # which elements are less than 2 AND equal to 4
-x < 2 & x ==4
+x < 2 & x == 4
 ```
+**Note:** When combining operators, operator precedence applies, such that operators with high precedence will be evaluated first. For example, in the above line, `x < 2` will be evaluated before `x == 4` as the `<` has greater precedence than `==`. You can explore operator precendence in R using the man page returned by `?Syntax`.
 
 Relational and logical operators can be used to subset a vector based on the values returned by the operator, and the brackets, as we did above for specific elements.
 ```r
@@ -324,10 +325,10 @@ str(x)
 By extending the attributes of a vector to give them *dimensions*, i.e. the number of rows and columns we want the vector to be organized into, we can create *matrices*, a data structure that efficiently stores tabular data of a specific, single object class.
 
 ```r
-mat <- matrix(c(1.63, 2.25, 3.83, 4.99),
-              c(2.43, 8.31, 3.12, 7.25),
-              c(1.29, 3.23, 3.48, 0.23),
-              nrow=3, ncol=4)
+mat <- matrix(c(1.63, 2.25, 3.83, 4.99,
+                2.43, 8.31, 3.12, 7.25,
+                1.29, 3.23, 3.48, 0.23),
+                nrow=3, ncol=4)
 # check the structure and dimensions with dim()
 str(mat)
 dim(mat)
@@ -369,7 +370,7 @@ df <- data.frame(subject_id = c("s1", "s2", "s3", "s4"),
 str(df)
 ```
 
-Note that the default behavior of `data.frame()` is to convert character strings to factors. If you want to prevent this behavior, you can set the `StringsAsFactors()` argument as `FALSE`.
+Note that the default behavior of `data.frame()` in R version < 4.0 is to convert character strings to factors. If you want to prevent this behavior, you can set the `StringsAsFactors` argument as `FALSE`. In R versions > 4.0, the default behaviour is `StringsAsFactors==TRUE`.
 
 ```r
 df <- data.frame(subject_id = c("s1", "s2", "s3", "s4"),
@@ -503,7 +504,8 @@ for(i in 1:length(x)){
   y[i] <- x[i] * 10
 }
 
-return(y)
+# print the new vector to console
+y
 ```
 
 ## Basic data visualization
@@ -610,7 +612,7 @@ x <- c(1.63, 2.25, 3.83, 4.99)
 y <- c(TRUE, FALSE, TRUE, TRUE)
 z <- c("a", "b", "c", "d")
 
-# save all 3 objects to one file 
+# save all 3 objects to one file
 save(x, y, z, file = "~/my_r_objects.rdata")
 ```
 

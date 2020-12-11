@@ -1,15 +1,17 @@
-# Working with genomics data in R/Bioconductor - Part II
+Construct# Working with genomics data in R/Bioconductor - Part II
 
 ## Genome annotation
 
-As discussed at the end of part 1, there are many instances in genomic data analysis where we will want to utilize publicly available genome annotation data. This is typically done toward the end of an analysis when you wish to learn more about the most significant results. Bioconductor provides an extensive set of annotation resources that provide access with a number of popular annotation databases (NCBI, Ensembl, GenBank, UniProt) as well as functionality that allows interaction with these data using common Bioconductor data structures (e.g. GRanges).
+Commonly in genomic data analysis, we want to provide additional context to our data that helps us addrees our scientific hypothesis. We often achieve this through integrating results from an analysis with publicly available annotation data. Bioconductor provides functionality to directly interface with many popular annotation databases (NCBI, Ensembl, GenBank, UniProt) and import these data into your R environment as Bioconductor type objects (e.g. GRanges).
 
 Examples of common annotation tasks include:  
 * Mapping unique gene identifiers (e.g. ENSEMBL or NCBI IDs) to gene symbols in an RNA-seq experiment
-* Annotating coding variants from a WGS/WES dataset based on transcriptional context (e.g. coding variants) for a specific genome annotation (e.g. Ensembl transcripts)
-* Annotating the genomic context (e.g. promoter, intron, exon, intergenic), and obtain sequence information for, peaks from a ChIP- or ATAC-seq experiment (e.g. for motif analysis).
+* Identifying coding variants from a WGS/WES dataset based on transcriptional context (e.g. coding variants)
+* Annotation of genomic context for peak set from ChIP- or ATAC-seq experiment (e.g. promoter, intron, exon, intergenic)
 
 In this lesson, we will introduce the major Bioconductor packages for genome annotation and how you might use them to achieve common tasks in NGS data analysis.
+
+#### Key annotation packages in Bioconductor:
 
 | **Package/package-family** | **Contents & uses**                                                |
 |------------------------|-------------------------------------------------------------|
@@ -21,22 +23,22 @@ In this lesson, we will introduce the major Bioconductor packages for genome ann
 | *BS.genome*              | Full sequences for common reference genomes                 |
 | *genomation*             | annotation of genomic context and basic data visualization  |
 
-In understanding the overall framework for how these packages work synergistercally to simplify the process of obtaining the annotation data you need, it is useful to distginuish the *annotation-centric* packages from *method-centric* packages.
+These packages can be broadly categorized into **annotation-centric** packages and **method-centric** packages.
 
-*Annotation-centric* packages such as *Org.X.Db*, *EnsDb.X.vX*, *biomaRT*, and *BS.genome* are designed to provide access to specific annotations, e.g. Ensembl annotations for all organisms from a specific release, or access to legacy Ensembl genome annotations.
+**Annotation-centric** packages such as *Org.X.Db*, *EnsDb.X.vX*, *biomaRT*, and *BS.genome* are designed to provide access to specific annotations, e.g. Ensembl annotations for all organisms from a specific release, or access to legacy Ensembl genome annotations.
 
-*Method-centric* packages such as *AnnotationDbi* and *GenomicFeatures* provide functionality for convienient and efficient access to multiple databases, and do not focus on providing access to any one annotation resource alone. For example, *Org.X.DB*, *EnsDb.X.vX*, and *biomaRT* objects all inherit methods from *AnnotationDbi*, meaning that we can use these common methods to access data from different annotation packages (as we will see in this lesson).
+**Method-centric** packages such as *AnnotationDbi* and *GenomicFeatures* provide functionality for convienient and efficient access to multiple databases, and do not focus on providing access to any one annotation resource alone. For example, *Org.X.DB*, *EnsDb.X.vX*, and *biomaRT* objects all inherit methods from *AnnotationDbi*, meaning that we can use these common methods to access data from different annotation packages (as we will see in this lesson).
 
-**Note:** Another *method-centric* package that we won't discuss here is [*AnnotationHub*](https://www.bioconductor.org/packages/release/bioc/html/AnnotationHub.html), which provides methods to query annotation data from a very large and diverse range of databases.
+**Note:** Another method-centric package that we won't discuss here is [*AnnotationHub*](https://www.bioconductor.org/packages/release/bioc/html/AnnotationHub.html), which provides methods to query annotation data from a very large range of databases.
 
 ### Mapping gene identifiers with *Org.X.DB*
 
-OrgDb represents a family of Bioconductor packages that store gene identifiers from a numerous annotation databases (e.g. gene ontologies) for a wide range or organsisms. For example, `org.Hs.eg.db` loads the current annotations for human genes, `org.Mm.eg.db` for mouse, `org.Sc.sgd.db` for yeast, and so on.
+OrgDb represents a family of Bioconductor packages that store gene identifiers from a numerous annotation databases (e.g. gene ontologies) for a wide range or organisms. For example, `org.Hs.eg.db` loads the current annotations for human genes, `org.Mm.eg.db` for mouse, `org.Sc.sgd.db` for yeast, and so on.
 
-OrgDb packages also provide access to some basic additional annotation data such as membership in gene ontology groups. Just as we did in the last lesson, you can navigate through Bioconductor's package index to view all of the existing Org.X.db packages.
-[here](https://www.bioconductor.org/packages/release/BiocViews.html#___OrgDb)
+OrgDb packages also provide access to some basic additional annotation data such as membership in gene ontology groups. Just as we did in the last lesson, you can navigate through Bioconductor's package index to view all of the existing Org.X.db packages [here](https://www.bioconductor.org/packages/release/BiocViews.html#___OrgDb).
 
-It is worth noting that you are not loading annotation data for a specific genome build (e.g. hg38 vs. hg19) when using OrgDb packages (which should be obvious from the package names). OrgDb packages pertain to identifiers based on what are usually the most recent genome (hg38) annotations since they are updated every few months. If you need annotations for an older build (hg19) specifically, you may need to adopt a different approach than using OrgDb.
+**Note:**OrgDb packages contain annotation data for the most recent genome annotation for that organism, and are therefore not build specific. If you need to annotation for a specific genome build (e.g. h19 vs hg38) you may want to use a different annotation package.
+
 
 Load the org.db package for the human genome:
 ```r
@@ -54,7 +56,7 @@ class(org.Hs.eg.db)
 keytypes(org.Hs.eg.db)
 ```
 
-OrgDb objects use the `keytypes()` method to access specific types of data from the annotation source. We can ask OrgDb to return a specific keytype that we are interested in.
+OrgDb objects use the `keytypes()` function to access specific types of data from the annotation source. We can ask OrgDb to return a specific keytype that we are interested in.
 ```r
 # obtain all ENSEMBL IDs
 entrez.ids <- keys(org.Hs.eg.db, keytype="ENSEMBL")
@@ -64,7 +66,7 @@ head(entrez.ids)
 length(entrez.ids)
 ```
 
-The situation we usually end up in however, is when we want to return a set of keytypes given one set of keytypes, for example, returning the gene symbol, entrez ID, and RefSeq ID from a list of Ensembl IDs. For thie we can use the `select()` method or `mapIds()` method.
+The situation we usually end up in however, is when we want to return a set of keytypes given one set of keytypes, for example, returning the gene symbol, entrez ID, and RefSeq ID from a list of Ensembl IDs. For this we can use the `select()` method or `mapIds()` method.
 ```r
 # use ensembl id of first 6 in entrez.ids to get desired keytypes
 select(org.Hs.eg.db, keys = head(entrez.ids), columns = c("SYMBOL","ENTREZID", "REFSEQ"), keytype="ENSEMBL")
@@ -73,11 +75,9 @@ select(org.Hs.eg.db, keys = head(entrez.ids), columns = c("SYMBOL","ENTREZID", "
 mapIds(org.Hs.eg.db, keys = head(entrez.ids), column = c("SYMBOL"), keytype="ENSEMBL")
 ```
 
-**Question:** When/why might we use `mapIds` over `select`?
-
 ### RNA-seq results annotation using OrgDb  
 
-Lets apply this approach to annotate some real RNA-seq differential expression results. Start by reading in the data, currently stored in .csv format.
+Lets apply this approach to annotate some real RNA-seq differential expression results. Start by reading in the data, currently stored in `.csv` format.
 ```r
 # read in data
 results <- read.csv("diff-exp-results.csv", stringsAsFactors = F, row.names = "ensembl")
@@ -101,7 +101,7 @@ head(results)
 table(is.na(results$symbol))
 ```
 
-Uh Oh! There are lots of NAs, meaning many genes didn't have a symbol mapped to them... Turns out Org.Db is most built around **entrez IDs** and does not contain the annotations for many Ensembl genes, which includes a lot of non-coding RNAs like lincRNAs. Instead, we can use an Ensembl package, `EnsDb.Hsapiens.v86` to pull data directly from Ensembl.
+Uh Oh! There are lots of NAs, meaning many genes didn't have a symbol mapped to them... Turns out Org.Db is most built around **entrez IDs** from NCBI and does not contain the annotations for many Ensembl genes, which includes a lot of non-coding RNAs like lincRNAs. Instead, we can use an Ensembl package, `EnsDb.Hsapiens.v86` to pull data directly from Ensembl.
 
 ```r
 library(EnsDb.Hsapiens.v86)
@@ -122,13 +122,11 @@ table(is.na(gene.symbols.2))
 
 Many fewer NAs are identified, meaning we were able to annotate more of the genes in our dataset with gene symbols. There are still a few missing though, why might this be?
 
-To ensure we annotate all possible genes approrpiately, we need to make sure we are using annotation data from the genome annotation release that was used to determine read count quantification on our dataset (that is, the annotation used the define gene and exon boundaries for counting up reads and attributing them to each gene).
+To ensure we annotate all possible genes, we need to make sure we are using annotation data from the genome annotation used to in the read count quantification process for these data (think back to the `GTF` file we used during alignment and quantification).
 
-For standard RNA-seq analyses, this is usually performed using a **GTF** file that contains all the gene model and annotation data for a specific release. These data were annotated using Ensembl verion **97** (which explains why the R-package based off of Ensembl v86 was not able to find matching symbols for all our Ensembl IDs) therefore we could read the GTF file directly into R and manually link ensembl IDs to gene symbols.
+These data were annotated using Ensembl verion **97** (which explains why the R-package based off of Ensembl v86 was not able to find matching symbols for all our Ensembl IDs) therefore we could read the GTF file directly into R and manually link ensembl IDs to gene symbols. However, the GTF file is very large and may exceed available memory on our local machines if we load it into R.
 
-However, the GTF file is pretty big, so it not really feasible for us to use that approach unless we take the time to download and store the file locally, or work on a HPC. Instead, we can download basic annotation data for Ensembl annotation releases using the BioMart resource through the Ensembl website.
-
-Lets go and download these data from the [Ensembl website](https://uswest.ensembl.org/index.html) together (remember that we need to download annotation data specifically for Ensembl v97, and the current version (as of Nov. 2020), which is the website default, is Ensembl v101).
+Alternatively, we can download annotation data for the human Ensembl annotation releases **97**, and all other Ensembl genomes, using the [BioMart annotation database](https://www.ensembl.org/biomart/martview/6f49181a012124dc5569c6e9d5f71720). BioMart is an easy to use web-based tool that allows you to efficiently obtain annotation data for Ensembl genomes. **Use BioMart to obtain annotation data for the human genome version hg38 from annotation release v97.**
 
 Now read this file into R:
 ```r
@@ -159,6 +157,8 @@ write.csv(results_merge, file = "diff-exp-results-annotated.csv")
 As we have seen, while the R-packages discussed above can present powerful and quick ways to access lots of annotation data (e.g. gene ontology etc.), there are some obvious limitations which are important to understand when you are annotating your own datasets.
 
 Using BioMart is also valuable if you need annotation data for a model organism that doesn't have an EnsDb or OrgDb R-package availble for it.
+
+### OPTIONAL SECTION: Access Biomart data from within R
 
 If you want to access BioMart from within R, you can use the `BioMart` package to directly interface with the database. This can be a little slower than the approach described above, but can allow more flexibility depending on what you need annotation data for.
 ```r
@@ -209,11 +209,11 @@ You can see we now have a `data.frame` stored in anno_bm in our environment that
 
 ---
 
-### Leverging transcript-specific data with Bioconductor
+### Transcript-specific annotation data with Bioconductor
 
-Another useful core Bioconductor package is the `GenomicFeatures` package, which implements the `TxDb` object class, and provides a convienient and efficient way to store and access transcript specific data from a genome annotation. `TxDb` objects store a wide-range of transcript-specific information including coordinates and sequences for promoters, exons, introns, and untranslated regions (UTRs).
+Another core Bioconductor package is the **GenomicFeatures** package, which implements the *TxDb* object class, and provides a convenient and efficient way to store and access transcript specific data from a genome annotation. TxDb objects store a wide-range of transcript-specific information including coordinates and sequences for promoters, exons, introns, and untranslated regions (UTRs).
 
-`TxDB` objects for common genome annotations can be loaded directly by calling the corresponding annotation package. We can view the available `TxDb` packages by going to the Bioconductor website and using the search tool. Lets start by loading the `TxDb` package for the human genome and having a look at the contents.
+TxDb objects for common genome annotations can be loaded directly by calling the corresponding annotation package. We can view the available TxDb packages by going to the Bioconductor website and using the search tool. Lets start by loading the TxDb package for the human genome and having a look at the contents.
 ```r
 library(TxDb.Hsapiens.UCSC.hg38.knownGene)
 
@@ -222,13 +222,13 @@ txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 txdb
 ```
 
-You can see this available `TxDb` object is for gene annotations generated under the UCSC annotation pipeline. What if your genome is not included in the available `TxDb` packages, for example, if we wanted to continue using an Ensembl annotation? Or perhaps there is no pre-constructed `TxDb` object avaialble for your organism. `GenomicFeatures` provides a number of functions specifically to address these issues, for example:  
-* makeTxDbFromEnsembl() - Contsrtuct a TxDb object from Ensembl
-* makeTxDbPackageFromBiomaRt() - Contsrtuct a TxDb object from Biomart
-* makeTxDbPackageFromGFF() - Contsrtuct a TxDb object from a GFF/GTF file (especially useful if you are working with a very niche or custom annotation/organism).
+You can see this available TxDb object is for gene annotations generated under the UCSC annotation pipeline. What if your genome is not included in the available TxDb packages, for example, if we wanted to continue using an Ensembl annotation? Or perhaps there is no pre-constructed TxDb object available for your organism. GenomicFeatures provides a number of functions specifically to address these issues, for example:  
+* `makeTxDbFromEnsembl()` - Construct a TxDb object from Ensembl
+* `makeTxDbPackageFromBiomaRt()` - Construct a TxDb object from Biomart
+* `makeTxDbPackageFromGFF()` - Construct a TxDb object from a GFF/GTF file
 
 Lets construct a TxDb object from the latest release for human genes from Ensembl. We won't actually build it from scratch right now as it takes a bit of time, but we have a pre-made TxDb ready for you to read into your environment and work with.
-```
+```r
 #### DO NOT RUN ####
 txdb <- makeTxDbFromEnsembl("homo_sapiens", release = 101)
 
@@ -243,7 +243,7 @@ txdb <- loadDb("data/TxDb.Hsapiens.Ensembl.101.db")
 txdb
 ```
 
-Printing the object to the console tells us some basic information about the annotation. For example, you can see the data include hundreds of thousands of rows for unique transcripts, exons, and coding sequences. We can access this information with some basic accessor functions provided by the `GenomicFeatures` package.
+Printing the object to the console tells us some basic information about the annotation. For example, you can see the data include hundreds of thousands of rows for unique transcripts, exons, and coding sequences. We can access this information with some basic accessor functions provided by the GenomicFeatures package.
 ```r
 # retrieve all transcript level info
 txs <- transcripts(txdb)
@@ -259,7 +259,7 @@ length(txs)
 table(strand(txs))
 ```
 
-The `transcripts()` function convieniently returns a **GRanges** class object. this means we can apply all the same methods and accessor functions we used in the previous lesson to the transcript data here (e.g. seqnames(), strand(), findOverlaps(), etc.). There are also several other useful accessor functions that we can use to return specific subsets of the data in our `TxDb` object.
+The `transcripts()` function conveniently returns a GRanges class object. This means we can apply all the same methods and accessor functions we used in the previous lesson to the transcript data here (e.g. `seqnames()`, `strand()`, `findOverlaps()`, etc.). There are also several other useful accessor functions that we can use to return specific subsets of the data in our TxDb object.
 ```r
 # retireve all the exon ranges
 ex <- exons(txdb)
@@ -275,7 +275,7 @@ exonicParts(txdb)
 intronicParts(txdb)
 ```
 
-Some of these ranges might be a bit more useful to us if they were organized by their relation to a specific transcript or gene. There are several accessor functions that provide functionality to achieve this, and return a **GRangesList** class object rather than ordinary Granges objects.
+Some of these ranges might be more useful if they were organized by their relation to a specific transcript or gene. There are several accessor functions that provide functionality to achieve this, and return a GRangesList class object rather than ordinary Granges objects.
 ```r
 # return all transcript ranges organized by gene
 txs_by_gene <- transcriptsBy(txdb, by = "gene")
@@ -289,15 +289,14 @@ ex_by_gene <- exonsBy(txdb, by = "tx")
 ex_by_gene
 ```
 
-Equivalent functions exist to return oganized GRangesLists for specific features, including:  
+Equivalent functions exist to return organized GRangesLists for specific features, including:  
 * `exonsBy()` - exons by feature
-* `cdsBy()` - coding sequences by feature
 * `intronsByTranscript()` - introns by transcript
 * `exonsByTranscript()` - exons by transcript
 * `threeUTRsByTranscript()` - 3'UTRs by transcript
 * `fiveUTRsByTranscript()` - 5'-UTRs by transcript
 
-As an alternative way to return data from the Txdb object, you can use the `select()` method with the `columns` and `keytypes` arguments just as we did for *OrgDBb* objects above. This convienient approach is made possible by the fact that *TxDb* objects inheret from *AnnotationDbi* objects, just as *OrgDb* objects do. Using `select` in this way allows us to return data for a large list of features, or a specific subset that we request using the `keys` argument. For example, we might wish to return transcript to gene mapping for specific gene IDs, or we may want to obtain all the exon IDs and their genomic location info for a specific set of transcripts.
+Data can also be accessed from a TxDb object using the `select()` method with the `columns` and `keytypes` arguments just as we did for *OrgDBb* objects. This convenient approach is made possible by the fact that *TxDb* objects inheret from *AnnotationDbi* objects, just as *OrgDb* objects do. Using `select` in this way allows us to return data for a large list of features, or a specific subset that we request using the `keys` argument. For example, we might wish to return transcript to gene mapping for specific gene IDs, or we may want to obtain all the exon IDs and their genomic location info for a specific set of transcripts.
 ```r
 # look at the columns avaialble to be returned in the Txdb
 columns(txdb)
@@ -307,7 +306,9 @@ gene_to_tx <- select(txdb, keys = "ENSG00000273696", columns="TXNAME", keytype="
 gene_to_tx
 
 # return tx to gene mapping for top 500 RNA-seq diff. exp. results
-gene_to_tx <- select(txdb, keys = head(rownames(results), 500) , columns="TXNAME", keytype="GENEID")
+gene_to_tx <- select(txdb, keys = head(rownames(results), 500) ,
+                     columns="TXNAME",
+                     keytype="GENEID")
 head(gene_to_tx)
 dim(gene_to_tx)
 
@@ -317,8 +318,9 @@ table(duplicated(gene_to_tx$TXNAME))
 
 # return exons IDs, their coordinates, and strand for top 10 transcripts from RNA-seq results
 tx_to_exon <- select(txdb, keys = head(gene_to_tx, 10)$TXNAME ,
-                      columns=c("EXONCHROM", "EXONNAME", "EXONSTART", "EXONEND", "EXONSTRAND", "GENEID"), keytype="TXNAME")
-tx_to_exon
+                      columns=c("EXONCHROM", "EXONNAME", "EXONSTART",
+                      "EXONEND", "EXONSTRAND", "GENEID"),
+                      keytype="TXNAME")
 
 # again, check for duplicate entries
 table(duplicated(tx_to_exon$TXNAME))
@@ -326,9 +328,13 @@ table(duplicated(tx_to_exon$TXNAME))
 
 ### Example application 1: Variant annotation
 
-Transcript annotation data can be used in many ways. One common usage example is for variant annotation, where we need to identify the transcriptional context of a variant set (e.g. promoter-associated, exon, intron, untranslated regions, etc.).
+Transcript annotation data can be used in many ways. One common usage example is in the annotation of variant calls, where we need to identify the transcriptional context of a variant set (e.g. promoter-associated, exon, intron, untranslated regions, etc.).
 
-To demonstrate how we could use our TxDb object created above to annotate variants, we will leverage functionality from another BioConductor package, `VariantAnnotation` that uses TxDb objects directly to annotate a set of variants (that can be in GRanges format). An example variant set is also provided, representing variants identified as present over multiple cancer types, as part of The Cancer Genome Atlas (TCGA) [Pan-Cancer Analysis of Whole Genomes (PCAWG) project](https://www.nature.com/articles/s41586-020-1969-6). Genomic coordinates (hg38) for all identified variants present on chromosome 17 are included in the file `../data/TCGA.pcawg.chr17.bed`.
+To demonstrate how we could achieve this in Bioconductor, we will also use the `VariantAnnotation` package that uses TxDb objects directly to annotate a set of variants. An example set of variant calls is provided, representing variants present over multiple cancer types, identified as part of The Cancer Genome Atlas (TCGA) [*Pan-Cancer Analysis of Whole Genomes (PCAWG) project*](https://www.nature.com/articles/s41586-020-1969-6). Genomic coordinates (hg38) for all identified variants present on chromosome 17 are included in the file `../data/TCGA.pcawg.chr17.bed`.
+
+> Note that *'variant annotation'* also commonly includes annotating variants with their functional consequence
+
+To demonstrate how we could use our TxDb object created above to annotate variants, we will leverage functionality from another BioConductor package, `VariantAnnotation` that uses TxDb objects directly to annotate a set of variants (that can be in GRanges format).
 
 ```r
 library(VariantAnnotation)
@@ -356,7 +362,7 @@ round(prop.table(sum.tab), digits = 2)
 barplot(round(prop.table(table(coding$LOCATION)), digits = 2))
 ```
 
-It would also be nice to have the gene symbols included in the TxDb object. We can do this using the `select()` method as we did previously. This allows us to easily search for genes of interest, by their transcript ID, gene ID, or gene symbol.
+It would also be nice to have the gene symbols included in the TxDb object. We can add gene symbols in the same way we did using above using annotation data downloaded from Biomart. For these data, we need annotation release 101, which has been provided for you in the `Day-3/data/` directory.
 ```r
 #
 anno <- read.table("data/GRCh38.p12_ensembl-101.txt", sep="\t", header=TRUE, stringsAsFactors = F)
@@ -366,13 +372,16 @@ indicies_of_matches <- match(vars$GENEID, anno$Gene.stable.ID)
 
 # add gene symbols to vars object
 vars$GENE.SYMBOL <- anno$Gene.name[indicies_of_matches]
+```
 
+Adding gene symbols allows us to easily search for genes of interest, by their transcript ID, gene ID, or gene symbol. We demonstrate this below by restricting to variants identified in the *CD97B* gene.
+```r
 # exmaple gene of interest:
-vars_erbb2 <- vars[vars$GENE.SYMBOL %in% "ERBB2",]
-vars_erbb2
+vars_cd79b <- vars[vars$GENE.SYMBOL %in% "CD97B",]
+vars_cd79b
 
 # check how many of each variant type
-table(vars_erbb2$LOCATION)
+table(vars_cd79b$LOCATION)
 ```
 
 We could also use the visualization approaches we learn't in the last lesson to plot the variants in this region using the `Gviz` package.
@@ -452,6 +461,9 @@ To annotate the genomic context of the ChIP peaks, we will use functionality fro
 
 The specific function we will use to perform the annotation is the `annotatePeak` function, which accepts a *TxDb* class object directly to define the regions that the peaks should be annotated based on. Lets `annotatePeak` on the forebrain H3K27ac peak set.
 ```r
+# load the chipseeker package
+library('ChIPseeker')
+
 # run annotatePeak
 fr_h3K27ac_anno <- annotatePeak(fr$h3K27ac, tssRegion=c(-2000, 1000), TxDb = txdb)
 fr_h3K27ac_anno
