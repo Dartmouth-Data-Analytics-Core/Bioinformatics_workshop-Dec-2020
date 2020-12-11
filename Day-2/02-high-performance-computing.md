@@ -314,7 +314,7 @@ running R interactively
 
 ## Break out room exercises
 
-- Build a pbs script that uses the counting GC script that you created yesterday
+- Build a pbs script that uses the counting GC script (count_GC_content.sh) that you created yesterday
 
 - Run this script on the raw fastq files
 
