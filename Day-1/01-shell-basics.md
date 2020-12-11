@@ -28,7 +28,9 @@ Accessing the (bash) shell:
 - On a mac or linux system, the *Terminal* application provides access to the shell. There are also applications that you can download that provide customizations not present in the Terminal application, such as [iTerm2](https://iterm2.com/).
 - On a Windows system, you can use an applicatrion such as [MobaXterm](https://mobaxterm.mobatek.net/).
 
-![](../figures/shell.png)
+<p align="center">
+  <img src="../figures/shell.png" height="80%" width="80%"/>
+</p>
 
 When you open your terminal application you will be presented with the command prompt `$` when you are able to input commands. If the terminal is busy and cannot currently accept new commands, you will not be presented with the prompt.
 
@@ -90,9 +92,9 @@ We can use the redirect command (>) to redirect the output of commands like echo
 ```bash
 echo 'bla bla bla' > mynotes.txt
 ```
-## Log on to discovery cluster 
+## Log on to discovery cluster
 
-Many of the higher level commands for working with NGS data will require a lot of memory and computing power, more than most laptops can handle efficiently. 
+Many of the higher level commands for working with NGS data will require a lot of memory and computing power, more than most laptops can handle efficiently.
 The discovery cluster is a resource hosted by Dartmouth's Research Computing team. This cluster enables you to execute high level commands wihtout using the memory and computing power on your local machine (more about this tomorrow). Let's log onto the discovery cluster now. We will use a secure shell command `ssh` to log onto the discovery cluster.
 
 ```bash
@@ -116,7 +118,7 @@ pwd
 
 ```
 
-You should see something like `/dartfs-hpc/rc/home/h/netID` displayed in response to your command. Initially when you log on you will always be directed to your home directory (the address or path listed above). Your home directory by default will have 50GB of storage space to begin with, if you are running something that requires more storage space it is possible to extend that limit temporarily with the `/scratch/ drive`. This is where we have stored all of the files you will be working with today. Directories and files hosted on the `/scratch/` drive will only be maintained for 45 days, you will receive a notification from research computing before the data is deleted, but it will be maintained longer than 45 days. 
+You should see something like `/dartfs-hpc/rc/home/h/netID` displayed in response to your command. Initially when you log on you will always be directed to your home directory (the address or path listed above). Your home directory by default will have 50GB of storage space to begin with, if you are running something that requires more storage space it is possible to extend that limit temporarily with the `/scratch/ drive`. This is where we have stored all of the files you will be working with today. Directories and files hosted on the `/scratch/` drive will only be maintained for 45 days, you will receive a notification from research computing before the data is deleted, but it will be maintained longer than 45 days.
 
 It is a good idea when working on projects on an HPC to stay organized so lets start by making a folder, or directory to store all of the work you do today we will call it `fundamentals_of_bioinformatics`. You will notice that I chose a title that has no spaces in it, this is because the space is a special character, special characters need to be *escaped* with the `\` and so `funadmentals_of_bioinformatics` would look like `fundamentals\ of\ bioinformatics` with the escape characters. You can see that file names with spaces become unweildy to type out so most programmers will replace spaces with `_`, `.`, or `-` in their filenames to keep everything neat.
 
@@ -157,7 +159,7 @@ When working with larger files, which we are usually doing in bioinformatics, yo
 - `head` will print the first 10 lines by default, but this number can be controlled with the `-n` option
 - `tail` will print the final lines of a file, and can also be controlled with the `-n` option
 
-We will use a larger text file to show the utility of these commands, as well as other commands in the subsequent parts of this lesson. 
+We will use a larger text file to show the utility of these commands, as well as other commands in the subsequent parts of this lesson.
 ```bash
 # Show the first 20 lines of the all_counts.txt file
 head -n 20 all_counts.txt
@@ -394,13 +396,15 @@ ls *.txt
 
 ### Customizing your environment
 
-You will notice the prompt in your terminal when you are logged onto discovery starts with the term `(base)` what this is indicating is that the environments loaded in your .bash_profile are the tools that are available for you to use. For this workshop (and for most NGS data processing) you will need to extend the software packages that are available to you. We will do this now by loading a new environment with the tool `conda`. We have pre-built this `conda` environment for you such that all of the tools you will need have been loaded into this environment, you should have created this environment with the commands included in the welcome and setup email. Tomorrow we will talk more about how to create your own custom `conda` environment. 
+You will notice the prompt in your terminal when you are logged onto discovery starts with the term `(base)` what this is indicating is that the environments loaded in your .bash_profile are the tools that are available for you to use. For this workshop (and for most NGS data processing) you will need to extend the software packages that are available to you.
+
+We will do this now by loading a new environment with the tool `conda`. We have pre-built this `conda` environment for you such that all of the tools you will need have been loaded into this environment, you should have created this environment with the commands included in the welcome and setup email. Tomorrow we will talk more about how to create your own custom `conda` environment.
 
 ```bash
 
 # Load conda environment
 conda activate bioinfo
 ```
-This should change the word at the beginning of your prompt from `(base)` to the name of the conda environment that you just loaded `(bioinfo)`. 
+This should change the word at the beginning of your prompt from `(base)` to the name of the conda environment that you just loaded `(bioinfo)`.
 
-> As we move through the subsequent lessons, we will introduce more complex bash commands in order to manipulate common bioinformatics file types. If you are ever confused about what a command does, remember you can always use `man` to check out the manual page (or google it). It you are confused about how commands are used in conjuction with each other, it can also be helpful to break them down and run parts individually, in order to understand what the constituent parts do.
+> As we move through the subsequent lessons, we will introduce more complex bash commands in order to manipulate common bioinformatics file types. If you are ever confused about what a command does, remember you can always use `man` to check out the manual page (or google it). It you are confused about how commands are used in conjunction with each other, it can also be helpful to break them down and run parts individually, in order to understand what the constituent parts do.
