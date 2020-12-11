@@ -148,7 +148,7 @@ results$ensembl <- rownames(results)
 
 results_merge <- merge(results, anno, by="ensembl")
 head(results_merge)
-table(is.na(z2$Gene.name))
+table(is.na(results_merge$Gene.name))
 ```
 
 Great! We now have gene symbols for all the genes in our dataset, and some additional annotation data integrated directly with our results. Save these data and send it to your PI!
@@ -200,7 +200,8 @@ The flagship function of the BiomaRt package is `getBM()` (for get BiomaRt presu
 anno_bm <- getBM(attributes=c("ensembl_gene_id", "hgnc_symbol", "chromosome_name", "start_position", "end_position", "strand"),
                  filters = "ensembl_gene_id",
                  values = head(results$ensembl, 2000),
-                 mart = ensembl)
+                 mart = ensembl,
+		 useCache = FALSE)
 head(anno_bm, 10)
 ```
 
