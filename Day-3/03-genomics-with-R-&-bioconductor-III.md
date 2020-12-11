@@ -36,7 +36,7 @@ seq
 length(seq)
 
 # show the structure of the DNAString object
-str(dna.st)
+str(seq)
 ```
 
 This sequence is a bit short and unrealistic. Lets make a longer sequence using the pre-stored *BioStrings* object `DNA_ALPHABET` and some functions from base R.
@@ -320,7 +320,7 @@ Image source: [Wikipedia](https://en.wikipedia.org/wiki/Amphimedon_queenslandica
 
 We can retrieve a FASTA file for the coding sequences  (13 overall) from NCBI [(RefSeq ID: NC_008944.1)](https://www.ncbi.nlm.nih.gov/genome/2698) and read the FASTA file into R as a DNAStringSet object using the `readDNAStringSet()` function.
 ```{r}
-fasta.file <- "../data/a.queenslandica.fasta"
+fasta.file <- "a.queenslandica.fasta"
 a.queen <- readDNAStringSet(fasta.file, "fasta")
 a.queen
 ```
@@ -376,7 +376,7 @@ match1[[3]]
 
 # use a loop to search for stop codons in all our coding sequences
 matches <- list()
-for(i in 1:length(gc.content)){
+for(i in 1:length(a.queen)){
   matches[[i]] <- matchPDict(stop.codons.dict, a.queen[[i]])
 }
 length(matches)
