@@ -140,7 +140,7 @@ As expected the new directory that you created is empty there are no files. Lets
 ```bash
 
 # copy the file from the scratch drive to the fundamentals_of_bioinformatics directory you just created
-cp /scratch/fund_of_bioinfo/all_counts.txt ./
+cp /scratch/fund_of_bioinfo/counts/all_counts.txt ./
 
 ```
 
@@ -307,8 +307,11 @@ $ll
 
 It is possible to make variables you add to your environment persistent, meaning those changes will define your environment each time you start a new bash session. This can be achieved by adding the variable assignment to one of the *environment files*, which are a set of files that are executed everytime you start a new bash session. These files are typically hidden, so we need to use `ls` wuth the `-a` flag to see them.
 
-List all files in your working directory and locate the `.bash_profile` environment file, and view its contents with the `cat` command.
+List all files in your homoe directory and locate the `.bash_profile` environment file, and view its contents with the `cat` command.
 ```bash
+# navigate to your home directory
+cd ../
+
 # view files in current working directory and include hidden files
 ls -a
 

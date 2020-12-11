@@ -59,7 +59,7 @@ STAR --genomeDir /scratch/fund_of_bioinfo/ref/hg38_chr20_index \
   --readFilesCommand zcat \
   --sjdbGTFfile /scratch/fund_of_bioinfo/ref/Homo_sapiens.GRCh38.97.chr20.gtf \
   --runThreadN 1 \
-  --outSAMtype SAM \
+  --outSAMtype BAM SortedByCoordinate \
   --outFilterType BySJout \
   --outFileNamePrefix SRR1039508.
   ```
@@ -177,6 +177,8 @@ So for example, alignment in row 3 of our SAM file example above (`5S6M`) would 
 SAM format is a common way of representing sequenced reads, especially after reads have been aligned or mapped to a reference genome. BAM is a binary (non-human readable) format of SAM that takes up less space. CRAM files are compressed versions of BAM files - these take up the least space and are recommended for longer term storage of alignment files. SAM/BAM/CRAM files can be converted back and forth with the tool **samtools view**.
 
 ```bash
+#convert bam to sam
+samtools view -H sample.bam > sample.sam
 
 #convert sam to bam
 samtools view -b sample.sam > sample.bam
@@ -194,7 +196,6 @@ All header lines will start with the **@** symbol. The mandatory flag **@HD** wi
 To view a SAM/BAM/CRAM file you can use the **samtools view** tool with the **-H** flag:
 
 ```bash
-samtools view -H sample.sam
 samtools view -H sample.bam
 ```
 

@@ -36,18 +36,23 @@ The most simplistic methods (e.g. [htseq-count](https://htseq.readthedocs.io/en/
 As an example, lets use [htseq-count](https://htseq.readthedocs.io/en/release_0.11.1/count.html) to quantify reads for an alignment we created in the previous lesson. Some important options in *htseq-count* include:
 
 **Feature type (`-t`):**  
-Specifies the feature in your GTF file you want to count over (r3rd column). The default is **exon**. However, this can be changed to any feature in your GTF file, so theoretically can be used to count any feature you have annotated.
+Specifies the feature in your GTF file you want to count over (3rd column). The default is **exon**. However, this can be changed to any feature in your GTF file, so theoretically can be used to count any feature you have annotated.
 
 **Strandedness (`-s`):**  
 Specifies if reads in your experiment come from a stranded (`yes`) or unstranded (`no`) library type. It is critical to set this correctly, as incorrect selection will result in needlessesly throwing away 50% of your reads.  
 
 ```r
+# make a new directory to store your data in 
+mkdir ../quantification
+cd ../quantification
+
+# quantify reads that map to exons (default)
 htseq-count \
 	-f bam \
 	-s no \
 	-r pos \
-	../alignment/SRR1039508.Aligned.sortedByCoord.out.bam \
-	../Homo_sapiens.GRCh38.97.chr20.gtf > SRR1039508.htseq-counts
+	../aligned/SRR1039508.Aligned.sortedByCoord.out.bam \
+	/scratch/fund_of_bioinfo/ref/Homo_sapiens.GRCh38.97.chr20.gtf > SRR1039508.htseq-counts
 ```
 
 Have a look at the resulting file.
@@ -80,7 +85,7 @@ Adapted from [Nakato & Sakata, *Methods*, 2020](https://www.sciencedirect.com/sc
 
 After sequencing the enriched regions of DNA and mapping them to a reference genome, we use statistical approaches to model the distribution of reads compared to those of a background sample (e.g. input DNA or IgG IP) in order to identify regions that are truly enriched regions representing real binding sites. This process is referred to as **peak calling**.
 
-Alignments generated after mapping short reads from a ChIP-seq experiment to a reference genome generally show asymmetric distribution of reads on the +/- strand immediately around a binding site. By shifting these reads toward the middle, or extending them to the expected fragment length, we can generate a signal profile that is compared to in the background signal from the control DNA sample using statistical models, ultimately assigning a probability value (*P*-value) to each peak.
+Alignments generated after mapping short reads from a ChIP-seq experiment to a reference genome generally show asymmetric distribution of reads on the +/- strand immediately around a binding site. By shifting these reads toward the middle, or extending them to the expected fragment length, we can generate a signal profile that is compared to the background signal from the control DNA sample using statistical models, ultimately assigning a probability value (*P*-value) to each peak.
 
 <p align="center">
 <img src="../figures/peak-calling.png" title="xxxx" alt="context"
@@ -89,7 +94,7 @@ Alignments generated after mapping short reads from a ChIP-seq experiment to a r
 
 
 
-Part A adapted from [Park, *Nature Rev. Gen.*, 2009](https://www.nature.com/articles/nrg2641). Part B adapted from [Pepke et al, *Nature Methods*, 2009](https://www.nature.com/articles/nmeth.1371).
+Part A has been adapted from [Park, *Nature Rev. Gen.*, 2009](https://www.nature.com/articles/nrg2641). Part B has been adapted from [Pepke et al, *Nature Methods*, 2009](https://www.nature.com/articles/nmeth.1371).
 
 
 
@@ -98,6 +103,7 @@ Part A adapted from [Park, *Nature Rev. Gen.*, 2009](https://www.nature.com/arti
 
 Below is an example a shell command line usage that you could use to call peaks with MACS2.  
 
+*Do not run this is only an example*
 ```bash
 macs2 callpeak \
 	-t sample-1-chip.bam \
@@ -127,14 +133,14 @@ Nine additional optional fields can be provided to include additional informatio
 
 The [UCSC website](https://genome.ucsc.edu/FAQ/FAQformat.html#format1) is an excellent resource for learning more about BED, narrowpeak, and other genomics file formats.
 
-Lets briefly explore a BED file on the command line. We will use `heart_E15.5_H3K9ac.bed` located in the data folder for day-3 materials (`Day-3/data/`):
+Lets briefly explore a BED file on the command line. We will use `heart_E15.5_H3K9ac.bed` located in the scratch directory:
 ```bash
 # examine the head and tail of the file
-head -n 10 heart_E15.5_H3K9ac.bed
-tail -n 10 heart_E15.5_H3K9ac.bed
+head -n 10 /scratch/fund_of_bioinfo/bed_file/heart_E15.5_H3K9ac.bed
+tail -n 10 /scratch/fund_of_bioinfo/bed_file/heart_E15.5_H3K9ac.bed
 
 # count number of regions in the file
-wc -l narrowpeak
+wc -l head -n 10 /scratch/fund_of_bioinfo/bed_file/heart_E15.5_H3K9ac.bed
 ```
 
 **Note:** The settings and options used to perform peak calling appropriately are dependent on the data you have (e.g. ChIP-seq, ATAC-seq, etc.) and the type of peak you are hoping to detect. TFs usually form narrow punctuate peaks but other marks, such as histone marks, typically form broader peaks, and can require different settings to accurately detect.
@@ -157,7 +163,7 @@ bigWig files can be constructed from the *wiggle (Wig)* or *bedGraph* file forma
 
 > For the purposes of this workshop, we only need understand the idea behind of bigwig files and what they are used for. We hope to address their generation and use in more detail in future workshops.
 
-As bigwig files data essentially describing all positions in the reference genome, we can use them to evaluate signal across many genomic loci simultaneously. One common example is to plot the signal directly upstream and downstream of the called peaks. As you cabn see in the example below, such analysis is not limited to ChIP-seq, and could instead represent Tn5 insertions in an ATAC-seq experiment, for example.
+Bigwig file data essentially describes all positions in the reference genome, thus we can use them to evaluate signal across many genomic loci simultaneously. One common example is to plot the signal directly upstream and downstream of the called peaks. As you can see in the example below, such analysis is not limited to ChIP-seq, and could instead represent Tn5 insertions in an ATAC-seq experiment, for example.
 
 <p align="center">
 <img src="../figures/chip-tss-example.png" title="" alt="context"
