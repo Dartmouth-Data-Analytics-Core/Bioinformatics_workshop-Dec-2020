@@ -58,7 +58,17 @@ When using RStudio, you will generally want to generate your code using the scri
 We will be using RStudio throughout the workshop, although will point out how and when you may wish to run R interactively (such as on an HPC).
 
 ---
+## Orienting yourself
 
+As with working on the terminal a good first step is to orient yourself, lets see where on your local computer and reset this location to where you want to be with the `getwd()` and `setwd()` commands. 
+
+```r
+# where are you on your local machine
+getwd()
+
+# set working directory to the data folder of Day-2 in the github repo you downloaded - notice that the path needs to be in double quotes
+setwd("your_path/Bioinformatics_workshop/Day-2/data/")
+```
 
 ## Basic data structures in R
 
@@ -559,7 +569,7 @@ Tabular data are often stored a text files where the individual fields containin
 Use `read.table()` to read in the *all_counts.txt*  that we used on day 1. Since `read.table()` is a general function for loading in tabular data, we need to specify the correct separator/delimiter value using the `sep` argument. Tab delimited data is specified using `\t` in the sep argument.
 ```r
 # using read.table
-counts <- read.table(file = "~/all_counts.txt",
+counts <- read.table(file = "all_counts.txt",
                      sep = "\t", header = TRUE, stringsAsFactors = FALSE)
 ### Note 1: header accepts logical value indicating if the first row are column names (default FALSE)
 ### Note 2: we use stringsAsFactors
@@ -571,7 +581,7 @@ class(counts); dim(counts); str(counts)
 Now use `read.delim()`. An important difference between `read.delim()` and `read.table()` are the default setting for the *sep* and *header* arguments. By deault in `read.delim()`, *sep* is set to `\t` and the header argument is set to `TRUE`, so we do not need to explicity call those arguments.
 ```r
 # using read.delim
-counts <- read.table(file = "~/all_counts.txt", stringsAsFactors=FALSE)
+counts <- read.table(file = "all_counts.txt", stringsAsFactors=FALSE)
 
 # check class, dimensions and structure
 class(counts); dim(counts); str(counts)
@@ -591,12 +601,12 @@ In both functions, the first argyument specifies the object in your global envir
 counts_sub <- counts[1:2000, 1:5]
 
 # write to tab delimited file using write.table
-write.table(counts_sub, file = "~/all_counts_sub.txt", sep = "\t")
+write.table(counts_sub, file = "all_counts_sub.txt", sep = "\t")
 ```
 
 In contrast, `read.csv()` does not require you to set the delimitor value, and by default writes data to comma separated value files (.csv).
 ```r
-write.csv(counts_sub, file = "~/all_counts_sub.csv")
+write.csv(counts_sub, file = "all_counts_sub.csv")
 ```
 
 ## Save R objects to file
@@ -611,22 +621,22 @@ y <- c(TRUE, FALSE, TRUE, TRUE)
 z <- c("a", "b", "c", "d")
 
 # save all 3 objects to one file 
-save(x, y, z, file = "~/my_r_objects.rdata")
+save(x, y, z, file = "my_r_objects.rdata")
 ```
 
 These objects can then be loaded back into your global environment using the `load()` function with the absolute or relative file path. The objects will appear in your new environment with exactly the same names as in your previous environment.
 ```r
-load(file = "~/my_r_objects.rdata")
+load(file = "my_r_objects.rdata")
 ```
 
 Single R objects can be saved and restored in a similar way using the `saveRDS()` and `readRDS()` functions. Files saved using RDS must take on the `.RDS` extension.
 ```r
 # save a single object to a specific file path
-saveRDS(x, file = "~/my_r_object.rds")
+saveRDS(x, file = "my_r_object.rds")
 
 # use the assignment operator to assign object to any variable you want
-x <- readRDS(file = "~/my_r_object.rds")
+x <- readRDS(file = "my_r_object.rds")
 
 # I changed my mind, I want the object to be assigned to variable `a` in my new env
-a <- readRDS(file = "~/my_r_object.rds")
+a <- readRDS(file = "my_r_object.rds")
 ```
