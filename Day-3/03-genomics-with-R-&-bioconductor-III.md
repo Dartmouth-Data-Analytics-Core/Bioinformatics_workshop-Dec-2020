@@ -3,32 +3,36 @@
 
 ## Sequence analysis & references genomes
 
-Beyond providing access to extensive annotation data in R, Bioconductor also provides functionality to obtain and maniuplate the complete reference sequences for commonly used genomes. Specifically, the [BSgenome](https://bioconductor.org/packages/release/bioc/html/BSgenome.html) family of Bioconductor packages provides an efficient way to obtain, query, and maniuplate genomic sequence data from reference genomes. You can return a vector of the currently available genomes to your console by printing `available.genomes()` after loading the `BSgenome` package.
+Beyond providing access to annotation data in R, Bioconductor also provides functionality for accessing and analyzing complete reference sequences for commonly used genomes. Namely, the [BSgenome](https://bioconductor.org/packages/release/bioc/html/BSgenome.html) family of Bioconductor packages provides an efficient way to obtain, query, and manipulate genomic sequence data from reference genomes. You can return a vector of the currently available genomes to your console by printing `available.genomes()` after loading the `BSgenome` package.
+
+Analyzing genomic sequence data directly can be used for a number of common research tasks, all possible in the BSGenome/BioStrings framework, for example:  
+* Extracting DNA/RNA/protein sequences for specific genomic features  
+* Calculating nucleotide frequencies for defined sequences
+* Searching for matching sequences of interest
 
 ```r
+# load the package
 library(BSgenome)
 
+# check currently available genomes
 available.genomes()
 ```
 
-The available genomes are preominantly based around NCBI and UCSC genomes, however functionality does exist for [forging a *BSGenome*](https://bioconductor.org/packages/release/bioc/html/BSgenome.html) package, allowing you to leverage the *BioStrings* framework for genomes that are not part of the available set from `BSgenome`.
+These genomes are focused predominantly on those available from NCBI and UCSC genomes, however functionality exists to [forge a BSGenome](https://bioconductor.org/packages/release/bioc/html/BSgenome.html) package, allowing you to leverage the BSGenome framework for genomes not part of the currently available set.
 
-If your genome is not included in the available genomes but you would still like to leverage the `BioStrings` and `BSGenome` framework, you can [forge a BSGenome package](https://bioconductor.org/packages/release/bioc/html/BSgenome.html) following instructions available at the BioConductor website.
+BSgenome packages are heavily dependent on the [BioStrings package](http://bioconductor.org/packÂages/release/bioc/html/Biostrings.html), which defines a set of methods and object classes for storing and accessing sequence data. BioStrings is loaded automatically when you loaded BSgenome.
 
-BSgenome packages are all heavily dependent on another Bioconductor package, [BioStrings](http://bioconductor.org/packages/release/bioc/html/Biostrings.html) , which defines a set of methods and object classes for storing and accessing the sequence data, and is loaded automatically when you loaded `BSgenome`. We will introduce the basic object classes and methods introduced by `BioStrings` to demonstrate how they form the basis for `BSgenome` packages, and what genomic sequence-based operations they allow you to perform on reference genome data (or any sequence you define).
+## Learning objectives:
 
-Analyzing genomic sequence data directly can be used for a number of common research tasks, all possible in the *BSGenome/BioStrings* framework, for example:  
-* Extracting DNA/RNA/protein sequences of specific genes or gene regions of interest (e.g. DNA sequence flanking a ChIP-seq peak)
-* Calculating nucleotide frequencies among specific genomic features
-* Searching for matching sequences of interest (e.g. barcode matching)
+We will introduce the basic object classes and methods introduced by BioStrings to demonstrate how they form the basis for BSgenome packages, and what genomic sequence-based operations they allow you to perform on reference genome data (or any sequence you define).
 
-#### Basic object-classes and methods in the *BioStrings* package
+### Basic object-classes and methods in the BioStrings package
 
-Before working with a complete reference genome sequence from *BSGenome*, lets discuss the basic object-classes implemented in the *BioStrings* package to store sequence data, as well as the methods use to parse these sequences.
+Before working with a complete genome sequence from BSGenome, lets discuss the basic object-classes implemented in the BioStrings package to store sequence data, as well as the methods use to parse these sequences.
 
-The most basic object class in *BioStrings* is the *XString* class, which is technically a '*virtual class*' (meaning it cannot actually store objects itself, but can be used to set rules for a a group of classes) encompassing object classes for DNA, RNA, and protein sequences: `DNAString`, `RNAString`, and `AAString`. Today we will focus on DNA sequences using *DNAString* class objects.
+The most basic object class in BioStrings is the *XString* class, which is technically a '*virtual class*' (meaning it cannot actually store objects itself, but can be used to set rules for a a group of classes) encompassing object classes for DNA, RNA, and protein sequences: `DNAString`, `RNAString`, and `AAString`. Today we will focus on DNA sequences using DNAString class objects.
 
-Lets start by creating a **really** simple *DNAString* object and looking at some basic features of it:
+Lets start by creating a simple DNAString object and looking at some of its basic features:
 ```r
 # use the DNAString contructor function to create a 10 letter DNA sequence
 seq <- DNAString(x="AGCT", start=1, nchar=NA)
@@ -41,15 +45,15 @@ length(seq)
 str(seq)
 ```
 
-This sequence is a bit short and unrealistic. Lets make a longer sequence using the pre-stored *BioStrings* object `DNA_ALPHABET` and some functions from base R.
+Now we will make a longer sequence using the pre-stored BioStrings object `DNA_ALPHABET` and some functions from base R.
 ```r
 # print DNA alphabet to see what it returns
 DNA_ALPHABET
 ```
 
-You can see the 4 standard DNA bases are returned as the first 4 elements of this character string. The remaining elements represent ambiguous bases or specific combinations/relationships using something called the *extended The International Union of Pure and Applied Chemistry (IUPAC) genetic alphabet.* **BioStrings** and its object classes use the extended IUPAC genetic alphabet to describe nucelic acid sequences, therefore we will nbriefly cover the basics of the extended IUPAC alphabet now.
+The four standard DNA bases are returned as the first 4 elements of this character string. The remaining elements represent ambiguous bases or specific combinations/relationships using something called the *extended The International Union of Pure and Applied Chemistry (IUPAC) genetic alphabet.* BioStrings and its object classes use the extended IUPAC genetic alphabet to describe nucleic acid sequences, therefore we will briefly cover the basics of the extended IUPAC alphabet now.
 
-The extended IUPAC code is a specific nomenclature designed to describe incompletely specified nucleic acids. The standard IUPAC code uses 16 characters to specify single bases (A, G, C, T, U) in nucleic acid sequences, or various possible states that a specific nucleic acid may exist as in a sequence.
+The extended IUPAC code is a nomenclature used to describe incompletely specified nucleic acids. This is useful when dealing with reference genomes, as we often encounter regions with ambiguous assemblies. The standard IUPAC code uses 16 characters to specify both single bases (A, G, C, T, U) or the possible states for that base.
 
 The standard IUPAC code is used by numerous bioinformatics tools and softwares in order to represent complex sequences of nucleic acids for which we may not be confident in some individual base identities (e.g. complex genomic regions that are challenging to sequence using short read approaches).
 
@@ -77,21 +81,16 @@ The standard IUPAC code is used by numerous bioinformatics tools and softwares i
 
 This table was adapted from [Johnson, 2010, *Bioinformatics*](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2865858/#B1).
 
-An extended IUPAC genetic alphabet was also described in 2010 [(Johnson, 2010, *Bioinformatics*)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2865858/#B1). The extended code uses additional characters, underlining, and bolding as well as the original 16 character code (all meanings maintained) to denote all possible combinations or relationships between bases. Among other uses, this has been valuable for representing genetic varaition in DNA sequences. You can explore the details on the extended code in **Tables 2 & 3** of [(Johnson, 2010)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2865858/#B1).
+An extended IUPAC genetic alphabet was also described in 2010 [(Johnson, 2010, *Bioinformatics*)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2865858/#B1). The extended code uses additional characters, underlining, and bolding as well as the original 16 character code (all meanings maintained) to denote all possible combinations or relationships between bases. Among other uses, this has been valuable for representing genetic varaition in DNA sequences. You can explore the details on the extended code in Tables 2 & 3 of [(Johnson, 2010)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2865858/#B1).
 
- If you're working with *BioStrings* objects, and need a reminder of the basic characters of the extended code, you can just type `IUPAC_CODE_MAP` when you have the *BioStrings* package loaded into your R session.
+If you're working with BioStrings objects, and need a reminder of the basic characters of the extended code, you can just type `IUPAC_CODE_MAP` when you have the BioStrings package loaded into your R session.
 
-For example, entering the command below into your command-line..
-```
+```r
+# print iupac code to console
 IUPAC_CODE_MAP
 ```
-...will return the following to your console:
-```r
-     A      C      G      T      M      R      W      S      Y      K      V      H      D      B  N
-   "A"    "C"    "G"    "T"   "AC"   "AG"   "AT"   "CG"   "CT"   "GT"  "ACG"  "ACT"  "AGT"  "CGT" "ACGT"
-```
 
-For now, lets use the standard, unambiguous DNA bases (A, G, C, T).
+For now, we will use use the standard, unambiguous DNA bases (A, G, C, T) for some examples.
 ```{r}
 # randomly sample from specific characters in DNA_ALPHABET to create a longer sequence
 seq = sample(DNA_ALPHABET[c(1:4, 16)], size=100, replace=TRUE)
@@ -124,7 +123,7 @@ dinucleotideFrequency(seq.dnastring, as.prob=TRUE)
 trinucleotideFrequency(seq.dnastring, as.prob=TRUE)
 ```
 
-We can also perform some basic manipulations of our sequence using *BioStrings* functions.
+We can also perform some basic manipulations of our sequence using BioStrings functions.
 ```r
 # subset the sequence for 10 specific bases of interest  
 seq.dnastring[10:19]
@@ -145,7 +144,7 @@ reverseComplement(subseq(seq.dnastring, 1, 10))
 translate(seq.dnastring)
 ```
 
-Again, our example is a little impractical since we are usually working with a set of sequences, for example the chromosomes in a reference genome. This is where the `DNAStringSet` object class becomes useful. `DNAStringSet` allows you to store, name, and manipulate multiple sequences in one *BioStrings* object.
+Again, our example is a little impractical since we are usually working with a set of sequences, for example the chromosomes in a reference genome. This is where the `DNAStringSet` object class becomes useful. `DNAStringSet` allows you to store, name, and manipulate multiple sequences in one BioStrings object.
 ```r
 # remove the old single sequence from our global R environment
 rm(seq)
@@ -173,11 +172,11 @@ names(seq.dnass) = paste("barcode-", 1:5, sep="")
 seq.dnass
 ```
 
-Like *XString*, a virtual class exists for `DNAStringSet` class objects called *XStringSet*, which also contains object classes for storing RNA and AA sequences (`RNAStringSet` and `AAStringSet`).
+Like XString, a virtual class exists for `DNAStringSet` class objects called *XStringSet*, which also contains object classes for storing RNA and AA sequences (`RNAStringSet` and `AAStringSet`).
 
 #### Working with *BSGenome* reference genomes
 
-Now that we understand the major classes implemented by *BioStrings*, lets load a complete reference genome and start exploring it.
+Now that we understand the major methods and classes implemented by BioStrings, lets load a complete reference genome and start exploring it.
 ```r
 # assign the genome to a variable using getBSgenome() (you need to have the package for the BSgenome you are trying to load already installed)
 genome <- getBSgenome("BSgenome.Mmusculus.UCSC.mm10")
@@ -190,13 +189,13 @@ str(genome)
 metadata(genome)
 ```
 
-By default, the *BSGenomes* come with no sequence masking of, for example known repetitive regions that you may wish to ignore in your analyses. To obtain a masked genome, you should set `masked=TRUE` in the `getBSgenome()` function. This will load a genome in which specific sequences have been masked in a hierachical fashion using the following criteria:  
+By default, the *BSGenomes* come with no sequence masking. It is common when woprking with reference genomes to mask regions that may ciontain ambiguous sequences, such as repeat regions, that you wish to ignore in your analyses. To obtain a masked genome, you should set `masked=TRUE` in the `getBSgenome()` function. This will load a genome in which specific sequences have been masked in a hierachical fashion using the following criteria:  
 1. Gaps in the genome assembly
 2. Sequences with intra-contig ambiguities
 3. regions flagged by [*RepeatMasker*](http://www.repeatmasker.org/)
 4. regions flagged by [*Tandem Repeat Finder*](https://tandem.bu.edu/trf/trf.html)
 
-Lets load in the masked reference and compare to the unmasked version.
+Load the masked reference and compare to the unmasked version.
 ```r
 genome.m <- getBSgenome("BSgenome.Mmusculus.UCSC.mm10.masked")
 class(genome.m)
@@ -220,7 +219,7 @@ seqinfo(genome)
 genome$chr1
 ```
 
-Lets move forward with the masked genome for today. Remove the `genome` variable from your working environment and replace it with the masked genome for convienience.
+Lets move forward with the masked genome for today. Remove the `genome` variable from your working environment and replace it with the masked genome for convenience.
 ```r
 rm(genome)
 
@@ -246,20 +245,20 @@ alphabetFrequency(chr1, baseOnly=TRUE, as.prob=TRUE)
 letterFrequency(chr1, "A", as.prob=TRUE)
 ```
 
-Beyond the basic *BioStrings* based methods, there is one very important method implemented by the *BSGenome* using the `getSeq()` function, that allows you to extract specific sequences at request from a *BSgenome* or *XStringSet* class object. We will use `getSeq()` functionality in our next example to illustrate how you might use BSGenome packages in a standard NGS analysis.
+Beyond the basic BioStrings based methods, there is one important method implemented by the BSGenome using the `getSeq()` function, that extracts sequences at request from a BSgenome or XStringSet class object. We will use getSeq() functionality in our example below to demonstrate how you might use BSGenome packages in a typical NGS analysis.
 
-#### Example usage of a BSGenome package: Extracting peak flanking sequences from ChIP-seq data
+#### Example: Extracting sequences flanking ChIP-seq peaks
 
-Once peak regions have been identified to describe the potential binding locations of a particular transcription factor (TF), a common task in the analysis of ChIP-seq data is to scan the sequences immediately surrounding these peaks in order to identify sequences enriched over these peak regions that may represent the binding motif for that TF. In order to achieve this, we need to obtain the sequences for these peaks from the reference genome that the samples were aligned to (mm10). The cartoon below depicts this overall workflow.
+Once peak regions have been identified to describe the potential binding locations of transcription factor (TF) or histone modification, a common task in the analysis of ChIP-seq data is to scan the sequences immediately surrounding these peaks in order to identify sequences enriched over these peak regions that may represent the binding motif for that TF. To achieve this, we need to obtain the sequences for these peaks from the reference genome that the samples were aligned to (mm10). The cartoon below depicts this overall workflow.
 
 <p align="center">
 <img src="../figures/motif-example.png" title="xxxx" alt="context"
 	width="90%" height="90%" />
 </p>
 
-As an example, we will continue our mouse forebrain theme, using ChIP-seq data from the developing mouse forebrain that was performed using an antibody specific for the CTCF transcription factor (TF), a critical TF for diverse cellular processes that performs a plethora of transcriptional activation/repression functions at a genome-wide level. Called CTCF peaks for this experiment were downloaded from the ENCODE website [here](https://www.encodeproject.org/experiments/ENCSR677HXC/).
+As an example, we will again use data from the ENCDOE project, where mouse forebrain tissues were ChIP'd for CTCF, a critical TF for diverse cellular processes that performs a wide range of transcriptional activation/repression functions at a genome-wide level. Called CTCF peaks for this experiment were downloaded from the ENCODE website [here](https://www.encodeproject.org/experiments/ENCSR677HXC/).
 
-Lets read in the BED file as a *GRanges* object using *rtracklayer* function `import()` as we have done previously. We can then use the `getSeq()` function in Bioconductor to return the sequences from our previously assigned *BSGenome* (UCSC - mm10, assigned to `genome`) that cover the regions specified in the *GRanges* object.
+Read in the BED file as a *GRanges* object using *rtracklayer* function `import()` as we have done previously. We can then use the `getSeq()` function to return sequences from our previously assigned BSGenome object (UCSC - mm10, assigned to the variable *genome*) that cover the regions specified in the GRanges object.
 ```r
 # read in peaks
 bed <- import("data/CTCF-mouse-forebrain-mm10.bed", format="BED")
@@ -270,7 +269,7 @@ ctcf_seqs <- getSeq(genome, bed)
 ctcf_seqs
 ```
 
-Since the object returned by `getSeq()` is a DNAStringSet class object, we can use *BioStrings* based methods to perform operations on the sequences directly. For example, we might be interested in checking the nucleotide frequencies across all peaks.
+Since the object returned by `getSeq()` is a DNAStringSet class object, we can use BioStrings based methods to perform operations on the sequences directly. For example, we might be interested in checking the nucleotide frequencies across all peaks.
 ```r
 # calculate nucleotide freqs.
 nt_freqs <- alphabetFrequency(ctcf_seqs, baseOnly=TRUE, as.prob=TRUE)
@@ -279,7 +278,7 @@ nt_freqs <- alphabetFrequency(ctcf_seqs, baseOnly=TRUE, as.prob=TRUE)
 round(apply(nt_freqs, 2, mean), digits=2)
 ```
 
-We might also be interested in visualizaing the distribution of the peak width, to get an idea of how much they vary. We can use the `width` accessor function to extract the width of each peak, and base R functions for plotting.
+We might also be interested in visualizing the distribution of the peak width, to get an idea of how much they vary. We can use the `width` accessor function to extract the width of each peak, and base R functions for plotting.
 ```r
 hist(width(ctcf_seqs),
      col = "darkgray",
@@ -307,18 +306,18 @@ Now we are ready to export these sequences in FASTA file format, which is used a
 writeXStringSet(ctcf_seqs, file=paste0(peak_dir, "CTCF-peaks-resized.fa"))
 ```
 
-After you write the file, go to your the bash command line and have a look at your FASTA file to confirm it looks correct.
+After you write the file, go to your the UNIX command line and have a look at your FASTA file to confirm it looks correct.
 
-**Note:** As we have discussed before, there are several other ways you could have performed this task outside of the functionality implemented by *BioStrings* and *BSGenome*. The major advantage of performing this analysis in R/Bioconductor is that you do not need to host any large reference genome files locally except for installing the *BSGenome* packages, functionality from other Bioconductor packages can be utilized (such as how we used the *GRanges* `resize()` function above), and you can easily leverage the other functionality for sequence operations available in *BioStrings* (of which there are many).
+**Note:** There are  other ways you could have performed this task outside of the functionality implemented by BioStrings and BSGenome. The major advantage of performing this analysis in R/Bioconductor is that you can leverage the methods and object classes implemneted in BioStrings, BSGenome, GRanges, and other Bioconductor packages for your analysis.  
 
-If you did have direct access to the reference genome locally and other functionality in Bioconductor wasn't a priority for you, you could perform this analysis at the command line in bash with [*bedtools*](https://bedtools.readthedocs.io/en/latest/) and its `getfasta` tool, which allows you to extract sequences from a BED/GTF/VCF file and export them to a FASTA file.
+If you did not require R/Bioconductor functionality for further analysis, you could perform a similar analysis on the UNIX command line with [*bedtools*](https://bedtools.readthedocs.io/en/latest/) and its `getfasta` tool, which allows you to extract sequences from a BED/GTF/VCF file and export them to a FASTA file. Ofcourse, this do mean you would need to have a copy of the reference genome available to you.
 
 ---
 
 #### OPTIONAL SECTION:
 #### Using *BioStrings* without *BSGenome*
 
-It is also worth noting that *BioStrings* can be used independently from *BSGenome* with any set of sequences you are able to define in your R environment as an *XString* or *XStringSet* class object. For example, perhaps you are studying the *Amphimedon queenslandica*, a marine sponge organism native to the Great Barrier Reef, and want to explore some basic features of its coding sequences.
+BioStrings can be used independently from BSGenome with any set of sequences you are able to define in your R environment as an *XString* or *XStringSet* class object. For example, perhaps you are studying the *Amphimedon queenslandica*, a marine sponge organism native to the Great Barrier Reef, and want to explore some basic features of its coding sequences.
 
 <p align="center">
 <img src="../figures/Amphimedon_queenslandica_adult.png" title="xxxx" alt="context"
@@ -334,7 +333,7 @@ a.queen <- readDNAStringSet(fasta.file, "fasta")
 a.queen
 ```
 
-Just as we have done earlier in this lesson, we can again use the *BioStrings* functions to perform basic operations on these sequences. For example:
+Just as we have done earlier in this lesson, we can again use the BioStrings functions to perform basic operations on these sequences. For example:
 ```r
 # confirm how long it is
 length(a.queen)
@@ -348,7 +347,7 @@ a.freqs <- letterFrequency(a.queen, "A", as.prob=TRUE)
 a.freqs
 ```
 
-*BioStrings* also implements extensive functionality for **pattern matching**, allowing you to search sequences for specific patterns of interest. For example, we may want to confirm that each of our coding sequences begins with an `ATG` start codon. We can do this using the *BioStrings* functions `matchPattern()` and `countPattern()`.
+BioStrings also implements extensive functionality for **pattern matching**, allowing you to search sequences for specific patterns of interest. For example, we may want to confirm that each of our coding sequences begins with an `ATG` start codon. We can do this using the BioStrings functions `matchPattern()` and `countPattern()`.
 ```r
 # return all matches in a DNAString subject sequence to a query pattern
 matchPattern("ATG", a.queen[[1]])
@@ -370,7 +369,7 @@ str(vmatch)
 vmatch[[1]]
 ```
 
-We may also have several patterns that we want to search for in each our coding sequences. For example, perhaps we want to search for standard stop codons (`TAG`, `TAA`, `TGA`) in the *A.queenslandica* coding sequences. *BioStrings* functions `matchPDict()` and `vmatchPDict()` provide functionality for such tasks. e.g.
+We may also have several patterns that we want to search for in each our coding sequences. For example, perhaps we want to search for standard stop codons (`TAG`, `TAA`, `TGA`) in the *A.queenslandica* coding sequences. BioStrings functions `matchPDict()` and `vmatchPDict()` provide functionality for such tasks. e.g.
 ```r
 # create a DNAStringSet of the stop codons
 stop.codons <- DNAStringSet(c("TAG", "TAA", "TGA"))
@@ -394,9 +393,9 @@ matches[[4]]
 matches[[4]][[3]]
 ```
 
-#### Other functionality in *BioStrings*
+#### Other functionality in BioStrings
 
-*BioStrings* also provides functionality for a number of other analytical tasks that you may want to perform on a set of sequences stored using the *XString* and *XStringSet* method, for example:  
+BioStrings also provides functionality for a number of other analytical tasks that you may want to perform on a set of sequences stored using the *XString* and *XStringSet* method, for example:  
 * trimming sequence ends based on pattern matching using `trimLRPatterns()`
 * local and global alignment problems using `pairwiseAlignment()`
 * read in multiple sequence alignments using `readDNAMultipleAlignment()`
@@ -404,6 +403,6 @@ matches[[4]][[3]]
 * palindrome searching using findPalindromes `findPalindromes()`
 * computing edit distances between sets of sequences using `stringDist()`  
 
-An excellent *BioStrings* tutorial is available [here](https://bioconductor.org/help/course-materials/2011/BioC2011/LabStuff/BiostringsBSgenomeOverview.pdf) from one of the *BioStrings* creators, that covers much of the same material as we have above, but in more detail and with more complex examples.
+An excellent BioStrings tutorial is available [here](https://bioconductor.org/help/course-materials/2011/BioC2011/LabStuff/BiostringsBSgenomeOverview.pdf) from one of the BioStrings creators, that covers much of the same material as we have above, but in more detail and with more complex examples.
 
 > Similar tasks (and many other things) can be performed in python using tools like [*biopython*](https://biopython.org/). The major advantage of the *BioStrings* package is its interoperability with other R/BioConductor packages, such as the *BSGenome* package.
