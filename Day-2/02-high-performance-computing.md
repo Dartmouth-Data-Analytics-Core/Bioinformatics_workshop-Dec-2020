@@ -118,12 +118,6 @@ To establish a connection to a new site you would click on the **Site Manager** 
 ## Environment Modules
 
 
-Used on HPC systems to make software versions available
-usually installed by the system admin, so you cannot add or modify them yourself
-
-
-
-
 Each person who uses the HPCs at Dartmouth has a different set of tasks and data that they need to work on, and as such we do not need all the same software loaded to complete the tasks that you are interested. Instead discovery/polaris/andes have modules that contain pre-loaded software that you can load into your current environment so that they are available for you to use. Modules are used on HPC systems to make multiple versions of popular software availble to users. UNfortunately, modules are installed and maintained by the system administrators, so you cannot add modules or modify them yourself.
 
 In order to see the modules you currently have loaded in your environment use the command `modules list`. To see the breadth of software available for you to load use the command `module avail`.
@@ -147,7 +141,12 @@ R.version
 # quit running R interactively to return to the bash terminal
 q()
 ```
-
+<p align="center">
+  <img src="../figures/R-interactive.png" title="xxxx" alt="context"
+	width="100%" height="100%" />
+ </p>
+ </p>
+ 
 Now go ahead and load the module for the older version of R that you need (3.3.1).
 ```bash
 # Load a module to the current environment
