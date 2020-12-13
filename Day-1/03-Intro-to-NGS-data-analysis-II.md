@@ -22,70 +22,46 @@ Challenges of aligning millions of short reads to a reference genome involve:
 It is important when selecting an aligner to select one appropriate for your experiment. Different aligners exist and generally have different properties and applications. For example, some aligners are **splice-aware** while others are not. Splice-aware aligners can generate alignments that span intronic regions and therefore account for splicing, e.g. `STAR` and `HISAT2`. If your dataset is prokaryotic (non-splicosomal) you would not want to use a splice-aware aligner, and instead using an aligner that is not designed to map across intronic regions such as `bwa-mem` or `bowtie2`.
 
 
-
-
-
-
-
-
-
-
-
-
-
 ### What is a reference genome?
 
-Reference genomes are a concept, not a reality. Reference genomes are a idealized representation of a standard genome from a particular organism.
-Reference genomes are created through organizing sequence reads through a process referred to as [*genome assembly*](https://link.springer.com/referenceworkentry/10.1007%2F978-0-387-09766-4_402).
+Reference genomes are more of a concept, not a reality. A reference genome (or reference assembly) is an idealized representation of the genome of particular organism, generated through [*de novo* *genome assembly*](https://link.springer.com/referenceworkentry/10.1007%2F978-0-387-09766-4_402) of sequencing reads from one or several individuals. In NGS analysis, we commonly use reference genomes as a scaffold upon which to construct alignments of sequencing reads via read mapping.
 
-### Sources of reference genomes
+Reference genomes have proven a powerful tool that allows us to appropriately address many scientific questions, as well as providing the scientific community a standardized coordinate system for that is used for specific genome builds. For example, the permanent start coordinate for the human gene in reference genome GRCh38/p.13 is chr9:127,786,034.
 
-Most reference genomes are hosted on ftp sites where files can copied to a location of your choosing with the `rsync` command.
+New genome builds are produced when significant improvements have been made to the sequence, warranting release of an updated sequence with a new coordinate system. For example, genome coordinates are different between GRCh38 and GRCh37. Individual genome builds are sometime updated through *patches*, for example, when a previously ambiguous sequence becomes available.
+
+However, there are a number imitations to using reference genomes in the ways described above:  
+- do not appropriately account for genetic variation, as they are composed of one linear sequence
+- short-read sequencing technology has been used to generate some references, which can lead to inaccuracies or gaps in the assembly of regions that are challenging to sequence with these technologies (e.g. repetitive regions)
+- some assemblies, such as the human reference, do not contain so-called non-reference unique insertions (NUIs), which are unique sequences found in multiple individuals but not in the reference
+
+These limitations have resulted in productive discussion and research around the concepts and utilities of reference genomes, prompting some alternative reference styles to be suggested. See [Wong *et al*, Nat. Comm. 2020](https://www.nature.com/articles/s41467-020-19311-w) and Ballouz *et al*, Genom. Biol. 2019](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1774-4) for examples.
+
+In recent years, long read sequencing technologies have allowed us to improve the quality and completeness of reference genomes.
+
+#### Sources of reference genomes & genome annotations
+
+Reference genomes are hosted on a number of different websites, usually distributed in FASTA format, and often accompanied by genome annotations, which describe the gene/transcript models for that genome. These annotations are the product specific pipelines utilized by large-scale genome annotation projects.
+
+For example, [*RefSeq (NCBI)*](https://ftp.ncbi.nlm.nih.gov/genomes/refseq/), [*UCSC*](https://hgdownload.soe.ucsc.edu/downloads.html), and [*Ensembl*](http://ftp.ensembl.org/pub/) all generate genome annotations based on specific annotation pipelines, and currently host annotations for a wide range of organisms.
+
+The table below from the [UCSC website](https://genome.ucsc.edu/FAQ/FAQgenes.html#gene) highlights how different genome annotation from different annotation pipelines can be with respect to availability of transcript models for human genome build GRCh38/hg38 (as of March 2019).  
+
+<p align="left">
+<img src="../figures/genome-anno.png" title="xxxx" alt="context"
+	width="60%" height="60%" />
+</p>
+
+Several genome annotation project websites will also host current and archived versions of the reference genome sequence. For common genomes, the hosted reference genomes (and their sequences) are identical and come from the same source/submitter. For example, the human genome reference sequences hosted on NCBI, UCSC, and Ensembl all use the sequence provided by the Genome Reference Consortium (GRC)](https://www.ncbi.nlm.nih.gov/grc) which provides genome assemblies for human, mouse, zebrafish and chicken.
+
+Most reference genomes and genome annotations can be downloaded through ftp sites that allow you to download the FASTA files for that genomes using the UNIX command line. While there are several ways you can download files from the command line, one example is through using the `rsync` command.
 
 *Do not run this command - this is only an example*
 ```bash
-
 # example rsync command with the UCSC ftp site
 # the -a option denotes archive mode, the -P option indicates you want to show the progress as files are downloaded
 rsync -a -P rsync://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/ ./
-
 ```
- Here are some examples of commonly used sites where reference genomes are hosted.
-
-- [*RefSeq*](https://ftp.ncbi.nlm.nih.gov/genomes/refseq/)
-- [*JGI*](https://genome.jgi.doe.gov/portal/help/download.jsf)
-- [*UCSC*](https://hgdownload.soe.ucsc.edu/downloads.html)
-- [*Ensembl*](http://ftp.ensembl.org/pub/)
-- [*GENCODE*](http://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/)
-
-# Reference genome annotation
-
-**RefSeq:**
-NX_XXXX represents manually curated transcripts.
-XM_XXXX represents automatically* annotated transcripts
-
-**Ensembl/GENCODE:**
-ENST_XXXX represents manually curated transcripts.
-
-#### Limitations of reference genomes
-By definition a constant property of genomes is genetic variation between individuals, this feature holds true for both single celled organisms where variation is introduced through mutation and recombination and multicellular sexual organisms where mutation and sexual recombination constantly stir the gene pool to introduce variation. It is therefore impossible to define a reference genome for a given species that encompasses all of the variation within that species.
-
-However, Current reference genomes work as the foundation for all genomic data and databases. They provide a scaffold for genome assembly, variant calling, RNA or other sequencing read alignment, gene annotation, and functional analysis. Genes are referred to by their loci, with their base positions defined by reference genome coordinates. Variants and alleles are labeled as such when compared to the reference (i.e., reference (REF) versus alternative (ALT)). Related (strains, diploid, or personal) genomes are assembled using the reference as a scaffold, and RNA-seq reads are typically mapped to the reference genome.
-
-At this point we need a baseline for all of the genomics tools that we use, however many scientists are considering [solutions that could fundamentally change how we think of and build reference genomes](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1774-4).
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ### General concepts for read alignment
@@ -169,29 +145,39 @@ Letter key for CIGAR strings:
 So for example, alignment in row 3 of our SAM file example above (`5S6M`) would describe an alignment where 5 bases are soft-clipped, followed by 6 matching bases.
 
 
+### Generating alignments
 
+Since the reads we have been working with were generated as part of a eukaryotic RNA-seq experiment, we ned to use a splice aware aligner that can generate gapped alignments. [STAR](https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf) (Spliced Transcripts Alignment to a Reference) is a  flexible and efficient short read aligner. We will use STAR as a general example of aligning short reads to a reference genome. Other short read aligners (e.g. `bwa` and `bowtie/bowtie2`) will use different syntax on the command line and you should carefully read the documnetation for the aligner you plan to use.
 
+#### Constructing a genome index
 
+Short read aligners require you to create an index of your reference genome before you can conduct an alignment. The index The index is in principle similar to how one might index a book, so that specific items or information can be found more quickly. For the genome index, we are indexing the genome so that the aligner can narrow down where a read may map to and speed up mapping.
 
+Index generation can be time consuming, so we are providing you with a pre-built genome index consisting of only chromosome 20 (hg38). Alignments will therefore only be generated for this chromosome. The code chunk below shows example usage of STAR to create a STAR index of hg38.
 
+```bash
+###### DO NOT RUN - EXAMPLE CODE CHUNK ONLY #######
+STAR --runThreadN 16 \
+  --runMode genomeGenerate \
+  --genomeDir hg38_chr20_index \
+  --genomeFastaFiles Homo_sapiens.GRCh38.dna.primary_assembly.chr20.fa \
+  --sjdbGTFfile Homo_sapiens.GRCh38.97.chr20.gtf \
+  --genomeSAindexNbases 11
+```
 
+Option details:
+- `--runThreadN`: no. of core/threads you want to use
+- `--runMode`: the mode you want to run STAR in (for index generation, this should be genomeGenerate)
+- `--genomeDir`: directory you want your genome to go to
+- `--genomeFastaFiles`: path to genome .fasta
+- `--sjdbGTFfile`: path to genome annotation in .gtf format
+- `--sjdbOverhang`: default is 100, usually set to the readlength -1
 
+You can find the pre-built index at `/scratch/fund_of_bioinfo/ref/hg38_chr20_index/`. Once you have generated an index, it is best not to do anything with it, except tell STAR where it is when you want to align reads.
 
+#### Aligning the reads
 
-
-
-
-### Perform an alignment
-
-For this dataset we are using STAR because the reads were generated from a eukaryotic RNA-seq experiment which require a splice aware aligner to generate appropriate alignments.
-
-
-
-
-index
-
-
-
+We are ready to align our reads, present in the paired-end FASTQ files `SRR1039508_1.trim.chr20.fastq.gz` and `SRR1039508_2.trim.chr20.fastq.gz`.
 
 ```bash
 # create a directory to store aligned files
@@ -206,7 +192,7 @@ STAR --genomeDir /scratch/fund_of_bioinfo/ref/hg38_chr20_index \
   --readFilesCommand zcat \
   --sjdbGTFfile /scratch/fund_of_bioinfo/ref/Homo_sapiens.GRCh38.97.chr20.gtf \
   --runThreadN 1 \
-  --outSAMtype BAM SortedByCoordinate \
+	--outSAMtype SAM \
   --outFilterType BySJout \
   --outFileNamePrefix SRR1039508.
 ```
@@ -221,58 +207,92 @@ Option details:
 - `--outFilterType`: how mapped reads will be filtered (normal/BySJout)
 - `--outFileNamePrefix`: prefix for outfiles generated in the run
 
+> *NOTE:* It usually makes sense to set `outSAMtype` to `BAM SortedByCoordinate`, so that I do not need to convert the default SAM file output by STAR to BAM, then sort it. However, since we want to look inside the file at the alignments, we are creating a SAM first, and will convert to a BAM afterwards.
+
+As with most aligning, there are many options that can be set to control how read mapping is performed and define properties of alignments that can be generated. The setting you need to use depend you your data type and analysis workflow. Always read the documentation for the aligner you are using in detail.
+
+**Alignment output**
+
+Once the alignment has finished, you should have a number of new files in your directory. These are composed of:  
+- `.sam` - your alignment file
+- `Log.out` - the log of the STAR run
+- `Log.final.out` - the summary file of the mapping statistics
+- `Log.progress.out` - a summary file that is updated with key mapping statistics as the run progresses
+- `SJ.out.tab` - high-confidence splice-functions
+
+There are a number of ways that alignment quality can be assessed, many of them depending on your data type (e.g. RNA-seq, ChIP-seq), and you should always do a detailed post-alignment QC analysis.  Regardless of data-type, the most important alignment QC metric is generally the percentage of uniquely mapping reads. For STAR alignments, this metric is included in the `Log.final.out` file.
+
+```bash
+cat SRR1039508.Log.final.out
+```
+
+### Working with SAM/BAM files
+
+[Samtools](http://www.htslib.org/doc/samtools.html) is an extensive software suite that provides tools for working with alignment files. We will use Samtools to explore our alignments, and demonstrate some common tasks that can be performed using this software. While our alignments were generated from RNA-seq reads, the samtools usage examples below will be aplpiciable to analysis of any NGS data type.
+
+Using samtools with the `view` command and `-H` flag allows you to view the header line of a SAM file.
+```bash
+samtools view -H SRR1039508.Aligned.out.sam  | head
+```
+
+`view` can also be used to print the first few alignments.
+```bash
+samtools view SRR1039508.Aligned.out.sam | head
+```
+
+It is common to sort SAM/BAM files as this is required by many downstream tools that take alignment files as input.
+```bash
+samtools sort SRR1039508.Aligned.out.sam -o SRR1039508.Aligned.out.sorted.sam
+```
+
+In practice, we can ask programs like STAR to give us indexed and sorted BAM files as output from the alignment, however this is not the case with all aligners and in these cases you will have to sort and index files after the alignment is complete. Now that we've looked at the alignments, we should convert our SAM to BAM for indexing and downstream analysis.
+```bash
+samtools view -S -b SRR1039508.Aligned.out.sorted.sam > SRR1039508.Aligned.out.sorted.bam
+```
+
+We should also index this BAM, which will create a file with the same name, but the suffix `.bai`.
+```bash
+samtools index SRR1039508.Aligned.out.sorted.bam
+```
+
+Another useful thing we might want to do with our BAM file is to count how many alignments have specific FLAG types (unique alignments, secondary, unmapped, properly paired).
+```bash
+samtools flagstat SRR1039508.Aligned.out.sorted.bam
+```
+
+We can even use the specific FLAGs in the BAM file to extract specific alignments. For example, you might want to produce BAM files where all of the reads mapping to the forward and reverse strands are in separate files:
+```bash
+# use -F option in view to filter out reads that were unmapped
+samtools view -F 4 SRR1039508.Aligned.out.sorted.bam -o SRR1039508.Aligned.out.sorted.unmapped.bam
+
+# count number of alignments
+samtools view -c SRR1039508.Aligned.out.sorted.unmapped.bam
+
+# directly count reads with specific flag without making an intermediate file
+samtools view -c -F 4 SRR1039508.Aligned.out.sorted.REV.bam
+```
 
 
+### Visualizing alignments
 
+Alignments can be visualized using genome browser software such as the Integrative Genomics Viewer (IGV), allowing you to interactively explore alignments to a reference genome and how they overlap with genome annotation (e.g. gene models). This is an extremely useful way to visualize NGS data, and also allows you to review the evidence supporting downstream analysis results generated from aligned reads (e.g. variant calls).
 
-
-The predominant metric of interest to detrmine if our aignment was successful is the % of uniquely mappng reads, what value means the experiment was successful depends on the data type
-
-
-
-
-alignments can be viewed in igv, we will do this on day-2.
-
+The figure below shows some example alignments for paired-end mouse RNA-seq data visualized using the IGV.
 
 <p align="center">
-<img src="../figures/igv-03.png" title="xxxx" alt="context"
+<img src="../figures/rna-seq-alignments.png" title="xxxx" alt="context"
 	width="95%" height="95%" />
 </p>
 
+Note how the alignments pile up over the exons, which makes sense since these are RNA-seq data where only the transcriptome was sequenced. Alignment gaps are also present, which indicate alignments that span the intronic regions. If we had not used a gapped aligner such as STAR, we would have failed to generate many of these alignments.
+
+We will use IGV to visualize and explore some alignments interactively on day-2.
 
 
+### Generate alignments for multiple samples
 
+It would be tedious (and more error prone) to repeat the code we used above to perform read mapping for multiple samples. We can use our new skills for coding through the UNIX shell to perform the mapping for multiple samples iteratively. In particular, we will use a `for` or `while` loop.
 
-
-
-
-
-
-
-
-```bash
-#convert bam to sam
-samtools view -H sample.bam > sample.sam
-
-#convert sam to bam
-samtools view -b sample.sam > sample.bam
-
-#convert bam to cram
-samtools view -C sample.bam > sample.cram
-```
-
-header
-
-```bash
-samtools view -H sample.bam
-```
-
-
-
-
-
-
-### Run alignments for multiple samples
 ```bash
 ls ../trim/*_1.trim.chr20.fastq.gz | while read x; do
 
@@ -298,9 +318,9 @@ done
 # index the BAMs
 samtools index *sortedByCoord.out.bam
 ```
-Note that I change `--outSAMtype` to `BAM sortedByCoord` so that we dont have to convert SAM to BAM and run `sort`.
+Note that I change `--outSAMtype` to `BAM sortedByCoord` so that we don't have to convert SAM to BAM and run `sort`.
 
-View the reports quickly:
+View the STAR alignment reports quickly:
 ```bash
 ls *Log.final.out | while read x; do
    yes '' | sed 4q
@@ -309,17 +329,6 @@ ls *Log.final.out | while read x; do
    cat $x
 done
 ```
-
-
-
-
-
-
-> Important Note: After generating alignments, it is critical to inspect their quality.
-
-
-
-
 
 ## Break out room exercises
 

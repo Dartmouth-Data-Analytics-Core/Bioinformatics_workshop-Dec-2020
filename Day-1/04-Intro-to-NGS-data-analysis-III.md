@@ -42,7 +42,7 @@ Specifies the feature in your GTF file you want to count over (3rd column). The 
 Specifies if reads in your experiment come from a stranded (`yes`) or unstranded (`no`) library type. It is critical to set this correctly, as incorrect selection will result in needlessesly throwing away 50% of your reads.  
 
 ```r
-# make a new directory to store your data in 
+# make a new directory to store your data in
 mkdir ../quantification
 cd ../quantification
 
@@ -83,7 +83,12 @@ In contrast to RNA-seq experiments, we are sometimes more concerned with identif
 
 Adapted from [Nakato & Sakata, *Methods*, 2020](https://www.sciencedirect.com/science/article/pii/S1046202320300591)
 
-After sequencing the enriched regions of DNA and mapping them to a reference genome, we use statistical approaches to model the distribution of reads compared to those of a background sample (e.g. input DNA or IgG IP) in order to identify regions that are truly enriched regions representing real binding sites. This process is referred to as **peak calling**.
+After sequencing the enriched regions of DNA and mapping them to a reference genome, we use statistical approaches to model the distribution of reads compared to those of a background sample (e.g. input DNA or IgG IP) in order to identify regions that are truly enriched regions representing real binding sites. This process is referred to as **peak calling**. Some example ChIP-seq alignments are shown below. You can see that the pileups in read density correlate with the called peaks shown in the green annotation tracks.
+
+<p align="center">
+<img src="../figures/igv-11.png" title="" alt="context"
+	width="90%" height="90%" />
+</p>
 
 Alignments generated after mapping short reads from a ChIP-seq experiment to a reference genome generally show asymmetric distribution of reads on the +/- strand immediately around a binding site. By shifting these reads toward the middle, or extending them to the expected fragment length, we can generate a signal profile that is compared to the background signal from the control DNA sample using statistical models, ultimately assigning a probability value (*P*-value) to each peak.
 
@@ -154,7 +159,7 @@ In analyses where you have identified a set of called peaks representing regions
 
 Visualization of signal track data is usually achieved by converting alignment files (.BAM format) into a **bigWig** file, an indexed binary file format used to store dense continuous data (i.e. signal) over a large set of coordinates that can be viewed as a graph. These features make bigWig files a very efficient way to visualize read density/signal for any type of high-throughput genomics data.
 
-bigWig files can be constructed from the *wiggle (Wig)* or *bedGraph* file formats, both of which are also used to store dense continuous data. bigWig, Wig, and bedGraph files formats are all described in more detail on the [UCSC website](http://genome.ucsc.edu/goldenPath/help/bigWig.html). 
+bigWig files can be constructed from the *wiggle (Wig)* or *bedGraph* file formats, both of which are also used to store dense continuous data. bigWig, Wig, and bedGraph files formats are all described in more detail on the [UCSC website](http://genome.ucsc.edu/goldenPath/help/bigWig.html).
 
 <p align="center">
 <img src="../figures/chip-signal-genome-wide.png" title="xxxx" alt="context"
