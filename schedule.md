@@ -17,7 +17,7 @@ We have designed the schedule so that breaks are essentially built into the brea
 
 - **12:30-1:00 - Intro. to bioinformatics (lecture)**
 
-- **1:05-1:40 - Basic Bash commands**
+- **1:05-1:40 - Recap of UNIX shell/Bash**
   - 1:40-1:50 Break out room #1
 
 - **1:50-2:25 - Intro. to next-generation sequencing (lecture)**
