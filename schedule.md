@@ -15,18 +15,18 @@ We have designed the schedule so that breaks are essentially built into the brea
 - **12:00-12:30 - Introduction**
   - Intro to workshop, the Data Analytics Core, and personal intros.
 
-- **1-1:35 - Intro. to bioinformatics (lecture)**
+- **12:30-1:00 - Intro. to bioinformatics (lecture)**
 
-- **1:40-2:15 - Basic Bash commands**
-  - 2:15-2:25 Break out room #1
+- **1:05-1:40 - Recap of UNIX shell/Bash**
+  - 1:40-1:50 Break out room #1
 
-- **2:25-3:00 - Intro. to next-generation sequencing (lecture)**
+- **1:50-2:25 - Intro. to next-generation sequencing (lecture)**
 
-- **3:00-3:40 - Intro-to-NGS-data-analysis-I (FASTQ files)**
-  -3:40-4:10 Break out room #2
+- **2:25-3:05 - Intro-to-NGS-data-analysis-I (FASTQ files)**
+  -3:05-3:35 Break out room #2
 
-- **4:10-4:40 - Intro-to-NGS-data-analysis-II (BAM/SAM/CRAM files)**
-  - 4:40-4:55 Break out room #3
+- **3:35-4:05 - Intro-to-NGS-data-analysis-II (BAM/SAM/CRAM files)**
+  - 4:05-4:20 Break out room #3
 
 ---
 
