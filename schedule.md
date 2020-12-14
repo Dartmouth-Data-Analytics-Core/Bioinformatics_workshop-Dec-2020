@@ -22,7 +22,7 @@ We have designed the schedule so that breaks are essentially built into the brea
 
 - **1:50-2:25 - Intro. to next-generation sequencing (lecture)**
 
-- **2:25-3:05 - Intro-to-NGS-data-analysis-I (FASTQ files)**
+- **2:25-3:05 - Intro-to-NGS-data-analysis-I (FASTQ files)**  
   -3:05-3:35 Break out room #2
 
 - **3:35-4:05 - Intro-to-NGS-data-analysis-II (BAM/SAM/CRAM files)**
@@ -34,7 +34,7 @@ We have designed the schedule so that breaks are essentially built into the brea
 
 - **12:00-12:10 - Day 1 recap & questions**
 
-- **12:10-12:40 - Intro-to-NGS-data-analysis-III (BED/BigWig/count files)**
+- **12:10-12:40 - Intro-to-NGS-data-analysis-III (BED/BigWig/count files)**  
   -12:40-12:50 Break out room #4
 
 - **12:50-1:30 - Introduction to IGV**
@@ -43,7 +43,7 @@ We have designed the schedule so that breaks are essentially built into the brea
 - **2:10-2:40 - High performance computing**
   - 2:40-2:55 Break out room #2
 
-- **2.55-3:25 - Installing and managing software**
+- **2.55-3:25 - Installing and managing software**  
   - 3:25-3:40 Break out room #3
 
 - **3:40-4:20 - Basics of R programming**
@@ -55,13 +55,13 @@ We have designed the schedule so that breaks are essentially built into the brea
 
 - **12:00-12:10 - Day 2 recap & questions**
 
-- **12:10-12:45 - Genomics with R & Bioconductor I (working with genomic regions)**
+- **12:10-12:45 - Genomics with R & Bioconductor I** (working with genomic regions)
   - 12:45-1:10 Break out room #1
 
-- **1:10-1:50 - Genomics with R & Bioconductor II (genome annotation)**
+- **1:10-1:50 - Genomics with R & Bioconductor II** (genome annotation)
   - 1:50-2:10 Break out room #2
 
-- **2:10-2:50 - Genomics with R & Bioconductor III (sequence analysis & reference genomes)**
+- **2:10-2:50 - Genomics with R & Bioconductor III** (sequence analysis & reference genomes)
   - 2:50-3:10 Break out room #2
 
 - **3:10-4:10 - Introduction to statistical inference for bioinformatics**
