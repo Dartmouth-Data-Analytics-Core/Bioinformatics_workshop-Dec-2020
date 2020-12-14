@@ -370,9 +370,38 @@ cutadapt \
 - `-q` qulaity threshold for trimming bases
 - `-j` number of cores/threads to use
 
-You should now have trimmed FASTQ files in this directory that can be used for an alignment. Lets look at the report that cutadapt generated.
+You should now have a trimmed FASTQ file in this directory that can be used for an alignment. Lets look at the report that cutadapt generated.
 ```bash
 cat SRR1039508.cutadapt.report
+```
+
+Now lets run this on multiple samples:
+```bash 
+ls ../raw_fastq/*.chr20.fastq.gz | while read x; do \
+
+   # save the file name
+   sample=`echo "$x"` 
+   # get everything in file name after "/" and before "_" e.g. "SRR1039508"
+   sample=`echo "$sample" | cut -d"/" -f4 | cut -d"_" -f1` 
+   echo processing "$sample"
+
+   # run cutadapt for each sample 
+   cutadapt \
+      -o ${sample}_1.trim.chr20.fastq.gz \
+      -p ${sample}_2.trim.chr20.fastq.gz \
+      ../raw_fastq/${sample}_1.chr20.fastq.gz ../raw_fastq/${sample}_2.chr20.fastq.gz \
+      -m 1 -q 20 -j 4 > $sample.cutadapt.report
+done
+```
+
+You should now have trimmed FASTQ files in this directory that we will use for the alignment. You should also be able to see and print each of your reports from cutadapt. 
+```bash
+ls *cutadapt.report | while read x; do
+   yes '' | sed 4q
+   echo Printing $x
+   yes '' | sed 1q
+   cat $x
+done
 ```
 
 **Additional note:** For data generated at Dartmouth, since much of the data in the Genomics core is generated using an *Illumina NextSeq 500*, we also often use the `--nextseq-trim` option in cutadapt.
