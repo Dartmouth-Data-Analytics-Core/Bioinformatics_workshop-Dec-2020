@@ -46,9 +46,12 @@ Specifies the feature in your GTF file you want to count over (3rd column). The 
 Specifies if reads in your experiment come from a stranded (`yes`) or unstranded (`no`) library type. It is critical to set this correctly, as incorrect selection will result in needlessesly throwing away 50% of your reads.  
 
 ```r
+# go to your scratch dir 
+biow
+
 # make a new directory to store your data in
-mkdir ../quantification
-cd ../quantification
+mkdir quantification
+cd quantification
 
 # quantify reads that map to exons (default)
 htseq-count \
