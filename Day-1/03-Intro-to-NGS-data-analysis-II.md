@@ -14,8 +14,8 @@ Make a new directory to work in:
 biow
 
 # make the directroy and cd into it 
-mkdir alignment 
-cd alignment
+mkdir aligned
+cd aligned
 ```
 
 If you get lost, or do not have enough time to finish the commands before we move to the next session you can copy the files needed for the next step with the following command from the scratch directory you have created for yourself. Again, you will need to update the target directory to your own directory on scratch. 
