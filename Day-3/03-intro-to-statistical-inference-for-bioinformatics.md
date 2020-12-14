@@ -1,12 +1,8 @@
-additionalhierarchical
 # Introduction to Statistical Learning & Inference in bioinformatics
 
 As we discussed on day 1, bioinformatics draws on knowledge from multiple disciplines. To effectively solve most bioinformatic problems, knowledge from each of these disciplines must be applied to address the overall problem. Developing a **working knowledge of statistics** is critical for anyone hoping to solve bioinformatic problems, particularly in genomics.
 
-In particular, this working knowledge of statistics is required to understand data analysis after data reduction of specific data types, e.g. performing a differential expression analysis
-
-
-
+In particular, this working knowledge of statistics is required to understand data analysis after data reduction of specific data types, e.g. performing a differential expression analysis.
 
 
 <p align="center">
@@ -72,44 +68,132 @@ Below, we provide more specific introductions to both supervised and unsupervise
 
 
 
-## Statistical inference
 
+
+
+
+## Statistical inference
 
 statsitical inference refers to:
 estimation
 hypothesis testing
 
 
-mention MLE
 
-bayseian
+### What is hypothesis testing?
+
+In bioinformatic data analysis, we often want to test a hypothesis such that we can assess how meaningful our results are. For example, in an RNA-seq differential expression analysis we would like to know which genes showed meaningfully different gene expression between the experimental groups. *Hypothesis testing* describes the statistical framework that we use to assess how meaningful our results are.
+
+General procedure for hypothesis testing:
+1. Decide on the null hypothesis (*H<sub>0*)
+2. Use the sample data to calculate a test statistic
+3. Use the test-statistic to calculate a P-value
+4. Accept or reject the null hypothesis based on magnitude of P-value
+
+To help understand the procedure for hypothesis tetsing, some useful definitions:
+- **Null hypothesis (*H<sub>0*)** - the hypothesis that there is *no meaningful difference* between our samples
+- **alternative hypothesis (*H<sub>A*)** there is a meaningful difference* between our samples
+- **test-statistic** - quantity comparing your results to those you would expect under the null hypothesis
+- **P-value** - probability that we would observe a test-statistic as extreme as the one we observed, simply due to chance
+
+Through comparing our observed data to that expected under the *null hypothesis* (*H<sub>0*) we can calculate the *test-statistic* using a distribution of known area, such as the t-distribution. Since these distributions are of known area, we can calculate a probability value (*P*-value) that tells us how likely we are to observe a test-statistic this big due to chance.
+
+<p align="center">
+  <img src="../figures/t-dist.png" height="410" width="650"/>
+</p>
 
 
-### What is *hypothesis testing*?
 
 
+Larger test-statistic values mean there is a larger difference between the distribution of our observed data, and the distribution of data under the null hypothesis. For the t-distribution, we test-statistic is calculated using the following equation:
+
+*t-statistic* = (*x<sub>i</sub>* - &mu;) / (*s* x sqrt(*n*))
+
+Using the t-statistic and the *degrees of freedom* (sample number - 1) the P-value is determined. If the P-value is < our threshold (&alpha;), we will reject the null and accept the alternative hypothesis. By setting &alpha; to 0.05, this means we will interpret results as meaningful if they have at most a 5 in 100 probability of being due to chance.
+
+<p align="center">
+  <img src="../figures/t-dist2.png" height="410" width="650"/>
+</p>
 
 
-
-
-
-### What is a *P*-value?
-
-
+> **P-value thresholds:** Although 5% is a commonly used P-value threshold, you can be more or less stringent depending on the nature of your experiment: if you want to be very conservative and restrict your results to few results that are likely to be true positives, you may wish to restrict the results to a more stringent threshold. If your experiment is very preliminary and you care less about capturing some false positives than missing true positives, you may wish to relax your threshold.  
 
 
 
 ### The multiple testing problem
 
+In bioinformatics and genomics, we measure thousands upon thousands on features (e.g. genes, peaks, methylation sites) and we often run a statistical test for each of them when trying to identify meaningful features with regard to our hypothesis. As we defined above, P-values are *the probability that we would observe a result as extreme as the one we observed, simply due to chance*. Therefore, if we use 0.05 as a P-value threshold, and test 20,000 features for statistical significance, by definition 5% of those features will have a test-statistic that big simply due to chance.
+
+Consider an typical RNA-seq experiment, where it is common to test >20,000 genes for differential expression across two or more conditions. If we set 5% as our &alpha;, 5% of the fold-changes we observe will be sufficiently different between the experimental groups due to chance. **5% of 20,000 is 1000 genes**, which is obviously an unacceptable amount of false-positives.
+
+errors table
+
+We can demonstrate the multiple testing problem by simulating some very simple data and running statistical tests repeatedly on them.
 
 
+```r
 
+```
+
+```r
+# how many P-values < 0.05
+sum(res2$pvalue < 0.05, na.rm=TRUE)
+
+# how many FDR adjusted P-values < 0.05
+sum(res2$padj < 0.05, na.rm=TRUE)
+
+# how many with Bonferonni adjusted P-values < 0.05
+sum(res2$pvalue < (0.05/nrow(res2)), na.rm=TRUE)
+
+# plot the results
+plot(res2$log2FoldChange, -log10(res2$pvalue),
+     main = "Volcano plot - DEG w/ scrambled sample labes",
+     las = 1, col = "cornflowerblue",
+     ylab = "- log10 P-value", xlab = "log2 Fold change", ylim = c(0,7))
+
+# add significance lines
+abline(h= -log10(0.05), lty = 2, col = "red") # nominal P-value
+abline(h= -log10(0.05/nrow(res2)), lty = 2, col = "black") # Bonferonni
+```
+
+As you can see...
 
 
 ### Methods for multiple testing correction
 
+We address this problem through *multiple testing correction*. While several methods that control different aspects of the multiple testing problem, we commonly use methods that control the false-discovery rate (FDR) in genomics experiments. Controlling the false discovery rate at 10% means that we are accepting that 1 in 10 of the features with a significant adjusted P-value, is actually a false-positive. However if your experiment requires more stringency, you may wish to use a method that controls the family-wise error rate (FWER), such as **Bonferonni** correction.
 
 
+Bonferonni -
+
+False discovery rate -
+
+
+Many software package will calculate P-values adjusted for multiple testing for you, however you can always calculate them yourself in R, using a vector of the raw P-values.
+
+```r
+# bonferroni correction
+p.adj.bonf <- p.adjust(pvalue, method = "FWER")
+
+# FDR correction
+p.adj.fdr <- p.adjust(pvalue, method = "fdr")
+```
+
+
+
+
+```r
+# plot corrected P-values
+
+```
+
+
+You can see that there are **minimal results with statistical signficance after correction**, which is true since we scrambled the sample labels and created a fake dataset that should have no true DE. However, if we used the unadjusted P-values, we would identify **A LOT** of potentially interesting genes, that would in-fact be **false-positives**.
+
+This example highlights the short coming of hypothesis testing approaches, and demonstrates how important it is to correct for multiple hypothesis testing.
+
+
+link
 
 
 
@@ -344,7 +428,10 @@ In these cases we fit the data using a **generalized linear model (GLM)**. GLM's
 - use of probability distributions other than the normal distribution
 - the use of a *link-function* that links the expression values in the linear model to the experimental groups, in a way that these other distributions can be used.
 
-<img src="../figures/neg-binom.png" height="400" width="600"/>
+<p align="center">
+<img src="../figures/neg-binom.png" title="xxxx" alt="context"
+	width="75%" height="75%" />
+</p>
 
 For example, bulk RNA-seq data typically exhibit a distribution referred to as the *negative-binomial* and therefore require a GLM of the *negative-binomial family* in order to appropriately model RNA-seq counts and test them for differential expression.
 
@@ -388,7 +475,7 @@ To demonstrate how you would perform a PCA analysis in R, we will use gene expre
 The expression data includes samples collected as multiple time-points during development of the mouse embryo across 17 different tissues and organs (see Figure 1A from the manuscript below).
 
 <p align="center">
-  <img src="../figures/fig-1a-he.png" height="350" width="650"/>
+  <img src="../figures/fig-1a-he.png" height="70%" width="70%"/>
 </p>
 
 To help get you started, you have been provided with a matrix of FPKM counts (*fragments per kilobase million mapped reads*, which represent normalized expression values) and sample metadata. In the code chunks below, we will explore the relationships between samples from different tissues using PCA.
@@ -415,8 +502,8 @@ plot(vars, las = 1, main="Sample gene expression variance", xlab = "Gene", ylab 
 abline(v=5000, col="red")
 ```
 
-<p align="center">
-  <img src="../figures/var-pca.png" height=height="300" width="430"/>
+<p align="left">
+  <img src="../figures/var-pca.png" height=height="60%" width="60%"/>
 </p>
 
 In-fact, most genes show little variance in expression levels across tissues. Features that do not vary across samples are not informative for dimensionality reduction or clustering methods, therefore it is generally useful to remove them.
@@ -468,7 +555,7 @@ legend(1.5, 105, levels(pca_df$tissue), pch = 16, col = cols, cex = 0.9)
 ```
 
 <p align="center">
-  <img src="../figures/pca-plot.png" height="400" width="410"/>
+  <img src="../figures/pca-plot.png" height="75%" width="75%"/>
 </p>
 
 Viewing the dataset using this lower dimensional representation provides us with critical insights into the data that would be too challenging to obtain by looking at the expression levels of individual genes separately. We see that samples from similar tissues generally cluster together on the PCA plot, while more distinct tissue types appear further away from each other. This fits with our expectations, as samples from the same (or similar tissues) should have similar gene expression profiles.
@@ -481,7 +568,7 @@ Generally, clustering analysis describes a collection of methods used to group s
 Unsupervised hierarchical clustering describes a specific approach to performing clustering analysis, in which a tree-like structure is generated to describe the relatedness of samples and features. The results of this procedure are commonly represented using heatmaps, with samples defining columns and features (e.g. genes) defining the rows. Visualization using heatmaps is valuable as it allows us to identify *'modules'* of similar/dissimilar features across samples, making approaches like hierarchical clustering complimentary to dimensionality-reductions methods like PCA.
 
 <p align="center">
-  <img src="../figures/heatmap-exp.png" height="300" width="600"/>
+  <img src="../figures/heatmap-exp.png" height="90%" width="90%"/>
 </p>
 
 To demonstrate how one could perform an unsupervised hierachical clustering analysis in R, we will use the same RNA-seq dataset from [He *et al*](https://www.nature.com/articles/s41586-020-2536-x), describing transcriptomic changes in the developing mouse embryo.
@@ -514,8 +601,8 @@ plot(vars, las = 1, main="Sample gene expression variance",
 abline(v=1000, col="red")
 ```
 
-<p align="center">
-  <img src="../figures/var-hclust.png" height="300" width="450"/>
+<p align="left">
+  <img src="../figures/var-hclust.png" height="60%" width="60%"/>
 </p>
 
 
@@ -556,7 +643,7 @@ pheatmap(mat_scaled,
 ```
 
 <p align="center">
-  <img src="../figures/hclust.png" height="450" width="380"/>
+  <img src="../figures/hclust.png" height="80%" width="80%"/>
 </p>
 
 The sample dendrogram and annotation bar tells us that all five tissues were assigned to their own cluster, with sub-clusters among each. It also allows us to compare between these groups to make inferences, for example, liver seems to be the most dissimilar tissue from forebrain based on gene expression.
