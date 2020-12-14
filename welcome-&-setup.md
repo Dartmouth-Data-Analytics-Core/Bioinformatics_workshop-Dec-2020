@@ -81,7 +81,7 @@ conda env create -f /scratch/fund_of_bioinfo/environment.yml
 When you are ready activate the conda environment, which you will need for the work we are doing for days 1 and 2 of the workshop you can use the following command. 
 
 ```bash
-conda activate bioinfo/
+conda activate bioinfo
 ```
 
 You will see that the activate command has worked when it reads (fund_of_bioinfo) rather than (base) to the left of the prompt. When you are finished using a conda environment it is good practice to deactivate your session with the following command.
@@ -126,12 +126,12 @@ if (!any(rownames(installed.packages()) == "GenomicRanges")){
 }
 library(biomaRt)
 
-if (!any(rownames(installed.packages()) == "GViz")){
+if (!any(rownames(installed.packages()) == "Gviz")){
   if (!requireNamespace("BiocManager", quietly = TRUE))
       install.packages("BiocManager")
-  BiocManager::install("GViz")
+  BiocManager::install("Gviz")
 }
-library(GViz)
+library(Gviz)
 
 if (!any(rownames(installed.packages()) == "org.Hs.eg.db")){
   if (!requireNamespace("BiocManager", quietly = TRUE))
@@ -188,6 +188,10 @@ if (!any(rownames(installed.packages()) == "ChIPseeker")){
   BiocManager::install("ChIPseeker")
 }
 library(ChIPseeker)
+
+install("BSgenome.Mmusculus.UCSC.mm10")
+
+install("BSgenome.Mmusculus.UCSC.mm10.masked")
 
 sessionInfo()
 ```
