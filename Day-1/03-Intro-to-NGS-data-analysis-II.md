@@ -21,7 +21,7 @@ cd aligned
 If you get lost, or do not have enough time to finish the commands before we move to the next session you can copy the files needed for the next step with the following command from the scratch directory you have created for yourself. Again, you will need to update the target directory to your own directory on scratch. 
 
 ```bash
-cp /scratch/fund_of_bioinfo/aligned/* /scratch/omw/
+cp /dartfs-hpc/scratch/fund_of_bioinfo/aligned/* /scratch/omw/
 ```
 
 ### Principles of read mapping for RNA-seq
@@ -203,12 +203,12 @@ We are ready to align our reads, present in the paired-end FASTQ files `SRR10395
 
 ```bash
 # run splice aware alignment
-STAR --genomeDir /scratch/fund_of_bioinfo/ref/hg38_chr20_index \
+STAR --genomeDir /dartfs-hpc/scratch/fund_of_bioinfo/ref/hg38_chr20_index \
   --readFilesIn ../trim/SRR1039508_1.trim.chr20.fastq.gz ../trim/SRR1039508_2.trim.chr20.fastq.gz \
   --readFilesCommand zcat \
-  --sjdbGTFfile /scratch/fund_of_bioinfo/ref/Homo_sapiens.GRCh38.97.chr20.gtf \
+  --sjdbGTFfile /dartfs-hpc/scratch/fund_of_bioinfo/ref/Homo_sapiens.GRCh38.97.chr20.gtf \
   --runThreadN 1 \
-	--outSAMtype SAM \
+  --outSAMtype SAM \
   --outFilterType BySJout \
   --outFileNamePrefix SRR1039508.
 ```
@@ -321,10 +321,10 @@ ls ../trim/*_1.trim.chr20.fastq.gz | while read x; do
   echo processing "$sample"
 
   # run STAR for each sample
-  STAR --genomeDir /scratch/fund_of_bioinfo/ref/hg38_chr20_index \
+  STAR --genomeDir /dartfs-hpc/scratch/fund_of_bioinfo/ref/hg38_chr20_index \
     --readFilesIn ../trim/${sample}_1.trim.chr20.fastq.gz ../trim/${sample}_2.trim.chr20.fastq.gz \
     --readFilesCommand zcat \
-    --sjdbGTFfile /scratch/fund_of_bioinfo/ref/Homo_sapiens.GRCh38.97.chr20.gtf \
+    --sjdbGTFfile /dartfs-hpc/scratch/fund_of_bioinfo/ref/Homo_sapiens.GRCh38.97.chr20.gtf \
     --runThreadN 4 \
     --outSAMtype BAM SortedByCoordinate \
     --outFilterType BySJout \
