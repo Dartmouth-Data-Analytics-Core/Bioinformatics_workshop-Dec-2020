@@ -321,10 +321,10 @@ ls ../trim/*_1.trim.chr20.fastq.gz | while read x; do
   echo processing "$sample"
 
   # run STAR for each sample
-  STAR --genomeDir /dartfs-hpc/scratch/rnaseq1/refs/hg38_chr20_index \
+  STAR --genomeDir /scratch/fund_of_bioinfo/ref/hg38_chr20_index \
     --readFilesIn ../trim/${sample}_1.trim.chr20.fastq.gz ../trim/${sample}_2.trim.chr20.fastq.gz \
     --readFilesCommand zcat \
-    --sjdbGTFfile /dartfs-hpc/scratch/rnaseq1/refs/Homo_sapiens.GRCh38.97.chr20.gtf \
+    --sjdbGTFfile /scratch/fund_of_bioinfo/ref/Homo_sapiens.GRCh38.97.chr20.gtf \
     --runThreadN 4 \
     --outSAMtype BAM SortedByCoordinate \
     --outFilterType BySJout \
