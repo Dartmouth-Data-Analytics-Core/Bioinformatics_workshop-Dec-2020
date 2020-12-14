@@ -151,7 +151,7 @@ cp /scratch/fund_of_bioinfo/counts/all_counts.txt ./
 
 The shell provides us with a number of commands to view the contents of files in define ways. The `cat` command for example (standing for concatenate) will print the entire contents of a file to the terminal. This can be useful for smaller files, but as you will see with larger files can be an unweildy way to look at the contents of a file.
 ```bash
-cat all_conunts.txt
+cat all_counts.txt
 ```
 
 When working with larger files, which we are usually doing in bioinformatics, you may not wish to print the whole file as it would overrun your terminal. Other commands exist that allow you to explore file contents with more control.
@@ -187,7 +187,7 @@ mv ~/all_counts.txt ~/all_counts.copy.txt
 You can also use the `mv` command to move a file to a new location. Let's move the all_counts.copy.txt from your home directory into your fundamentals_of_bioinformatics directory.
 ```bash
 # Move the all_counts.copy.txt into your fundamentals_of_bioinformatics directory
-mv ~/all_counts.copy.txt fundamentals_of_bioinformatics/
+mv ~/all_counts.copy.txt fundamentals_of_bioinformatics
 
 #check the contents of your fundamentals_of_bioinformatics directory
 ls
@@ -222,7 +222,7 @@ Similarly to how we used the redirect command (>) above, we could redirect the o
 cut -f 1,2,17 all_counts.txt > all_counts_sub.txt
 
 # look at head of this new file
-all_counts_sub.txt
+head all_counts_sub.txt
 ```
 
 ### Pattern matching with *Grep*
