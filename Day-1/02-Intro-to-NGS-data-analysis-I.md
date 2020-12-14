@@ -7,7 +7,7 @@
 If you get lost, or do not have enough time to finish the commands before we move to the next session you can copy the files needed for the next step with the following command from the scratch directory you have created for yourself. You will just need to update the target directory to your own directory on scratch. 
 
 ```bash
-cp /scratch/fund_of_bioinfo/* /scratch/omw/
+cp -r /scratch/fund_of_bioinfo/* /scratch/omw/
 ```
 
 ## Raw NGS data, FASTQ file format
@@ -280,11 +280,11 @@ Run FASTQC on our data and move the results to a new directory.
 fastqc -t 1 *.fastq.gz
 
 # move results to a new folder
-mkdir fastqc_results
+mkdir ../fastqc_results
 mv *fastqc* fastqc_results
 
 # move into it and ls
-cd fastqc_results
+cd ../fastqc_results
 ls -lah
 ```
 
@@ -382,7 +382,7 @@ ls ../raw_fastq/*.chr20.fastq.gz | while read x; do \
    # save the file name
    sample=`echo "$x"` 
    # get everything in file name after "/" and before "_" e.g. "SRR1039508"
-   sample=`echo "$sample" | cut -d"/" -f4 | cut -d"_" -f1` 
+   sample=`echo "$sample" | cut -d"/" -f3 | cut -d"_" -f1` 
    echo processing "$sample"
 
    # run cutadapt for each sample 
