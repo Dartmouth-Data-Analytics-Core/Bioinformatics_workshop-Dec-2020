@@ -123,12 +123,18 @@ You should see something like `/dartfs-hpc/rc/home/h/netID` displayed in respons
 It is a good idea when working on projects on an HPC to stay organized so lets start by making a folder, or directory to store all of the work you do today we will call it `fundamentals_of_bioinformatics`. You will notice that I chose a title that has no spaces in it, this is because the space is a special character, special characters need to be *escaped* with the `\` and so `funadmentals_of_bioinformatics` would look like `fundamentals\ of\ bioinformatics` with the escape characters. You can see that file names with spaces become unweildy to type out so most programmers will replace spaces with `_`, `.`, or `-` in their filenames to keep everything neat.
 
 ```bash
+# navigate to scratch so you can make your own directory there 
+cd /scratch/
 
-# Create a directory
-mkdir fundamentals_of_bioinformatics
+# make the directory 
+mkdir -p omw/fundamentals_of_bioinformatics
 
-# enter the directory
-cd fundamentals_of_bioinformatics
+# go into it
+cd omw/fundamentals_of_bioinformatics
+
+# set an alias so we can get here quicly 
+alias biow='cd /scratch/omw/fundamentals_of_bioinformatics'
+# NOTE: you can add this line to your .bashrc so it get run everytime you log in, we will cover this below 
 
 # check your location on the cluster
 pwd
