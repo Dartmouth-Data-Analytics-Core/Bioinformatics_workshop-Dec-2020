@@ -2,6 +2,28 @@
 
 ## Alignment files (BAM/SAM/CRAM formats)
 
+### Learning objectives: 
+- Understand the major principles behind short-read alignment
+- Learn how alignment data is stored in SAM/BAM format
+- Learn how to perform basic operations on BAM files using `Samtools`
+- Perform an alignment with `STAR`
+
+Make a new directory to work in: 
+```bash 
+# go to our home dir for the wrkshop
+biow
+
+# make the directroy and cd into it 
+mkdir alignment 
+cd alignment
+```
+
+If you get lost, or do not have enough time to finish the commands before we move to the next session you can copy the files needed for the next step with the following command from the scratch directory you have created for yourself. Again, you will need to update the target directory to your own directory on scratch. 
+
+```bash
+cp /scratch/fund_of_bioinfo/aligned/* /scratch/omw/
+```
+
 ### Principles of read mapping for RNA-seq
 
 For NGS experiments, the goal of read mapping is to find an alignment that describes the **most likely location in the reference genome where that read originated from**. This is generally determined by reducing the information in the reference and query (read to be mapped) into smaller strings and looking for the position in the reference with the highest number of matching smaller strings. This process is also used in *de novo* genome assembly, local alignments (BLAST or BLAT), and global alignments.
@@ -180,13 +202,7 @@ You can find the pre-built index at `/scratch/fund_of_bioinfo/ref/hg38_chr20_ind
 We are ready to align our reads, present in the paired-end FASTQ files `SRR1039508_1.trim.chr20.fastq.gz` and `SRR1039508_2.trim.chr20.fastq.gz`.
 
 ```bash
-# create a directory to store aligned files
-mkdir ../aligned/
-
-# enter that directory
-cd ../aligned
-
-#run splice aware alignment
+# run splice aware alignment
 STAR --genomeDir /scratch/fund_of_bioinfo/ref/hg38_chr20_index \
   --readFilesIn ../trim/SRR1039508_1.trim.chr20.fastq.gz ../trim/SRR1039508_2.trim.chr20.fastq.gz \
   --readFilesCommand zcat \
