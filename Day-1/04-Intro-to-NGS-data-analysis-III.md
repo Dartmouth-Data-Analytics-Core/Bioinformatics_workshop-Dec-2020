@@ -59,7 +59,7 @@ htseq-count \
 	-s no \
 	-r pos \
 	../aligned/SRR1039508.Aligned.sortedByCoord.out.bam \
-	/scratch/fund_of_bioinfo/ref/Homo_sapiens.GRCh38.97.chr20.gtf > SRR1039508.htseq-counts
+	/dartfs-hpc/scratch/fund_of_bioinfo/ref/Homo_sapiens.GRCh38.97.chr20.gtf > SRR1039508.htseq-counts
 ```
 
 Have a look at the resulting file.
@@ -148,11 +148,11 @@ The [UCSC website](https://genome.ucsc.edu/FAQ/FAQformat.html#format1) is an exc
 Lets briefly explore a BED file on the command line. We will use `heart_E15.5_H3K9ac.bed` located in the scratch directory:
 ```bash
 # examine the head and tail of the file
-head -n 10 /scratch/fund_of_bioinfo/bed_files/heart_E15.5_H3K9ac.bed
-tail -n 10 /scratch/fund_of_bioinfo/bed_files/heart_E15.5_H3K9ac.bed
+head -n 10 /dartfs-hpc/scratch/fund_of_bioinfo/bed_files/heart_E15.5_H3K9ac.bed
+tail -n 10 /dartfs-hpc/scratch/fund_of_bioinfo/bed_files/heart_E15.5_H3K9ac.bed
 
 # count number of regions in the file
-wc -l head -n 10 /scratch/fund_of_bioinfo/bed_files/heart_E15.5_H3K9ac.bed
+wc -l head -n 10 /dartfs-hpc/scratch/fund_of_bioinfo/bed_files/heart_E15.5_H3K9ac.bed
 ```
 
 **Note:** The settings and options used to perform peak calling appropriately are dependent on the data you have (e.g. ChIP-seq, ATAC-seq, etc.) and the type of peak you are hoping to detect. TFs usually form narrow punctuate peaks but other marks, such as histone marks, typically form broader peaks, and can require different settings to accurately detect.
