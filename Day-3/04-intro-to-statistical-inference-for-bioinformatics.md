@@ -126,7 +126,13 @@ In bioinformatics and genomics, we measure thousands upon thousands on features 
 
 Consider an typical RNA-seq experiment, where it is common to test >20,000 genes for differential expression across two or more conditions. If we set 5% as our &alpha;, 5% of the fold-changes we observe will be sufficiently different between the experimental groups due to chance. **5% of 20,000 is 1000 genes**, which is obviously an unacceptable amount of false-positives.
 
-errors table
+
+|         |           | truth                         |                            |
+|---------|-----------|-------------------------------|----------------------------|
+|         |           | H0 (null) is true             | HA alternative) is true    |
+| descion | Accept H0 | True negative (P = 1 - alpha) | False-negative (P = beta)  |
+|         | Reject H0 | False positive (P = alpha)    | True-positive (P = 1-beta) |
+
 
 We can demonstrate the multiple testing problem by simulating some very simple data and running statistical tests repeatedly on them.
 
