@@ -1,5 +1,15 @@
 # Working with NGS data Part I
 
+### Learning objectives: 
+- Understand the FASTQ file format and the formatting sequence information it stores
+- Learn how to perform basic operations on FASTQ files in the command-line 
+
+If you get lost, or do not have enough time to finish the commands before we move to the next session you can copy the files needed for the next step with the following command from the scratch directory you have created for yourself. You will just need to update the target directory to your own directory on scratch. 
+
+```bash
+cp /scratch/fund_of_bioinfo/* /scratch/omw/
+```
+
 ## Raw NGS data, FASTQ file format
 
 FASTQ files are a workhorse file format of bioinformatics, and contain sequence reads generated in next-generatoon sequencing (NGS) experiments. We often refer to FASTQ files as the *'raw'* data for an NGS experiment, although these are technically the BCL image files captured by the sequencer and are used to synthesize the FASTQ files.
@@ -74,7 +84,9 @@ Given the size of these files, if everyone were to copy them to their home direc
 
 ```bash
 # move into your fundamentals_of_bioinformatics directory
-cd fundamentals_of_bioinformatics
+cd /scratch/omw/fundamentals_of_bioinformatics
+### OR use the alias you made 
+biow
 
 # lets keep our data organized and make a folder for these raw fastq files
 mkdir raw_fastq
@@ -85,7 +97,6 @@ ln -s /scratch/fund_of_bioinfo/raw_fastq/*fastq.gz ./
 
 # Check that your command worked
 ls -lah
-
 ```
 Sym-linked files are similar to an alias they are a file that points to a location. Any modifications made to the original files in `/scratch/fund_of_bioinfo/raw_fastq/` will also be seen in the symlink files. Moving the original files or deleting the original files will cause the symlinks to malfunction.
 
