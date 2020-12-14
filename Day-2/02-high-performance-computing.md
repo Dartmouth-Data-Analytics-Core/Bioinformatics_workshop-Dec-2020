@@ -76,7 +76,7 @@ Let's use these commands to move the file `all_counts.txt` which should be in th
 ```bash
 
 # Move the file from the cluster to your local machine
-rsync all_conuts.txt netID@discovery7.dartmouth.edu:/dartfs-hpc/rc/home/h/netID/fundamentals_of_bioinformatics/
+rsync all_conuts.txt netID@discovery7.dartmouth.edu:/dartfs-hpc/scratch/shannon/fundamentals_of_bioinformatics/
 
 ```
 
@@ -87,7 +87,7 @@ Now lets copy the `fundamentals_of_bioinformatics` directory to your local direc
 ```bash
 
 # Move the file from the cluster to your local machine
-rsync -r netID@discovery7.dartmouth.edu:/dartfs-hpc/rc/home/h/netID/fundamentals_of_bioinformatics/ ./
+rsync -r netID@discovery7.dartmouth.edu:/dartfs-hpc/scratch/shannon/fundamentals_of_bioinformatics/ ./
 
 ```
 
