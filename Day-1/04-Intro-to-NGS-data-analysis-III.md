@@ -8,7 +8,11 @@ After aligning reads to a reference genome, there are a couple of different ways
 **Peak calling:**
 - Alternatively, in experiments where we have performed some sort of enrichment for genomic regions of interest (e.g. DNAase-seq, ChIP-seq, ATAC-seq), we are usually interested in identifying regions containing signal above some background level. This is referred to as *peak calling* and allows us to confidently identify the regions containing enriched signals, e.g. transcription-factor binding sites in a ChIP-seq experiment.
 
-In this lesson, we will briefly explore the fundamental concepts of *read quantification* and *peak calling*, while introducing useful software and relevant file formats for each.
+**Variant Calling:**
+- Another downstream analysis is *variant calling*, or the process of determining which loci in the sequenced genome differ from the reference genome, or from another sample from the same experiment.  Calling variants, such as SNPs and insertions/deletions, can be used for purposes such as population-level genotyping or somatic mutation analysis.
+
+
+In this lesson, we will briefly explore the fundamental concepts of *read quantification*, *peak calling*, and *variant calling*, while introducing useful software and relevant file formats for each.
 
 ---
 
@@ -176,3 +180,21 @@ Bigwig file data essentially describes all positions in the reference genome, th
 </p>
 
 Adapted from Figure 1 of [Lin-Shiao *et al*, 2019, *Science Advances*](https://advances.sciencemag.org/content/5/5/eaaw0946)
+
+
+---
+
+## Variant calling
+
+Following an experiment such as Whole Genome Sequencing or Exome Sequencing and subsequent read alignment, a common next step is calling the variants in each sample.  *Variants* are locations in the sequenced samples where the sequenced reads differ from the reference genome to which they have been aligned.  
+
+Common software for variant calling includes Genome Analysis Toolkit, Mutect, Freebayes, Varscan, and Strelka.  The purpose of these softwares is to determine which variants are real, or which might be artifacts of sequencing error or alignment error, and output a score associated with that determination.  Any of these variant callers will require as input an aligned BAM file and a reference genome file.  Some expected optional parameters might be a list of sites to mask (such as known repetitive sites in the genome or known germline variants in a population), the expected ploidy of the sequenced sample, or a GTF file for annotating the genome context of each variant.
+
+The standard file format output by variant callers is Variant Call Format, or VCF, which is a tabular format containing the genomic location of each variant and the level of evidence for it in each sample, as well as a header describing the construction of the file.
+
+<p align="center">
+<img src="../figures/tcga_vcf_format.png" title="" alt="context"
+	width="90%" height="90%" />
+</p>
+
+After variant calling is performed and a confident set of variants is determined for each sample, some downstream analyses could include comparing variants found in tumor vs. normal pairs, variants found in resistant vs. non-resistant cell lines, or stastical analysis of the presence of variants in any case-control disease populations.
