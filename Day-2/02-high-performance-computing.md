@@ -29,23 +29,21 @@ Dartmouth's HPC is maintained by [Research Computing](https://rc.dartmouth.edu)(
 
 ## Discovery
 
-Discovery is a linux cluster with 2016 cores, 14.5TB of memory, and 1.8PB of disk space. The compute nodes are managed by a [job scheduler](https://rc.dartmouth.edu/index.php/using-discovery/scheduling-jobs/scheduler-policy/) when you log onto discovery you are automatically directed to the head node where data processing should **not be executed**. Discovery is mainly used to submit large multi-threaded jobs that will run for many hours or days.
+- 2016 cores 
+- 14.5TB of memory 
+- 1.8PB of disk space. 
 
-Interactive processing on discovery should only be performed on the *test node x01*. This is mostly for determining how long your discovery job will take once submitted. Once you are satisfied that the commands you're testing work as you expect they can be submitted to the scheduler using a PBS script. To use the test node simply log onto the test node interactively and execute the commands that you want to test.
+The compute nodes are managed by a [job scheduler](https://rc.dartmouth.edu/index.php/using-discovery/scheduling-jobs/scheduler-policy/) when you log onto discovery you are automatically directed to the head node where data processing should **not be executed**. 
 
-*This is an example command and shouldn't be executed*
-```bash
+Discovery is mainly used to submit large multi-threaded jobs that will run for many hours or days.
 
-# Log onto to the test node x01 interactively (the -I flag) for up to 3 hours, the -l flags indicate the details of the submission that you are asking for
-mksub -I -l nodes=x01 -l walltime=3:00:00
-
-```
 #### Andes/Polaris
 
 If you would like to work interactively you should do so on Andes/Polaris clusters. Lets take a minute to log onto Polaris.
 
 ```bash
-
+# Exit Discovery
+exit
 # Ssh onto Polaris, notice the command is the same except that the location that you are logging into has changed from discovery7 to polaris
 ssh netID@polaris.dartmouth.edu
 
@@ -61,9 +59,15 @@ pwd
 ```
 You will notice the the inital location you are logged into on polaris is the same home directory you found yourself in after your initial login to discovery. You can even see that all of the same files are there with the `ls` command. The content of your directories does not change whether you are logged onto discovery or polaris, what changes are the capabilities of the computing nodes that you are hosted on.
 
-Andes and polaris are shared memory computers which run jobs that require a lot of memory or scratch space (temp files that are created during processing but discarded later). Andes has 60 cores, 512 GB of memory, and 5TB of scratch space. Polaris has 40 cores, 1TB of memory, and 5TB of scratch space. You will notice that there are far fewer cores on andes/polaris, these clusters do not use a job scheduler and jobs are executed interactively on these HPCs. If you feel more comfortable executing jobs interactively this is where you should work.
+Andes and polaris are shared memory computers which run jobs that require a lot of memory or scratch space (temp files that are created during processing but discarded later). 
 
-You will also notice there is a lot more memory on polaris than andes, jobs that require a lot of memory and scratch space should be executed interactively on polaris as discovery may not have the scratch space or memory available to execute these types of jobs.
+Andes|Polaris
+---|---
+60 cores|40 cores
+512 GB of memory|1TB of memory
+5TB of scratch space|5TB of scratch space 
+
+You will notice that there are far fewer cores on andes/polaris, these clusters do not use a job scheduler and jobs are executed interactively on these HPCs. If you feel more comfortable executing jobs interactively this is where you should work.
 
 ## Moving files between computers
 
@@ -74,9 +78,9 @@ Sometimes you will want to move files from your account on the cluster to your l
 Let's use these commands to move the file `all_counts.txt` which should be in the Day1 directory you copied from the github repository, into your `fundamentals_of_bioinformatics` directory on discovery. To start open a new terminal window, this window should default to your local home directory (you can check this with `pwd`), navigate to the location you copied the github repo to so that you can see the `all_counts.txt` file when you use the `ls` command. From this new terminal window enter the following command:
 
 ```bash
-
+# ON YOUR LOCAL MACHINE
 # Move the file from the cluster to your local machine
-rsync all_conuts.txt netID@discovery7.dartmouth.edu:/dartfs-hpc/scratch/shannon/fundamentals_of_bioinformatics/
+rsync netID@discovery7.dartmouth.edu:/dartfs-hpc/scratch/shannon/fundamentals_of_bioinformatics/all_counts.txt ./
 
 ```
 
@@ -118,13 +122,13 @@ To establish a connection to a new site you would click on the **Site Manager** 
 
 ## Submitting a job to the cluster
 
-For many tasks that you will want to run, the task will require lots of memory and perhaps even threading to spread parts of the job onto multiple cores such that the job  is executed efficiently (think of a car being built in a factory it makes sense to build the headlights and doors in separate locations at the same time). We do this by submitting a job to the scheduler, in your submission you will provide parameters for running your job to the scheduler and the scheduler will assign your job to a (or multiple) node as soon as one becomes available. It is possible to do this all in one line of code, but the best practice is to use a script with all of this information endcoded and submit that script to the scheduler. In this way you have a written record of the parameters you used to submit the job and if anything goes wrong you can easily modify the script and resubmit it rather than typing the whole command out again.
+For many tasks that you will want to run, the task will require lots of memory and perhaps even threading to spread parts of the job onto multiple cores such that the job  is executed efficiently (think of a car being built in a factory it makes sense to build the headlights and doors in separate locations at the same time). We do this by submitting a job to the scheduler, in your submission you will provide parameters for running your job to the scheduler and the scheduler will assign your job to a (or multiple) node as soon as one becomes available. 
 
 Before submitting a job to the scheduler it is useful to check the traffic on discovery to get an idea of when a suitable node will become available. We can do this with the `pbsmon` command.
 
 ```bash
 
-# Check mode availability on discovery
+# Check node availability on discovery
 pbsmon
 ```
 
@@ -171,7 +175,7 @@ The lines that start with `#PBS` are the lines that are denoting the settings we
 
 ### Building a command
 
-Arguably the most important part to get right here is the *some command that I would like to submit* part of your script. We STRONGLY suggest that you read the manual for any tools that you are interested in using. Software executed through the command line has a plethora of options available, options that are often not available when using graphics user interfaces to execute the same software. It is important that you understand how these options change the way that the software will run on your data and which options are most appropriate for the data that you are using. Sometimes this comes down to knowing if your data are paired-end or single-end, but sometimes you need to know that the genome you are working with and the reference are not closely related and there could be options in the software that are more appropriate for that scenario.
+Arguably the most important part to get right here is the ***some command that I would like to submit*** part of your script. We STRONGLY suggest that you read the manual for any tools that you are interested in using. Software executed through the command line has a plethora of options available, options that are often not available when using graphics user interfaces to execute the same software. It is important that you understand how these options change the way that the software will run on your data and which options are most appropriate for the data that you are using. Sometimes this comes down to knowing if your data are paired-end or single-end, but sometimes you need to know that the genome you are working with and the reference are not closely related and there could be options in the software that are more appropriate for that scenario.
 
 There is a saying in computer programming "Garbage in, Garbage out" ultimately this means that the computer can only (at this point) follow your directions and it is important to do your due diligence and ensure that the commands you are executing are 1. most appropriate for the data you are using and 2. will ultimately answer the questions you have about your data.
 
@@ -187,7 +191,8 @@ mksub my_script.pbs
 
 ### Checking your jobs progress
 
-Once you submit your job you will want to peridically check on the progress of your job. One way to do that is using the commands `qstat` and `myjobs`. `qstat` will show you when your job was submitted to the que, and what the status of your job is (Q = still waiting to submit, R = currently running, C = completed).
+Once you submit your job you will want to periodically check on the progress of your job. One way to do that is using the commands `qstat` and `myjobs`. 
+`qstat` will show you when your job was submitted to the que, and what the status of your job is (Q = still waiting to submit, R = currently running, C = completed).
 `myjobs` will show the time the job was started, the status of your job (only running jobs are displayed), the time left based on the walltime you have requested,  and the HPC resources your job is using.
 
 ```bash
