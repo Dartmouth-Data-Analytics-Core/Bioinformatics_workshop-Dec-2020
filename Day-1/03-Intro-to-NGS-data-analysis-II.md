@@ -344,9 +344,7 @@ Note that I change `--outSAMtype` to `BAM sortedByCoord` so that we don't have t
 View the STAR alignment reports quickly:
 ```bash
 ls *Log.final.out | while read x; do
-   yes '' | sed 4q
    echo Printing $x
-   yes '' | sed 1q
    cat $x
 done
 ```
