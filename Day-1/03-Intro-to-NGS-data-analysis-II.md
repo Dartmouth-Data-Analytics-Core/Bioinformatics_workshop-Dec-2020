@@ -24,8 +24,11 @@ cd aligned
 If you get lost, or do not have enough time to finish the commands before we move to the next session you can copy the files needed for the next step with the following command from the scratch directory you have created for yourself. Again, you will need to update the target directory to your own directory on scratch. 
 
 ```bash
+# go to your scratch directory (e.g. /dartfs-hpc/scratch/omw/fundamentals_of_bioinformatics/)
+
+# copy files 
 # REMEMBER TO CHANGE THE DESTINATION DIRECTORY TO YOUR OWN INITIALS
-cp /dartfs-hpc/scratch/fund_of_bioinfo/aligned/* /scratch/omw/
+cp /dartfs-hpc/scratch/fund_of_bioinfo/aligned/* /dartfs-hpc/scratch/omw/
 ```
 
 ### Principles of read mapping for RNA-seq
