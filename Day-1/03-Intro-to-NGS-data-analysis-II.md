@@ -10,8 +10,11 @@
 
 Make a new directory to work in: 
 ```bash 
+#log onto the n07 node
+mksub -I -l walltime=5:00:00 -l nodes=n07
+
 # go to our home dir for the wrkshop
-biow
+cd /dartfs-hpc/scratch/YOUR_INITIALS_HERE/fundamentals_of_bioinformatics/
 
 # make the directroy and cd into it 
 mkdir aligned
