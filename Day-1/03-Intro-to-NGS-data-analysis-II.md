@@ -16,6 +16,10 @@ mksub -I -l walltime=5:00:00 -l nodes=n07
 # go to our home dir for the wrkshop
 cd /dartfs-hpc/scratch/YOUR_INITIALS_HERE/fundamentals_of_bioinformatics/
 
+# IF YOU DIDN'T HAVE TIME TO FINISH TRIMMING COPY THOSE FILES NOW 
+mkdir trim
+cp /dartfs-hpc/scratch/fund_of_bioinfo/trim/* /dartfs-hpc/scratch/YOUR_INITIALS_HERE/fundamentals_of_bioinformatics/trim/
+
 # make the directroy and cd into it 
 mkdir aligned
 cd aligned
@@ -24,11 +28,13 @@ cd aligned
 If you get lost, or do not have enough time to finish the commands before we move to the next session you can copy the files needed for the next step with the following command from the scratch directory you have created for yourself. Again, you will need to update the target directory to your own directory on scratch. 
 
 ```bash
-# go to your scratch directory (e.g. /dartfs-hpc/scratch/omw/fundamentals_of_bioinformatics/)
+# go to your scratch directory (e.g. /dartfs-hpc/scratch/YOUR_INTIALS_HERE/fundamentals_of_bioinformatics/)
+#make a directory to store aligned files 
+mkdir aligned
 
 # copy files 
 # REMEMBER TO CHANGE THE DESTINATION DIRECTORY TO YOUR OWN INITIALS
-cp /dartfs-hpc/scratch/fund_of_bioinfo/aligned/* /dartfs-hpc/scratch/omw/
+cp /dartfs-hpc/scratch/fund_of_bioinfo/aligned/* /dartfs-hpc/scratch/YOUR_INITIALS_HERE/fundamentals_of_bioinformatics/aligned/
 ```
 
 ### Principles of read mapping for RNA-seq
