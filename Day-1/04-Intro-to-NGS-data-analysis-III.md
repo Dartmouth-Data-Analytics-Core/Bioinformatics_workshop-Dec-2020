@@ -1,5 +1,13 @@
 # Working with NGS data Part III
+If you got lost or missed the last session you can copy all of the files we built in the alignment section with the following commands.
+```bash
+# navigate to your scratch directory
+cd /dartfs-hpc/scratch/YOUR_INTIALS_HERE/fundamentals_of_bioinformatics/
 
+# If you didn't have time to finish aligning copy these files now 
+mkdir aligned
+cp /dartfs-hpc/scratch/fund_of_bioinfo/aligned/* /dartfs-hpc/scratch/YOUR_INITIALS_HERE/fundamentals_of_bioinformatics/aligned/
+```
 After aligning reads to a reference genome, there are a couple of different ways we can continue with the analysis, which are dependent on the data type.
 
 **Read quantification:**
