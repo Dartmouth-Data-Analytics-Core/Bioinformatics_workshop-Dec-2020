@@ -21,6 +21,7 @@ cd aligned
 If you get lost, or do not have enough time to finish the commands before we move to the next session you can copy the files needed for the next step with the following command from the scratch directory you have created for yourself. Again, you will need to update the target directory to your own directory on scratch. 
 
 ```bash
+# REMEMBER TO CHANGE THE DESTINATION DIRECTORY TO YOUR OWN INITIALS
 cp /dartfs-hpc/scratch/fund_of_bioinfo/aligned/* /scratch/omw/
 ```
 
@@ -82,7 +83,7 @@ Most reference genomes and genome annotations can be downloaded through ftp site
 ```bash
 # example rsync command with the UCSC ftp site
 # the -a option denotes archive mode, the -P option indicates you want to show the progress as files are downloaded
-rsync -a -P rsync://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/ ./
+rsync -a -P rsync://hgdownload.soe.ucsc.edu/goldenPath/hg38/hg38Patch11/ ./
 ```
 
 
@@ -285,7 +286,7 @@ samtools view -F 4 SRR1039508.Aligned.out.sorted.bam -o SRR1039508.Aligned.out.s
 samtools view -c SRR1039508.Aligned.out.sorted.unmapped.bam
 
 # directly count reads with specific flag without making an intermediate file
-samtools view -c -F 4 SRR1039508.Aligned.out.sorted.REV.bam
+samtools view -c -F 4 SRR1039508.Aligned.out.sorted.unmapped.bam
 ```
 
 
@@ -329,10 +330,10 @@ ls ../trim/*_1.trim.chr20.fastq.gz | while read x; do
     --outSAMtype BAM SortedByCoordinate \
     --outFilterType BySJout \
     --outFileNamePrefix ${sample}.
+    
+   #index the BAMs for each sample
+   samtools index ${sample}.Aligned.sortedByCoord.out.bam
 done
-
-# index the BAMs
-samtools index *sortedByCoord.out.bam
 ```
 Note that I change `--outSAMtype` to `BAM sortedByCoord` so that we don't have to convert SAM to BAM and run `sort`.
 
