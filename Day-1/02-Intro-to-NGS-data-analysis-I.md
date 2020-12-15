@@ -7,7 +7,10 @@
 If you get lost, or do not have enough time to finish the commands before we move to the next session you can copy the files needed for the next step with the following command from the scratch directory you have created for yourself. You will just need to update the target directory to your own directory on scratch. 
 
 ```bash
-cp -r /dartfs-hpc/scratch/fund_of_bioinfo/* /scratch/omw/
+# go to your scratch directoory (e.g. /dartfs-hpc/scratch/omw/fundamentals_of_bioinformatics/)
+
+# copy files 
+cp -r /dartfs-hpc/scratch/fund_of_bioinfo/trim/* /scratch/omw/
 ```
 
 ## Raw NGS data, FASTQ file format
