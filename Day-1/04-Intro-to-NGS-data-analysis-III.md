@@ -152,7 +152,7 @@ head -n 10 /dartfs-hpc/scratch/fund_of_bioinfo/bed_files/heart_E15.5_H3K9ac.bed
 tail -n 10 /dartfs-hpc/scratch/fund_of_bioinfo/bed_files/heart_E15.5_H3K9ac.bed
 
 # count number of regions in the file
-wc -l head -n 10 /dartfs-hpc/scratch/fund_of_bioinfo/bed_files/heart_E15.5_H3K9ac.bed
+wc -l /dartfs-hpc/scratch/fund_of_bioinfo/bed_files/heart_E15.5_H3K9ac.bed
 ```
 
 **Note:** The settings and options used to perform peak calling appropriately are dependent on the data you have (e.g. ChIP-seq, ATAC-seq, etc.) and the type of peak you are hoping to detect. TFs usually form narrow punctuate peaks but other marks, such as histone marks, typically form broader peaks, and can require different settings to accurately detect.
