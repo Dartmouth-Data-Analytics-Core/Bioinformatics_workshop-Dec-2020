@@ -1,5 +1,6 @@
 ## 04-Intro to Stats
 
+setwd("/Users/omw/Documents/GitHub/Bioinformatics_workshop/Day-3/data/")
 
 # read in data
 fpkm <- read.table("fpkm_sub.txt", stringsAsFactors = FALSE, header=TRUE)

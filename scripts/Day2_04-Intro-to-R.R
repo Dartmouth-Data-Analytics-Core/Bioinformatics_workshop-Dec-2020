@@ -8,7 +8,7 @@ print(1, 2, 3)
 getwd()
 
 # set working directory to the data folder of Day-2 in the github repo you downloaded - notice that the path needs to be in double quotes
-setwd("your_path/Bioinformatics_workshop/Day-2/data/")
+setwd("your_path/Bioinformatics_workshop/Day-3/data/")
 
 ############################################## Vectors
 # numeric

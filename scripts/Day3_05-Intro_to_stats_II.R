@@ -51,7 +51,7 @@ text(600, 1.5, "Original threshold")
 ########################################
 
 # bonferroni correction
-p.adj.bonf <- p.adjust(p.value, method = "FWER")
+p.adj.bonf <- p.adjust(p.value, method = "bonferroni")
 p.adj.bonf
 
 # check if any are signifciant
@@ -59,8 +59,8 @@ table(p.adj.bonf < 0.05)
 ########################################
 
 #BiocManager::install("qvalue")
-# library(qvalue)
-qvalue(p.value)$qvalues
+library(qvalue)
+p.adj.fdr <- qvalue(p.value)$qvalues
 
 # check how many are sig.
 table(p.adj.fdr < 0.05)
@@ -158,3 +158,4 @@ boxplot(dat3$exp_geneX ~ dat3$subject_group ,
 # run the linear model and evaluate
 lm_2 <- lm(dat3$exp_geneX ~ dat3$subject_group)
 summary(lm_2)
+

@@ -52,13 +52,6 @@ sum(coverage(gr))
 sum(coverage(gr[strand(gr)=="+"]))
 
 ############################################################################################
-# index GRange object for specific elements 
-gr[1]
-gr[[1]]
-###### Error in getListElement(x, i, ...) : GRanges objects don't support [[, as.list(), lapply(), or unlist() at the moment
-gr[1][["r-1"]]
-##### Error in getListElement(x, i, ...) : GRanges objects don't support [[, as.list(), lapply(), or unlist() at the moment
-
 # view the top X regions of interest 
 head(gr, n=5)
 
@@ -188,13 +181,15 @@ ht_ov2 <- subsetByOverlaps(ht$h3K27ac, ht$h3K9ac)
 ht_ov2
 
 ############################################################################################
+library(Gviz)
+
 # create an annotation track from the Granges object for H3K27ac - this takes ~1 minute
 fr_h3k27ac_track <- AnnotationTrack(fr$h3K27ac, chromosome = "chr17", start = 9e6, end = 10e6,
                                     name = "Forebrain - H3K27ac", stacking = "dense", col = "indianred")
 
 # do the same for heart H3K27ac - this takes ~ 1 minute
 hr_h3k27ac_track <- AnnotationTrack(ht$h3K27ac, chromosome = "chr17", start = 9e6, end = 10e6,
-                                    name = "Heart - H3K27ac", stacking = "dense", col = "cornflowblue")
+                                    name = "Heart - H3K27ac", stacking = "dense", col = "cornflowerblue")
 
 # create a genomic axis object to add to plot
 gtrack <- GenomeAxisTrack()
