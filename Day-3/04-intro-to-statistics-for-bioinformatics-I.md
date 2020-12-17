@@ -5,7 +5,7 @@ As we discussed on day 1, bioinformatics draws on knowledge from multiple discip
 In particular, this working knowledge of statistics is required to understand the downstream data analysis methods we employ after data reduction of NGS datasets (e.g. differential analysis on raw gene expression counts).
 
 <p align="center">
-  <img src="../figures/bioinfo-venn.png" height="50%" width="60%"/>
+  <img src="../figures/bioinfo-venn.png" height="40%" width="50%"/>
 </p>
 
 Adapted from Md Arman Hossen on [Medium](https://medium.com/datadriveninvestor/i-have-designed-my-own-bioinformatics-degree-260b24767d87).
