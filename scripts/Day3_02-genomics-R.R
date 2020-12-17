@@ -1,4 +1,5 @@
 # 02-genomics-R
+setwd("/Users/omw/Documents/GitHub/Bioinformatics_workshop/Day-3/data/")
 
 ################################################
 library(org.Hs.eg.db)
@@ -126,7 +127,12 @@ library(TxDb.Hsapiens.UCSC.hg38.knownGene)
 txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 txdb
 
+#### DO NOT RUN ####
+txdb <- makeTxDbFromEnsembl("homo_sapiens", release = 101)
+
+#### DO RUN ####
 txdb <- loadDb("TxDb.Hsapiens.Ensembl.101.db")
+
 ################################################
 # retrieve all transcript level info
 txs <- transcripts(txdb)
@@ -213,7 +219,7 @@ sum.tab
 round(prop.table(sum.tab), digits = 2)
 
 # quick visualization
-barplot(round(prop.table(table(coding$LOCATION)), digits = 2))
+barplot(round(prop.table(table(vars$LOCATION)), digits = 2))
 
 ################################################
 #
@@ -226,16 +232,17 @@ indicies_of_matches <- match(vars$GENEID, anno$Gene.stable.ID)
 vars$GENE.SYMBOL <- anno$Gene.name[indicies_of_matches]
 
 # exmaple gene of interest:
-vars_cd79b <- vars[vars$GENE.SYMBOL %in% "CD97B",]
+vars_cd79b <- vars[vars$GENE.SYMBOL %in% "CD79B",]
 vars_cd79b
 
 # check how many of each variant type
-table(vars_erbb2$LOCATION)
+table(vars_cd79b$LOCATION)
 
 ################################################
 # required to set expectation for format of chromosome names ('chr17' vs '17')
 options(ucscChromosomeNames=FALSE)
 
+library(Gviz)
 # set gene region track from our txdb
 txTr <- GeneRegionTrack(txdb,
                         chromosome = "17",
