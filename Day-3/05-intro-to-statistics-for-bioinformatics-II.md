@@ -4,7 +4,7 @@
 
 ### Statistical inference
 
-Before we discuss supervised methods, it is useful to first discuss the fundamental concepts behind statistical inference, and importantly hypothesis testing, as we the hypothesis testing framework to infer biological insights from data that has been modeled using a supervised statistical approaches.
+Before we discuss supervised methods, it is useful to first discuss the fundamental concepts behind statistical inference, and importantly hypothesis testing, as we build the hypothesis testing framework to infer biological insights from data that has been modeled using a supervised statistical approaches.
 
 **Statistical inference** refers to the process we use to draw conclusions from models and procedures applied to the sample of the population we are studying, and is often broken down into two parts:
 - **estimation** where we learn or determine a population parameter through fitting a statistical model fitted to our data (e.g. though using supervised learning approaches)
