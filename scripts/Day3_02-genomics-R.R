@@ -126,6 +126,7 @@ library(TxDb.Hsapiens.UCSC.hg38.knownGene)
 txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 txdb
 
+txdb <- loadDb("TxDb.Hsapiens.Ensembl.101.db")
 ################################################
 # retrieve all transcript level info
 txs <- transcripts(txdb)
@@ -159,7 +160,8 @@ intronicParts(txdb)
 txs_by_gene <- transcriptsBy(txdb, by = "gene")
 txs_by_gene
 
-# index by gene.id of interest to get all transcripts annotated to that gene - Error: subscript contains invalid names
+# index by gene.id of interest to get all transcripts annotated to that gene - 
+# Error: subscript contains invalid names
 txs_by_gene["ENSG00000000419"]
 
 # index by exons by transcript (to identify unique exons)
@@ -195,7 +197,7 @@ table(duplicated(tx_to_exon$TXNAME))
 library(VariantAnnotation)
 
 # import the variant locations in bed file format
-bed <- import("data/TCGA.pcawg.chr17.bed", format="BED")
+bed <- import("TCGA.pcawg.chr17.bed", format="BED")
 bed
 
 # annotate the variants based on our Ensembl Txdb
@@ -215,7 +217,7 @@ barplot(round(prop.table(table(coding$LOCATION)), digits = 2))
 
 ################################################
 #
-anno <- read.table("data/GRCh38.p12_ensembl-101.txt", sep="\t", header=TRUE, stringsAsFactors = F)
+anno <- read.table("GRCh38.p12_ensembl-101.txt", sep="\t", header=TRUE, stringsAsFactors = F)
 
 # return indicies of ENSEMBL geneIDs from variants annotation in the Ensembl v101 annotation data
 indicies_of_matches <- match(vars$GENEID, anno$Gene.stable.ID)
@@ -224,8 +226,8 @@ indicies_of_matches <- match(vars$GENEID, anno$Gene.stable.ID)
 vars$GENE.SYMBOL <- anno$Gene.name[indicies_of_matches]
 
 # exmaple gene of interest:
-vars_erbb2 <- vars[vars$GENE.SYMBOL %in% "ERBB2",]
-vars_erbb2
+vars_cd79b <- vars[vars$GENE.SYMBOL %in% "CD97B",]
+vars_cd79b
 
 # check how many of each variant type
 table(vars_erbb2$LOCATION)
@@ -291,6 +293,8 @@ fr <- GRangesList("h3K27ac" = fr_h3k27ac, "h3K9ac" = fr_h3k9ac)
 ht <- GRangesList("h3K27ac" = ht_h3k27ac, "h3K9ac" = ht_h3k9ac)
 
 ################################################
+library(ChIPseeker)
+
 # run annotatePeak
 fr_h3K27ac_anno <- annotatePeak(fr$h3K27ac, tssRegion=c(-2000, 1000), TxDb = txdb)
 fr_h3K27ac_anno

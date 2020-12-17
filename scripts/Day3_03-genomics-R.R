@@ -101,7 +101,6 @@ seq.dnass
 
 ########################################
 # assign the genome to a variable using getBSgenome() 
-install("BSgenome.Mmusculus.UCSC.mm10")
 genome <- getBSgenome("BSgenome.Mmusculus.UCSC.mm10")
 genome
 
@@ -114,7 +113,6 @@ metadata(genome)
 #unable to find an inherited method for function ‘metadata’ for signature ‘"BSgenome"’
 
 ########################################
-install("BSgenome.Mmusculus.UCSC.mm10.masked")
 genome.m <- getBSgenome("BSgenome.Mmusculus.UCSC.mm10.masked")
 class(genome.m)
 genome.m
@@ -145,11 +143,6 @@ chr1 <- genome$chr1
 
 # confirm how long it is
 length(chr1)
-
-# subset it
-chr1[1:100]
-#Error in chr1[1:100] : object of type 'S4' is not subsettable
-chr1[100498:100598]
 
 # what is the frequency of each base in your sequence
 alphabetFrequency(chr1, baseOnly=TRUE, as.prob=TRUE)
@@ -257,3 +250,4 @@ length(matches)
 str(matches)
 matches[[4]]
 matches[[4]][[3]]
+
