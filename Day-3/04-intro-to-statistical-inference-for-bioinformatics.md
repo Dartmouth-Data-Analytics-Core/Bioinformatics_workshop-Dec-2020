@@ -1,46 +1,60 @@
-# Introduction to Statistical Learning & Inference in bioinformatics
+# Introduction to statistics for bioinformatics
 
 As we discussed on day 1, bioinformatics draws on knowledge from multiple disciplines. To effectively solve most bioinformatic problems, knowledge from each of these disciplines must be applied to address the overall problem. Developing a **working knowledge of statistics** is critical for anyone hoping to solve bioinformatic problems, particularly in genomics.
 
-In particular, this working knowledge of statistics is required to understand data analysis after data reduction of specific data types, e.g. performing a differential expression analysis.
-
+In particular, this working knowledge of statistics is required to understand the downstream data analysis methods we employ after data reduction of NGS datasets (e.g. differential analysis on raw gene expression counts).
 
 <p align="center">
-  <img src="../figures/bioinfo-venn.png" height="400" width="400"/>
+  <img src="../figures/bioinfo-venn.png" height="50%" width="60%"/>
 </p>
 
 Adapted from Md Arman Hossen on [Medium](https://medium.com/datadriveninvestor/i-have-designed-my-own-bioinformatics-degree-260b24767d87).
 
-Statistics involves the analysis of numerical data that we wish to use for making inferences on a larger population. Generally, ***statistical learning*** refers to the models and procedures with which we analyze these numerical datasets.
+Statistics involves the analysis of numerical data that we wish to use for making inferences on a larger population. Generally, **statistical learning** refers to the models and procedures with which we analyze these numerical datasets. **Statistical inference** refers to the process of drawing conclusions from these models and procedures.
 
-These models and procedures can be used to either make **predictions** (e.g. healthy vs. diseased tissue based on gene expression profiles) or for ***statistical inference***, where tools from statistical learning are applied to help us understand the relationship between a set of variables (e.g. which genes are associated with diseased tissue).
-
-While a comprehensive introduction to *statistical learning and inference* is well beyond the scope of this workshop (and generally takes years of specific training and experience), we will introduce some fundamental concepts required for approriate statsitcal analysis of genomics data sets that are relevant to wet- or dry-lab scientists alike.
+While a comprehensive introduction to *statistical learning and inference* is well beyond the scope of this workshop (and generally takes years of specific training and experience), we will introduce some fundamental concepts required for appropriate statistical analysis of genomics data sets that are relevant to wet- or dry-lab scientists alike.
 
 **What we *will* cover:**  
 - What is statistical learning?
 - Basics of supervised & unsupervised data analysis methods
-- Fundamentals of statistical inference & hypothesis testing
-- *P*-values & multiple testing correction
+- Basics of statistical inference & hypothesis testing
+- *P*-values & the multiple testing problem
 
 **What we *will not* cover:**  
 - Math & probability theory underlying statistical learning procedures
 - Model selection procedures & how to assess model fit
 - A comprehensive introduction to the methods used for statistical learning and inference in bioinformatics
 
-> **Important note:** Builing a more complete understanding of the statistical procedures commonly used in bioinformatics, such that you are able to confidently implement, interpret, and troubleshoot these procedures, requires a strong working knowledge of relevant math and probability theory. Such training is best sought out through formal instruction, and is usually not included in applied bioinformatics courses. While developing an understanding of the fundamental concepts in statistical learning and inference covered here will allow you to begin leveraging more complex statistical analyses in your own research, and act as a solid fondation upon which to further your training in this domain, it is also important to recognize when more specialist expertise is needed to address your analytical questions.
+> **Important note:** Building a more complete understanding of the statistical procedures commonly used in bioinformatics, such that you are able to confidently implement, interpret, and troubleshoot these procedures, requires a strong working knowledge of relevant math and probability theory. Such training is best sought out through formal instruction, and is usually not included in applied bioinformatics courses. While developing an understanding of the fundamental concepts in statistical learning and inference covered here will allow you to begin leveraging more complex statistical analyses in your own research, and act as a solid fondation upon which to further your training in this domain, it is also important to recognize when more specialist expertise is needed to address your analytical questions.
 
 ---
 
 ## Statistical learning
 
-As described above, *statistical learning* describes the models and procedures we use in order to understand data. Generally, the methods we use can be categorized into *supervised* and *unsupervised* methods.
+As described above, *statistical learning* describes the models and procedures we use in order to understand data. Generally, the methods we use can be categorized into *supervised* and *unsupervised* methods. In bioinformatic & genomic data analysis, we commonly perform these methods in sequence.
 
-**Supervised methods** describe approaches used when a set of observations we have made (e.g. gene expression levels) are all associated with a response variable (e.g. diseased or healthy). The observations, also called predictors, are generally referred to as the *independent variable (X)*, while the response is the *dependant variable (Y)*.
+**Unsupervised methods**
 
-By fitting statistical models to the data (the *learning* part), we aim to learn about the relationship between the *independent* and *dependent* variables (the *inference* part). For example, we may apply a form of linear model to gene expression data from heathly cases and diseased controls in order to address questions like:  
+We are often interested in identifying clusters and groups that form naturally in our data, meaning that we do not supervise the analysis using any dependent variable (e.g. tx group, WT vs KO). This part of an analysis is often referred to as an *exploratory data analysis*, and make use of *unsupervised statistical methods* to perform this analysis.
+
+Unsupervised data analysis is often used in bioinformatics to adress questions like:
+- How similar are my samples based on genome-wide profiles?
+- Are any samples in the dataset clear outliers?
+- Do any variables systematically affect genome-wide profiles (e.g. batch)?
+
+**Examples of unsupervised methods:**    
+- Dimensionality reduction (e.g. PCA, NMF, t-SNE, UMAP)
+- Clustering methods (e.g. hierachical, K-means)
+- Hidden markov modeling
+
+
+**Supervised methods**
+
+In contrast to unsupervised methods, we often wish to test a more specific question of hypothesis, for example in the context of a gene expression analysis, we might ask:
 - *Which genes are associated with disease?*
 - *How much does a given gene contribute to the disease phenotype?*
+
+The statistical methods we use to address these sorts of questions are typically referred to as *supervised statistical methods*.
 
 **Examples of supervised methods:**   
 - Linear regression
@@ -48,20 +62,9 @@ By fitting statistical models to the data (the *learning* part), we aim to learn
 - Descision trees
 - Support vector machines
 
-**Unsupervised methods**
-
-There are times when observations are not associated with a predictor (the *dependent variable*) and we simply wish to the relationships that exist in our data in a way that is *not supervised* by any such variable. This is often true in *exploratory data analysis*, where we want to explore how samples are related to each other without assigning samples to a specific group for modeling purposes.
-
-Alternatively, we may not have a dependent variable that can be used to model our observations. For example, in analysis of single cell sequencing data, we are often interested in studying subpopulations of cells that come from the same sample, and therefore require some way assessing similarities and differences between the cells so that wse can identify potential subpopulations of interest.  
-
-**Examples of unsupervised methods:**    
-- Dimensionality reduction (e.g. PCA, NMF, t-SNE, UMAP)
-- Clustering methods (e.g. hierachical, K-means)
-- Hidden markov modeling
-
 Below, we provide more specific introductions to both supervised and unsupervised learnings, using basic linear modeling as an example for supervised approaches, while exploring PCA and hierachical clustering for unsupervised analysis.
 
-> A more comprehensive introduction to statistical learning can be found in the book: [An Introduction to Statistical Learning](http://faculty.marshall.usc.edu/gareth-james/ISL/).
+> A more comprehensive introduction to statistical learning can be found in the book: [An Introduction to Statistical Learning](http://faculty.marshall.usc.edu/gareth-james/ISL/), in addition to numerous other statistical texts and online resources.
 
 
 
@@ -69,50 +72,259 @@ Below, we provide more specific introductions to both supervised and unsupervise
 
 
 
+### Unsupervised learning - Dimension reduction & clustering
+
+As mentioned above, unsupervised learning methods are very powerful tools to conduct exploratory data analysis. Two important groups of unsupervised methods include *dimensionality reduction methods* and *clustering-based methods*.
+
+- ***dimensionality reduction methods***: involves the transformation of data from a high-dimensional space to a low-dimensional space, allowing intrinsic properties of the high-dimensional dataset to be identified. These approaches are valuable when you have a large number of features (*p*) but a much smaller sample number (*n*).
+
+- ***clustering-based methods***: involves calculation of the similarity/dissimilarity between samples, resulting in organization of these samples into *'clusters'* defined by their relatedness to one-another
+
+We will explore an example of each approach below, using *principal components analysis (PCA)* as an example of dimensionality reduction, and *unsupervised hierachical clustering* as an example of a clustering-based method.
+
+#### Principal components analysis (PCA)
+
+For high dimensional datasets (e.g. genomics data), where we have measured many thousands of features over a relatively smaller number of samples, it is often desirable to reduce the complexity of the dataset so that it can be viewed in fewer dimensions that hopefully reveal some intrinsic properties of the dataset.
+
+> We will not discuss the mathematical procedures used to perform PCA here, however this is discussed exhaustively elsewhere. One excellent resource is the StatQuest video linked [here](https://www.youtube.com/watch?v=_UVHneBUBW0&ab_channel=StatQuestwithJoshStarmer).
+
+PCA is a very popular approach to perform dimensionality reduction. At its simplest level, PCA accepts a matrix of numerical values (e.g. gene expression matrix, ChIP-seq counts, etc.), and returns a set of numerical vectors (principal components) that represent the axes of greatest variation in the dataset.
+
+The principal components (PCs) explain distinct sources of variation in the data, and represent the lower-dimensional space that the original dataset has been projected into. Importantly, each PC explains more variation in the dataset than the last (e.g. PC1 explains more variation than PC2).
+
+By using the projection values of each sample along the PCs, we can visualize this lower-dimensional space to learn defining properties of the dataset.
+
+<p align="center">
+  <img src="../figures/pca-example.png" height="410" width="650"/>
+</p>
+
+To demonstrate how you would perform a PCA analysis in R, we will use gene expression data (RNA-seq) collected as part of the same ENCODE study we discussed in previous lessons [Gorkin et al, 2020](https://www.nature.com/articles/s41586-020-2093-3?proof=t), but published in the companion paper: [*The changing mouse embryo transcriptome at whole tissue and single-cell resolution*](https://www.nature.com/articles/s41586-020-2536-x).
+
+The expression data includes samples collected as multiple time-points during development of the mouse embryo across 17 different tissues and organs (see Figure 1A from the manuscript below).
+
+<p align="center">
+  <img src="../figures/fig-1a-he.png" height="70%" width="70%"/>
+</p>
+
+To help get you started, you have been provided with a matrix of FPKM counts (*fragments per kilobase million mapped reads*, which represent normalized expression values) and sample metadata. In the code chunks below, we will explore the relationships between samples from different tissues using PCA.
+
+```r
+# read in data
+fpkm <- read.table("fpkm_sub.txt", stringsAsFactors = FALSE, header=TRUE)
+meta <- read.delim("metadata_sub.tsv", stringsAsFactors = FALSE, header = TRUE)
+
+# have a quick look at top of files
+head(fpkm[,1:6])
+head(meta)
+
+# log transform fpkm counts
+log_fpkm <- log2(fpkm+1)
+
+# calculate variance across samples for each gene
+vars <- apply(log_fpkm, 1, var)
+# order variances based on magnitude of variance
+vars <- rev(vars[order(vars)])
+
+# plot variance for genes accross samples
+plot(vars, las = 1, main="Sample gene expression variance", xlab = "Gene", ylab = "Variance")
+abline(v=5000, col="red")
+```
+
+<p align="left">
+  <img src="../figures/var-pca.png" height=height="60%" width="60%"/>
+</p>
+
+In-fact, most genes show little variance in expression levels across tissues. Features that do not vary across samples are not informative for dimensionality reduction or clustering methods, therefore it is generally useful to remove them.
+
+In these data, it seems that ~ the top 5000 genes will explain most of the variance in these data, so we will only use these genes for the PCA.
+
+```r
+# perform PCA and order by variance
+vars_sub <- vars[1:5000]
+
+# perform the PCA on the fpkm matrix
+pca <- prcomp(t(log_fpkm[names(vars_sub), ]))
+
+# look at the object returned
+str(pca)
+head(pca$x)
+
+# construct data frame w/ PC loadings and add sample labels
+pca_df <- as.data.frame(pca$x)
+pca_df$tissue <- as.factor(meta$Biosample.term.name)
+pca_df$sample_ids <- meta$File.accession
+
+# extract percent variance explained by each PC
+percentVar <- pca$sdev^2/sum(pca$sdev^2)
+
+# add colors for plotting to df
+cols <- grDevices::rainbow(length(levels(pca_df$tissue)))
+
+# create an empty variable in pca_df to be filled with colors from cols
+pca_df$col <- NA
+
+# loop over tissue types in pca_df and assign colors for plotting
+for(i in 1:length(levels(pca_df$tissue))){
+  ind1 <- which(pca_df$tissue == levels(pca_df$tissue)[i])
+  pca_df$col[ind1] <- cols[i]
+}
+
+# plot PC1 vs PC2
+plot(pca_df[, 1], pca_df[, 2],
+     xlab = paste0("PC1 (", (round(percentVar[1], digits=3)*100), "% variance)"),
+     ylab = paste0("PC2 (", (round(percentVar[2], digits=3)*100), "% variance)"),
+     main = paste0("PC1 vs PC2 genome-wide RNA-seq tissue profiles"),
+     pch = 16, cex = 1.35, cex.lab = 1.3, cex.axis = 1.15, las = 1,
+     panel.first = grid(),
+     col = pca_df$col)
+
+# add a legend to the plot
+legend(1.5, 105, levels(pca_df$tissue), pch = 16, col = cols, cex = 0.9)
+```
+
+<p align="center">
+  <img src="../figures/pca-plot.png" height="75%" width="75%"/>
+</p>
+
+Viewing the dataset using this lower dimensional representation provides us with critical insights into the data that would be too challenging to obtain by looking at the expression levels of individual genes separately. We see that samples from similar tissues generally cluster together on the PCA plot, while more distinct tissue types appear further away from each other. This fits with our expectations, as samples from the same (or similar tissues) should have similar gene expression profiles.
+
+---
+
+#### Unsupervised hierarchical clustering
+
+Generally, clustering analysis describes a collection of methods used to group samples into groups called *clusters* which define their relation to one-another. These relationships are defined by the *distance metric* used, which is simply a measure of how similar/dissimilar samples or features in a dataset are to each other. Several distance metrics exist, such as *manhattan* or *euclidean* distance, and are calculated differently (and affect the clustering).
+
+Unsupervised hierarchical clustering describes a specific approach to performing clustering analysis, in which a tree-like structure is generated to describe the relatedness of samples and features. The results of this procedure are commonly represented using heatmaps, with samples defining columns and features (e.g. genes) defining the rows. Visualization using heatmaps is valuable as it allows us to identify *'modules'* of similar/dissimilar features across samples, making approaches like hierarchical clustering complimentary to dimensionality-reductions methods like PCA.
+
+<p align="center">
+  <img src="../figures/heatmap-exp.png" height="90%" width="90%"/>
+</p>
+
+To demonstrate how one could perform an unsupervised hierachical clustering analysis in R, we will use the same RNA-seq dataset from [He *et al*](https://www.nature.com/articles/s41586-020-2536-x), describing transcriptomic changes in the developing mouse embryo.
+
+Clustering can be quite computationally intensive, therefore we will first generate a subset of the gene expression data containing five specific tissues, rather than all 17.
+```r
+# subset mnetadata to 5 tissues of interest
+meta_ord <- meta[meta$Biosample.term.name=="forebrain" |
+                 meta$Biosample.term.name=="heart" |
+                 meta$Biosample.term.name=="limb" |
+                 meta$Biosample.term.name=="liver" |
+                 meta$Biosample.term.name=="intestine", ]
+
+# subset FPKM matrix to contain the same subset of samples
+log_fpkm_sub <- log_fpkm[, c(colnames(log_fpkm) %in%  meta_ord$File.accession)]
+```
+
+Since we took a subset of the original dataset, we need to recalculate the variance of each gene across the samples in this subset, so that we can assess how many features will be informative for the clustering procedure.
+```r
+# calculate variance of each gene across samples for new subset of data
+vars <- apply(log_fpkm_sub, 1, var)
+
+# order variances based on magnitude of variance
+vars <- rev(vars[order(vars)])
+
+# plot variance for genes across samples
+plot(vars, las = 1, main="Sample gene expression variance",
+     xlab = "Gene", ylab = "Variance")
+# add vertical line
+abline(v=1000, col="red")
+```
+
+<p align="left">
+  <img src="../figures/var-hclust.png" height="60%" width="60%"/>
+</p>
+
+
+The per gene variances look similar to before, however we will focus on the top 2000 most variable genes to help speed up the hierarchical clustering.
+```r
+# subset var to only top 2000 genes with most variance
+vars_sub <- vars[1:2000]
+
+# subset the fpkm matrix to these genes
+mat <- log_fpkm_sub[names(vars_sub), ]
+
+# order the samples in the same order they are in in the metadata file
+mat <- mat[, c(match(meta_ord$File.accession, colnames(mat)))]
+
+# scale the fpkm matrix by row
+mat_scaled = t(apply(mat, 1, scale))
+
+# set column names for this matrix (they were removed during transposition)
+colnames(mat_scaled) <- colnames(mat)
+```
+
+We will be using the *pheatmap()* from the `pheatmap` package, which provides extensive functionality for performing and visualizing the results of clustering analyses using heatmaps.
+```r
+# load the pheatmap package
+library(pheatmap)
+
+# create data frame to annotate heatmap with
+annotation_col = data.frame(Tissue = meta_ord$Biosample.term.name)
+rownames(annotation_col) = meta_ord$File.accession
+
+# use pheatmap() to perform clustering on scaled data matrix
+pheatmap(mat_scaled,
+         show_rownames=FALSE, show_colnames=FALSE,
+         annotation_col = annotation_col,
+         cluster_cols = TRUE,
+         clustering_method = "average",
+         clustering_distance_cols = "correlation")
+```
+
+<p align="center">
+  <img src="../figures/hclust.png" height="80%" width="80%"/>
+</p>
+
+The sample dendrogram and annotation bar tells us that all five tissues were assigned to their own cluster, with sub-clusters among each. It also allows us to compare between these groups to make inferences, for example, intestine seems to be the most dissimilar tissue from forebrain based on gene expression.
+
+In addition, the heatmap shows us the genes and their accompanying dendrogram, which allows us to visualize sets of genes that show coordinated changes across the samples, providing insight into the differences described by the clusters. For example, there is a set of ~200-300 genes that are uniquely up-regulated in intestinal tissue, and an additional ~100-200 genes that are shared with liver tissue.  
 
 
 
-## Statistical inference
+---
 
-statsitical inference refers to:
-estimation
-hypothesis testing
+### Statistical inference
 
+Before we discuss supervised methods, it is useful to first discuss the fundamental concepts behind statistical inference, and importantly hypothesis testing, as we the hypothesis testing framework to infer biological insights from data that has been modeled using a supervised statistical approaches.
 
+*Statistical inference* refers to the process we use to draw conclusions from models and procedures applied to the sample of the population we are studying, and is often broken down into two parts:
+- *estimation* where we learn or determine a population parameter through fitting a statistical model fitted to our data (e.g. though using supervised learning approaches)
+- *hypothesis testing* which involves testing for a specific value of this parameter, so that we can make an inference about the population from which the sample comes
 
-### What is hypothesis testing?
+An excellent article on the fundamentals of statistical inference and estimation from the *PennState course: Stat 504, Analysis of Discrete Data* is available [here](https://online.stat.psu.edu/stat504/node/16/).
 
-In bioinformatic data analysis, we often want to test a hypothesis such that we can assess how meaningful our results are. For example, in an RNA-seq differential expression analysis we would like to know which genes showed meaningfully different gene expression between the experimental groups. *Hypothesis testing* describes the statistical framework that we use to assess how meaningful our results are.
+### Hypothesis testing
+
+In bioinformatic data analysis, we often conduct hypothesis testing to assess how meaningful our results are. For example, in RNA-seq analysis, we would like to know which genes showed meaningfully different gene expression between the experimental groups. *Hypothesis testing* describes the statistical framework that we use to assess how meaningful our results are.
 
 General procedure for hypothesis testing:
 1. Decide on the null hypothesis (*H<sub>0*)
 2. Use the sample data to calculate a test statistic
 3. Use the test-statistic to calculate a P-value
-4. Accept or reject the null hypothesis based on magnitude of P-value
+4. Reject the null hypothesis if P-value is below your *a priori* threshold
 
-To help understand the procedure for hypothesis tetsing, some useful definitions:
+To help understand the procedure for hypothesis testing, some useful definitions:
 - **Null hypothesis (*H<sub>0*)** - the hypothesis that there is *no meaningful difference* between our samples
 - **alternative hypothesis (*H<sub>A*)** there is a meaningful difference* between our samples
 - **test-statistic** - quantity comparing your results to those you would expect under the null hypothesis
-- **P-value** - probability that we would observe a test-statistic as extreme as the one we observed, simply due to chance
+- **P-value** - probability of observing data equal to or more extreme than that observed due to chance
 
-Through comparing our observed data to that expected under the *null hypothesis* (*H<sub>0*) we can calculate the *test-statistic* using a distribution of known area, such as the t-distribution. Since these distributions are of known area, we can calculate a probability value (*P*-value) that tells us how likely we are to observe a test-statistic this big due to chance.
+Through comparing our observed data to that expected under the *null hypothesis* (*H<sub>0*) we can calculate the *test-statistic* using a distribution of known area. The z- and t- distributions are popular as they represent the distribution of the test-statistic in common situations and are otherwise often good approximations.
 
 <p align="center">
-  <img src="../figures/t-dist.png" height="410" width="650"/>
+  <img src="../figures/t-dist.png" height="70%" width="70%"/>
 </p>
 
+By assuming the test-statistic follows a know distribution such as the z- or t-distribution, we know how much to tolerate deviations that could be due to chance before rejecting the null hypothesis. Larger test-statistic values mean there is a larger difference between the distribution of our observed data, and the distribution of data under the null hypothesis, meaning we are more likely to reject the null when the test-statistic value is high.
 
-
-
-Larger test-statistic values mean there is a larger difference between the distribution of our observed data, and the distribution of data under the null hypothesis. For the t-distribution, we test-statistic is calculated using the following equation:
+For the t-distribution, the test-statistic is calculated using the following equation:
 
 *t-statistic* = (*x<sub>i</sub>* - &mu;) / (*s* x sqrt(*n*))
 
 Using the t-statistic and the *degrees of freedom* (sample number - 1) the P-value is determined. If the P-value is < our threshold (&alpha;), we will reject the null and accept the alternative hypothesis. By setting &alpha; to 0.05, this means we will interpret results as meaningful if they have at most a 5 in 100 probability of being due to chance.
 
 <p align="center">
-  <img src="../figures/t-dist2.png" height="410" width="650"/>
+  <img src="../figures/pvalues.png" height="80%" width="80%"/>
 </p>
 
 
@@ -122,93 +334,147 @@ Using the t-statistic and the *degrees of freedom* (sample number - 1) the P-val
 
 ### The multiple testing problem
 
-In bioinformatics and genomics, we measure thousands upon thousands on features (e.g. genes, peaks, methylation sites) and we often run a statistical test for each of them when trying to identify meaningful features with regard to our hypothesis. As we defined above, P-values are *the probability that we would observe a result as extreme as the one we observed, simply due to chance*. Therefore, if we use 0.05 as a P-value threshold, and test 20,000 features for statistical significance, by definition 5% of those features will have a test-statistic that big simply due to chance.
+In bioinformatics and genomics, we measure thousands of features simultaneously (e.g. genes, peaks, methylation sites) and run a statistical test for each of them when trying to identify meaningful features with regard to our hypothesis.
 
-Consider an typical RNA-seq experiment, where it is common to test >20,000 genes for differential expression across two or more conditions. If we set 5% as our &alpha;, 5% of the fold-changes we observe will be sufficiently different between the experimental groups due to chance. **5% of 20,000 is 1000 genes**, which is obviously an unacceptable amount of false-positives.
+As we defined above, P-values are *the probability of observing data equal to or more extreme than that observed due to chance*. Therefore, by definition, if we accept a P-value threshold of 0.05, we will reject the null hypothesis by mistake, even if the null is true.
 
+if we use 0.05 as a P-value threshold, and test 20,000 features for statistical significance, by definition 5% of those features will have a test-statistic that large simply due to chance.
 
-|         |           | truth                         |                            |
-|---------|-----------|-------------------------------|----------------------------|
-|         |           | H0 (null) is true             | HA alternative) is true    |
-| descion | Accept H0 | True negative (P = 1 - alpha) | False-negative (P = beta)  |
-|         | Reject H0 | False positive (P = alpha)    | True-positive (P = 1-beta) |
+Consider an RNA-seq experiment, where it is common to test >20,000 genes for differential expression across two or more conditions. If we set 5% as our &alpha;, we will mistakenly claim that 5% of the genes we tested are significantly differentially expressed. **5% of 20,000 is 1000 genes**, which is obviously an unacceptable amount of false-positives.
 
+We can classify the different types of errors and decisions we make during hypothesis testing according to how they fit with the actual truth observed in nature, as shown in the below table.
 
-We can demonstrate the multiple testing problem by simulating some very simple data and running statistical tests repeatedly on them.
+<p align="center">
+  <img src="../figures/desicions-table.png" height="80%" width="80%"/>
+</p>
 
+- False positives are generally referred to as **Type I error**.
+- False-negatives are referred to as **Type II error**.
+
+As we discussed above, at a 5% significance level, there is a 5% chance of rejecting the null by mistake (committing a type I error). As we perform more and more tests, the number of times we mistakenly reject the null will increase, causing us to make more and more false-positive claims.
+
+We can demonstrate the multiple testing problem by simulating some very simple data that come from exactly the same distribution, and therefore should have no significant differences between them, so we should never reject the null in theory.
 
 ```r
+# generate an expty vector to store P-values in
+p.value <- c()
 
+# generate 2 random variables (r.v.s) 1000 times and run a t.test on each pair of r.v.s
+# the r.v.s will have the same mean and distribution
+for(i in 1:1000){
+  # simulate random variables
+  x <- rnorm(n = 20, mean = 0, sd = 1)
+  y <- rnorm(n = 20, mean = 0, sd = 1)
+  # run t.test and extract p-value
+  p.value[i] <- t.test(x, y)$p.value
+}
+
+# count number of P-values less than our alpha
+table(p.value < 0.05)
+
+# order vector of P-values
+p.value <- p.value[order(p.value)]
+
+# visualize P-value magnitude
+plot(-log10(p.value), las = 1,
+     col = "cornflowerblue",
+     main = "-log 10 P-values",
+     xlab = "ordered P-values")
+
+# add a horizontal line
+abline(h=-log10(0.05), col = "red", lty = 2)
+
+# add some useful labels
+text(600, 1.5, "Small P-values higher up")
+text(600, 1.1, "Large P-values lower down")
 ```
 
-```r
-# how many P-values < 0.05
-sum(res2$pvalue < 0.05, na.rm=TRUE)
+<p align="center">
+  <img src="../figures/hypo-test-2.png" height="100%" width="100%"/>
+</p>
 
-# how many FDR adjusted P-values < 0.05
-sum(res2$padj < 0.05, na.rm=TRUE)
+Roughly 5% of the time, we commit a type I error. Left unchecked in genomics and bioinformatics studies, this error would cause a vast number of findings to be attributable to noise.
 
-# how many with Bonferonni adjusted P-values < 0.05
-sum(res2$pvalue < (0.05/nrow(res2)), na.rm=TRUE)
-
-# plot the results
-plot(res2$log2FoldChange, -log10(res2$pvalue),
-     main = "Volcano plot - DEG w/ scrambled sample labes",
-     las = 1, col = "cornflowerblue",
-     ylab = "- log10 P-value", xlab = "log2 Fold change", ylim = c(0,7))
-
-# add significance lines
-abline(h= -log10(0.05), lty = 2, col = "red") # nominal P-value
-abline(h= -log10(0.05/nrow(res2)), lty = 2, col = "black") # Bonferonni
-```
-
-As you can see...
-
+---
 
 ### Methods for multiple testing correction
 
-We address this problem through *multiple testing correction*. While several methods that control different aspects of the multiple testing problem, we commonly use methods that control the false-discovery rate (FDR) in genomics experiments. Controlling the false discovery rate at 10% means that we are accepting that 1 in 10 of the features with a significant adjusted P-value, is actually a false-positive. However if your experiment requires more stringency, you may wish to use a method that controls the family-wise error rate (FWER), such as **Bonferonni** correction.
+We address this problem through *multiple testing correction*, which describes a number of statistical approaches for controlling the type I error rate, preventing us from making a large number of false positive claims.
 
+#### Bonferroni correction
 
-Bonferonni -
+The simplest multiple testing correction method is the *Bonferonni* correction, which seeks to control the family-wise error rate (FWER): *the probability of making at least 1 false positive claim.*
 
-False discovery rate -
+To control for the FWER, the &alpha; threshold you have chosen for your experiment is divided by the number of tests performed, and any P-value must achieve significance below this threshold to be described as significant. In our example above where we ran 1000 tests at a 5% significance level, the correct alpha would be 0.05/1000 = 5e-5, so any P-value needs to be < 5e-5 to be deemed significant.
 
+We can demonstrate this by plotting the Bonferonni threshold on the plot for our previous example:
+```r
+# visualize P-value magnitude
+plot(-log10(p.value), las = 1,
+     col = "cornflowerblue",
+     main = "-log 10 P-values",
+     xlab = "ordered P-values", ylim = c(0,5))
 
-Many software package will calculate P-values adjusted for multiple testing for you, however you can always calculate them yourself in R, using a vector of the raw P-values.
+# add a horizontal line
+abline(h=-log10(0.05), col = "red", lty = 2)
+text(600, 4.5, "Bonferroni")
 
+# add a horizontal line
+abline(h=-log10(0.05/1000), col = "red", lty = 2)
+text(600, 1.5, "Original threshold")
+```
+
+<p align="center">
+  <img src="../figures/hypo-test-22.png" height="180%" width="80%"/>
+</p>
+
+We can also calculate a new set of P-values that have been adjusted by the Bonferonni method (P-values are multiplied by the number of comparisons), which can be evaluated at the 0.05 significance value.
 ```r
 # bonferroni correction
-p.adj.bonf <- p.adjust(pvalue, method = "FWER")
+p.adj.bonf <- p.adjust(p.value, method = "FWER")
+p.adj.bonf
 
-# FDR correction
-p.adj.fdr <- p.adjust(pvalue, method = "fdr")
+# check if any are signifciant
+table(p.adj.bonf < 0.05)
 ```
 
+By definition, Bonferroni correction guards against making even 1 false-positive, which is often too conservative in genomics experiments where we are using trying to generate new hypotheses in an exploratory fashion. Consequently, we often use other multiple testing correction methods in genomics, such as the false discovery rate (FDR).
 
 
+#### False discovery rate
 
+The *false discovery rate (FDR)* is a less conservative method of multiple testing correction, and can therefore be more powerful in genomics experiments, as =it will lead to fewer false-negatives, at the expense of increased false positives (compared to Bonferroni).
+
+FDR is defined as the proportion of false discoveries among all significant results. Controlling the false discovery rate at 5% means we accept 1 in 20 of the results we call significant, are actually false positives.
+
+<p align="center">
+  <img src="../figures/hypo-test-3.png" height="80%" width="80%"/>
+</p>
+
+To control for the FDR, we can use a list of P-values to calculate a *q-value* for each of these P-values in our list. A *q-value* for a specific test is defined as expected proportion of false-positives among all features called as or more extreme than the one in question.
+
+For example, if an individual gene for an RNA-seq differential expression analysis has a q-value of 0.01, this means 1% of genes with a lower significance value than this gene will be false-positives.  
+
+You can calculate q-values using the Bioconductor package `qvalue`.
 ```r
-# plot corrected P-values
+#BiocManager::install("qvalue")
+# library(qvalue)
+qvalue(p.value)$qvalues
 
+# check how many are sig.
+table(p.adj.fdr < 0.05)
 ```
 
+No results were identified as significant after correcting for multiple testing, which is what we expected should be true since we drew our random samples from the exact same distributions.
 
-You can see that there are **minimal results with statistical signficance after correction**, which is true since we scrambled the sample labels and created a fake dataset that should have no true DE. However, if we used the unadjusted P-values, we would identify **A LOT** of potentially interesting genes, that would in-fact be **false-positives**.
-
-This example highlights the short coming of hypothesis testing approaches, and demonstrates how important it is to correct for multiple hypothesis testing.
+This example highlights the short coming of hypothesis testing approaches, and demonstrates how important it is to correct for multiple hypothesis testing. **Always perform multiple testing correction**.
 
 
-link
-
+An good summary of multiple testing correction in high throughput genomics experiments can be found [here](https://www.nature.com/articles/nbt1209-1135). An excellent video describing the FDR-based methods can be found [here](https://www.youtube.com/watch?v=K8LQSvtjcEo&ab_channel=StatQuestwithJoshStarmer) by StatQuest.
 
 
 
-
-
-
-
-
+---
 
 ### Supervised learning - Linear modeling
 
@@ -314,9 +580,9 @@ One way to evaluate how much meaning we should attribute to the coefficient, is 
 
 In order to test how much certainty we have for a particular coefficient from a linear model, we estimate a quantity called **the standard error (SE)**. Without discussing the underlying stastics that define it, the SE is essentially a *measure of certainty around the coefficient*, and is dependent on the variance of the residuals (&epsilon;).
 
-Importantly, the SE can be used to perform **hypothesis testing** to determine if the coefficient is statistically significant. In this case, we can test the null hypothesis that the coefficient is equal to zero, using the following equation to calculate the *t-score*:
+Importantly, the SE can be used to perform **hypothesis testing** to determine if the coefficient is statistically significant. In this case, we can test the null hypothesis that the coefficient is equal to zero, using the following equation to calculate the *ore*:
 
-*t-score* = &beta;<sub>i</sub> - 0 / SE(&beta;<sub>i</sub>)
+*t-score* = (&beta;<sub>i</sub>) - 0 / SE(&beta;<sub>i</sub>)
 
 The *t-score* can then be used to calculate a *P*-value, as described in the hypothesis testing section. In R, the `summary()` function will test all model coefficients against the null hypothesis:
 ```r
@@ -366,6 +632,7 @@ segments(dat2$hba1c, dat2$gene_exp, dat2$hba1c, pre, col="cornflowerblue")
 
 The flatter slope of the regression line, and larger values of the residuals, suggests there is no useful relationship between Hba1c levels and expression of gene Y, which is supported by the large *P*-value returned by the model.
 
+---
 
 #### Simple Linear modeling with categorical variables
 
@@ -386,21 +653,18 @@ table(dat3$subject_group)
 # Note: Controls are coded as 0, cases are coded as 1
 
 # visualize the data
-plot(dat3$subject_group, dat3$exp_geneX,
-	ylab = "Expression (Gene X)",
-	xlab = "Subject group",
-	main = "Gene X exp. vs Hba1c",
-	col = "indianred", pch = 16, las = 1)
+boxplot(dat3$exp_geneX ~ dat3$subject_group ,
+     ylab = "Expression (Gene X)",
+     xlab = "Subject group",
+     main = "Gene X exp. vs Hba1c",
+     col = c("indianred", "cornflowerblue"), pch = 16, las = 1)
 
 
 # run the linear model and evaluate
 lm_2 <- lm(dat3$exp_geneX ~ dat3$subject_group)
 summary(lm_2)
-
-# add regression line to the plot
-abline(lm_2, lty=2)
 ```
-<img src="../figures/lm_example-3.png" height="500" width="550"/>
+<img src="../figures/lm_example-3.png" height="50%" width="45%"/>
 
 Looking at the model output, the *P*-value is very small, therefore we can conclude that there is an association between expression of gene X and disease status in this sample.
 
@@ -428,230 +692,31 @@ This approach is referred to as **multiple regression**. If you will be doing an
 
 #### Generalized linear models
 
-Commonly in bioinformatics, we find ourselves needing a model that can assume a different statistical distribution than the normal. The rationale behind this is that many bioinformatics and genomic data types exhibit specific distributions that are different from the normal.
+While standard linear models are very useful, there are situations where their use is not appropriate, for example:
 
-In these cases we fit the data using a **generalized linear model (GLM)**. GLM's are a family of statistical models that generalize standard linear regression in two ways:  
-- use of probability distributions other than the normal distribution
-- the use of a *link-function* that links the expression values in the linear model to the experimental groups, in a way that these other distributions can be used.
+- when values of Y are restricted (e.g. must be positive integers or binary values)
+- when the variance of Y depends on the mean
+
+One example from bioinformatics is RNA-seq gene expression data, where expression is measured in terms of read counts, whose values are restricted to being positive integers, and follow a distribution different from the normal distribution. Bulk RNA-seq data generally follow exhibit a distribution referred to as the *negative-binomial*.
 
 <p align="center">
 <img src="../figures/neg-binom.png" title="xxxx" alt="context"
 	width="75%" height="75%" />
 </p>
 
-For example, bulk RNA-seq data typically exhibit a distribution referred to as the *negative-binomial* and therefore require a GLM of the *negative-binomial family* in order to appropriately model RNA-seq counts and test them for differential expression.
-
-While GLMs are beyond the scope of this workshop, and we simply do not have the time to cover them in this short course, we do cover the fundamentals of how GLMs are used in the context of RNA-seq data analysis in our RNA-seq workshop!
-
-
-
-### Unsupervised learning - Dimension reduction & clustering
-
-As discussed earlier in this lesson, there are times when we wish to simply explore the relationships between samples in our dataset in a way that is not supervised by any dependent variable (e.g. tx group, WT vs KO). This approach is commonly referred to as exploratory data analysis, and is used to answer such questions as:
-- How similar are my samples based on genome-wide profiles?
-- Are any samples in the dataset clear outliers?
-- Do any variables systematically affect genome-wide profiles (e.g. batch)?
-
-Unsupervised learning methods are very powerful tools to conduct exploratory data analysis. Two important groups of unsupervised methods include *dimensionality reduction methods* and *clustering-based methods*.
-
-- ***dimensionality reduction methods***: involves the transformation of data from a high-dimensional space to a low-dimensional space, allowing intrinsic properties of the high-dimensional dataset to be identified
-
-- ***clustering-based methods***: involves calculation of the similarity/dissimilarity between samples, resulting in organization of these samples into *'clusters'* defined by their relatedness to one-another
-
-We will explore an example of each approach below, using *principal components analysis (PCA)* as an example of dimensionality reduction, and *unsupervised hierachical clustering* as an example of a clustering-based method.
-
-#### Principal components analysis (PCA)
-
-For high dimensional datasets (e.g. genomics data), where we have measured many thousands of features over a number of samples, it is often desirable to reduce the complexity of the dataset so that it can be viewed in fewer dimensions that hopefully reveal some intrinsic properties of the dataset.
-
-> We will not discuss the mathematical procedures used to perform PCA here, however this is discussed exhaustively elsewhere. One excellent resource is the StatQuest video linked [here](https://www.youtube.com/watch?v=_UVHneBUBW0&ab_channel=StatQuestwithJoshStarmer).
-
-PCA is a very popular approach to perform dimensionality reduction. At its simplest level, PCA accepts a matrix of numerical values (e.g. gene expression matrix, ChIP-seq counts, etc.), and returns a set of numerical vectors (principal components) that represent the axes of greatest variation in the dataset.
-
-The principal components (PCs) explain distinct sources of variation in the data, and represent the lower-dimensional space that the original dataset has been projected into. Importantly, each PC explains more variation in the dataset than the last (e.g. PC1 explains more variation than PC2).
-
-By using the projection values of each sample along the PCs, we can visualize this lower-dimensional space to learn defining properties of the dataset.
+RNA-seq read counts are also referred to as *heteroscadistic*, meaning they have a *non-constant variance* at different values of the mean across samples.
 
 <p align="center">
-  <img src="../figures/pca-example.png" height="410" width="650"/>
+<img src="../figures/heteroscad.png" title="xxxx" alt="context"
+	width="75%" height="75%" />
 </p>
 
-To demonstrate how you would perform a PCA analysis in R, we will use gene expression data (RNA-seq) collected as part of the same ENCODE study we discussed in previous lessons [Gorkin et al, 2020](https://www.nature.com/articles/s41586-020-2093-3?proof=t), but published in the companion paper: [*The changing mouse embryo transcriptome at whole tissue and single-cell resolution*](https://www.nature.com/articles/s41586-020-2536-x).
+Linear models are therefore generally not suitable to model read count data, and we need a statistical model that can leverage distributions other than the normal. *Generalized linear models (GLM)* are a family of statistical models that can achieve this, and generalize standard linear regression in two ways:  
+- use of probability distributions other than the normal distribution
+- the use of a *link-function* that links the expression values in the linear model to the experimental groups, in a way that these other distributions can be used.
 
-The expression data includes samples collected as multiple time-points during development of the mouse embryo across 17 different tissues and organs (see Figure 1A from the manuscript below).
+For analysis of bulk RNA-seq data, we use a GLM of the *negative-binomial family* in order to appropriately model RNA-seq counts and calculate P-values and test them for differential expression. This approach is adopted by popular Bioconductor-packages for differential expression such as [DESeq2](http://bioconductor.org/packages/release/bioc/html/DESeq2.html) and [edgeR](https://www.bioconductor.org/packages/release/bioc/html/edgeR.html).
 
-<p align="center">
-  <img src="../figures/fig-1a-he.png" height="70%" width="70%"/>
-</p>
+If you will be using software such as DESeq2 and edgeR in your own analysis, it is recommended to build a good fundamental understqanding of linear modeling and GLMs. While an comprehensive introduction to GLMs is beyond the scope of this workshop, this topic is covered in many good statistical textbooks and online courses.
 
-To help get you started, you have been provided with a matrix of FPKM counts (*fragments per kilobase million mapped reads*, which represent normalized expression values) and sample metadata. In the code chunks below, we will explore the relationships between samples from different tissues using PCA.
-
-```r
-# read in data
-fpkm <- read.table("fpkm_sub.txt", stringsAsFactors = FALSE, header=TRUE)
-meta <- read.delim("metadata_sub.tsv", stringsAsFactors = FALSE, header = TRUE)
-
-# have a quick look at top of files
-head(fpkm[,1:6])
-head(meta)
-
-# log transform fpkm counts
-log_fpkm <- log2(fpkm+1)
-
-# calculate variance across samples for each gene
-vars <- apply(log_fpkm, 1, var)
-# order variances based on magnitude of variance
-vars <- rev(vars[order(vars)])
-
-# plot variance for genes accross samples
-plot(vars, las = 1, main="Sample gene expression variance", xlab = "Gene", ylab = "Variance")
-abline(v=5000, col="red")
-```
-
-<p align="left">
-  <img src="../figures/var-pca.png" height=height="60%" width="60%"/>
-</p>
-
-In-fact, most genes show little variance in expression levels across tissues. Features that do not vary across samples are not informative for dimensionality reduction or clustering methods, therefore it is generally useful to remove them.
-
-In these data, it seems that ~ the top 5000 genes will explain most of the variance in these data, so we will only use these genes for the PCA.
-
-```r
-# perform PCA and order by variance
-vars_sub <- vars[1:5000]
-
-# perform the PCA on the fpkm matrix
-pca <- prcomp(t(log_fpkm[names(vars_sub), ]))
-
-# look at the object returned
-str(pca)
-head(pca$x)
-
-# construct data frame w/ PC loadings and add sample labels
-pca_df <- as.data.frame(pca$x)
-pca_df$tissue <- as.factor(meta$Biosample.term.name)
-pca_df$sample_ids <- meta$File.accession
-
-# extract percent variance explained by each PC
-percentVar <- pca$sdev^2/sum(pca$sdev^2)
-
-# add colors for plotting to df
-cols <- grDevices::rainbow(length(levels(pca_df$tissue)))
-
-# create an empty variable in pca_df to be filled with colors from cols
-pca_df$col <- NA
-
-# loop over tissue types in pca_df and assign colors for plotting
-for(i in 1:length(levels(pca_df$tissue))){
-  ind1 <- which(pca_df$tissue == levels(pca_df$tissue)[i])
-  pca_df$col[ind1] <- cols[i]
-}
-
-# plot PC1 vs PC2
-plot(pca_df[, 1], pca_df[, 2],
-     xlab = paste0("PC1 (", (round(percentVar[1], digits=3)*100), "% variance)"),
-     ylab = paste0("PC2 (", (round(percentVar[2], digits=3)*100), "% variance)"),
-     main = paste0("PC1 vs PC2 genome-wide RNA-seq tissue profiles"),
-     pch = 16, cex = 1.35, cex.lab = 1.3, cex.axis = 1.15, las = 1,
-     panel.first = grid(),
-     col = pca_df$col)
-
-# add a legend to the plot
-legend(1.5, 105, levels(pca_df$tissue), pch = 16, col = cols, cex = 0.9)
-```
-
-<p align="center">
-  <img src="../figures/pca-plot.png" height="75%" width="75%"/>
-</p>
-
-Viewing the dataset using this lower dimensional representation provides us with critical insights into the data that would be too challenging to obtain by looking at the expression levels of individual genes separately. We see that samples from similar tissues generally cluster together on the PCA plot, while more distinct tissue types appear further away from each other. This fits with our expectations, as samples from the same (or similar tissues) should have similar gene expression profiles.
-
-
-#### Unsupervised hierarchical clustering
-
-Generally, clustering analysis describes a collection of methods used to group samples into groups called *clusters* which define their relation to one-another. These relationships are defined by the *distance metric* used, which is simply a measure of how similar/dissimilar samples or features in a dataset are to each other. Several distance metrics exist, such as *manhattan* or *euclidean* distance, and are calculated differently (and affect the clustering).
-
-Unsupervised hierarchical clustering describes a specific approach to performing clustering analysis, in which a tree-like structure is generated to describe the relatedness of samples and features. The results of this procedure are commonly represented using heatmaps, with samples defining columns and features (e.g. genes) defining the rows. Visualization using heatmaps is valuable as it allows us to identify *'modules'* of similar/dissimilar features across samples, making approaches like hierarchical clustering complimentary to dimensionality-reductions methods like PCA.
-
-<p align="center">
-  <img src="../figures/heatmap-exp.png" height="90%" width="90%"/>
-</p>
-
-To demonstrate how one could perform an unsupervised hierachical clustering analysis in R, we will use the same RNA-seq dataset from [He *et al*](https://www.nature.com/articles/s41586-020-2536-x), describing transcriptomic changes in the developing mouse embryo.
-
-Clustering can be quite computationally intensive, therefore we will first generate a subset of the gene expression data containing five specific tissues, rather than all 17.
-```r
-# subset mnetadata to 5 tissues of interest
-meta_ord <- meta[meta$Biosample.term.name=="forebrain" |
-                 meta$Biosample.term.name=="heart" |
-                 meta$Biosample.term.name=="limb" |
-                 meta$Biosample.term.name=="liver" |
-                 meta$Biosample.term.name=="intestine", ]
-
-# subset FPKM matrix to contain the same subset of samples
-log_fpkm_sub <- log_fpkm[, c(colnames(log_fpkm) %in%  meta_ord$File.accession)]
-```
-
-Since we took a subset of the original dataset, we need to recalculate the variance of each gene across the samples in this subset, so that we can assess how many features will be informative for the clustering procedure.
-```r
-# calculate variance of each gene across samples for new subset of data
-vars <- apply(log_fpkm_sub, 1, var)
-
-# order variances based on magnitude of variance
-vars <- rev(vars[order(vars)])
-
-# plot variance for genes across samples
-plot(vars, las = 1, main="Sample gene expression variance",
-     xlab = "Gene", ylab = "Variance")
-# add vertical line
-abline(v=1000, col="red")
-```
-
-<p align="left">
-  <img src="../figures/var-hclust.png" height="60%" width="60%"/>
-</p>
-
-
-The per gene variances look similar to before, however we will focus on the top 2000 most variable genes to help speed up the hierarchical clustering.
-```r
-# subset var to only top 2000 genes with most variance
-vars_sub <- vars[1:2000]
-
-# subset the fpkm matrix to these genes
-mat <- log_fpkm_sub[names(vars_sub), ]
-
-# order the samples in the same order they are in in the metadata file
-mat <- mat[, c(match(meta_ord$File.accession, colnames(mat)))]
-
-# scale the fpkm matrix by row
-mat_scaled = t(apply(mat, 1, scale))
-
-# set column names for this matrix (they were removed during transposition)
-colnames(mat_scaled) <- colnames(mat)
-```
-
-We will be using the *pheatmap()* from the `pheatmap` package, which provides extensive functionality for performing and visualizing the results of clustering analyses using heatmaps.
-```r
-# load the pheatmap package
-library(pheatmap)
-
-# create data frame to annotate heatmap with
-annotation_col = data.frame(Tissue = meta_ord$Biosample.term.name)
-rownames(annotation_col) = meta_ord$File.accession
-
-# use pheatmap() to perform clustering on scaled data matrix
-pheatmap(mat_scaled,
-         show_rownames=FALSE, show_colnames=FALSE,
-         annotation_col = annotation_col,
-         cluster_cols = TRUE,
-         clustering_method = "average",
-         clustering_distance_cols = "correlation")
-```
-
-<p align="center">
-  <img src="../figures/hclust.png" height="80%" width="80%"/>
-</p>
-
-The sample dendrogram and annotation bar tells us that all five tissues were assigned to their own cluster, with sub-clusters among each. It also allows us to compare between these groups to make inferences, for example, liver seems to be the most dissimilar tissue from forebrain based on gene expression.
-
-In addition, the heatmap shows us the genes and their accompanying dendrogram, which allows us to visualize sets of genes that show coordinated changes across the samples, providing insight into the differences described by the clusters. For example, there is a set of ~200-300 genes that are uniquely up-regulated in intestinal tissue, and an additional ~100-200 genes that are shared with liver tissue.  
+> Note: We do cover the fundamentals of how GLMs are used in the context of RNA-seq data analysis in our RNA-seq dat analysis workshop.
